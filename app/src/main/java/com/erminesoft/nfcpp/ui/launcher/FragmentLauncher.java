@@ -35,6 +35,8 @@ public class FragmentLauncher {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
+
+
     public void launchWelcomeFragment() {
         GenericFragment fragmentWelcome = new WelcomeFragment();
         launch(fragmentWelcome, null);
