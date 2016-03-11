@@ -2,12 +2,22 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+
+import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
+import com.erminesoft.nfcpp.core.bridge.NetBridge;
+import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Aleks on 10.03.2016.
@@ -18,6 +28,8 @@ public class SignUpFragment extends GenericFragment {
     private EditText lastNameEt;
     private EditText signUpLoginEt;
     private EditText signUpPasswordEt;
+
+    private Observer observer;
 
     @Nullable
     @Override
@@ -33,6 +45,86 @@ public class SignUpFragment extends GenericFragment {
         lastNameEt = (EditText)view.findViewById(R.id.lastNameET);
         signUpLoginEt = (EditText)view.findViewById(R.id.signUploginUserET);
         signUpPasswordEt = (EditText)view.findViewById(R.id.signUpPasswordUserET);
+
+        View.OnClickListener listener = new Clicker();
+        view.findViewById(R.id.SignUpButton).setOnClickListener(listener);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        observer = new DbObserver();
+        mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+        observer = null;
+    }
+
+    private void buttonSignUpPressed() {
+        String putFirstName = firstNameEt.getText().toString();
+        String putLastName = lastNameEt.getText().toString();
+        String putSignUpLoginEt = signUpLoginEt.getText().toString();
+        String putSignUpPasswordEt = signUpPasswordEt.getText().toString();
+
+        String error;
+
+        if(TextUtils.isEmpty(putFirstName)) {
+             error  = "Empty first name";
+            ((TextInputLayout) getView().findViewById(R.id.firstNameWrap)).setError(error);
+            return;
+        }
+
+        if (TextUtils.isEmpty(putLastName)) {
+            error = "Empty last name";
+            ((TextInputLayout) getView().findViewById(R.id.lastNameWrap)).setError(error);
+            return;
+        }
+
+        if (TextUtils.isEmpty(putSignUpLoginEt)) {
+            error = "Empty login";
+            ((TextInputLayout) getView().findViewById(R.id.signUploginUserWrap)).setError(error);
+            return;
+        }
+
+        if(TextUtils.isEmpty(putSignUpPasswordEt)) {
+            error =  "Empty password";
+            ((TextInputLayout) getView().findViewById(R.id.signUpPasswordUserWrap)).setError(error);
+            return;
+        }
+        showProgressDialog();
+        NetBridge netBridge = mActivityBridge.getUApplication().getNetBridge();
+        netBridge.registryUser(buildUser(putFirstName, putLastName, putSignUpLoginEt, putSignUpPasswordEt),
+                new NetCallBack());
+    }
+
+    private BackendlessUser buildUser(String firstName, String lastName, String login, String password) {
+        BackendlessUser user = new BackendlessUser();
+        user.setPassword(password);
+        user.setProperty("name", login);
+        return user;
+    }
+
+
+    private final class NetCallBack extends SimpleMainCallBack {
+        @Override
+        public void onSuccess() {
+            hideProgressDialog();
+            mActivityBridge.getFragmentLauncher().launchMainFragment();
+        }
+    }
+
+    private final class DbObserver implements Observer {
+
+        @Override
+        public void update(Observable observable, Object data) {
+            Log.e("FL", "userAdded");
+            hideProgressDialog();
+            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
+        }
     }
 
     private final class Clicker implements View.OnClickListener {
@@ -40,7 +132,8 @@ public class SignUpFragment extends GenericFragment {
         @Override
         public void onClick(View v) {
             switch(v.getId()) {
-
+                case R.id.SignUpButton:
+                    buttonSignUpPressed();
             }
         }
     }

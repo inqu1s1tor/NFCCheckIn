@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.net;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -26,16 +27,24 @@ public final class NetManagerFacade implements NetBridge {
     }
     private void initBackendLess(Context context) {
         Resources res = context.getResources();
+        Log.d("init", "APP_ID = " + res.getString(R.string.BACKENDLESS_APP_ID));
+        Log.d("init", "KEY = " + res.getString(R.string.BACKENDLESS_KEY));
         Backendless.initApp(context, res.getString(R.string.BACKENDLESS_APP_ID), res.getString(R.string.BACKENDLESS_KEY), "v1");
     }
 
     @Override
     public void loginUser(String login, String password, MainCallBack mainCallBack) {
+        authManager.logInUser(login, password, mainCallBack);
 
     }
 
     @Override
-    public void registryUser(BackendlessUser user, MainCallBack mainCallBack) {
+    public void autoLoginUser(MainCallBack callback) {
+        authManager.autoLogin(callback);
+    }
 
+    @Override
+    public void registryUser(BackendlessUser user, MainCallBack mainCallBack) {
+        authManager.registryUser(user, mainCallBack);
     }
 }

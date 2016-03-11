@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
+import com.erminesoft.nfcpp.db.DbManager;
 import com.erminesoft.nfcpp.net.NetManagerFacade;
 
 
@@ -18,6 +19,7 @@ public final class NfcApplication extends Application {
         super.onCreate();
 
         sharedHelper = new SharedHelper(this);
+        dbBridge = new DbManager();
         netBridge = new NetManagerFacade(this, sharedHelper, dbBridge);
     }
 

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Nfcpp</string>
-    <string name="BACKENDLESS_APP_ID">04183582-C491-C143-FF07-45E39A703700</string>
+    <string name="BACKENDLESS_APP_ID">3FF1FA73-3C64-9161-FF7A-A21612B74C00</string>
     <string name="BACKENDLESS_KEY">17EA9154-5CF8-4658-FF9C-B6EB16377D00</string>
     <string name="Hello">Hello</string>
     <string name="LoginUser">Login</string>

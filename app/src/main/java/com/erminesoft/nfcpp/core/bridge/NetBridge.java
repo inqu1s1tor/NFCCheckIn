@@ -10,5 +10,7 @@ public interface NetBridge {
 
     void loginUser (String login, String password, MainCallBack mainCallBack);
 
+    void autoLoginUser(MainCallBack callback);
+
     void registryUser (BackendlessUser user, MainCallBack mainCallBack);
 }

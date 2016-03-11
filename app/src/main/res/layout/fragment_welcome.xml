@@ -19,6 +19,7 @@
         android:layout_height="wrap_content"
         android:text="@string/LoginUser"
         android:textSize="20dp"
+        android:visibility="invisible"
         android:id="@+id/text_view_login" />
 
     <TextView
@@ -28,5 +29,7 @@
         android:layout_height="wrap_content"
         android:text="@string/registerUser"
         android:textSize="20dp"
+        android:visibility="invisible"
+
         android:id="@+id/text_view_registry" />
 </LinearLayout>

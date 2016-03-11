@@ -31,11 +31,10 @@ public class FragmentMain extends GenericFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
 
             nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
             Log.e("MA", "is adapter enabled = " + nfcAdapter.isEnabled());

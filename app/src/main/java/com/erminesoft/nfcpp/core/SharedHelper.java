@@ -19,11 +19,11 @@ public final class SharedHelper {
     }
 
     public void setUserName (String userName) {
-        mSharedPreferences.edit().putString(USER_NAME, userName);
+        mSharedPreferences.edit().putString(USER_NAME, userName).apply();
     }
 
     public void setUserPassword (String userPassword) {
-        mSharedPreferences.edit().putString(User_PASSWORD, userPassword);
+        mSharedPreferences.edit().putString(User_PASSWORD, userPassword).apply();
     }
 
     public String getUserName() {

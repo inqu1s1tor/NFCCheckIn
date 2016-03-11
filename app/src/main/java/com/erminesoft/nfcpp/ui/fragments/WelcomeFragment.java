@@ -3,6 +3,7 @@ package com.erminesoft.nfcpp.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.SharedHelper;
+import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 
 /**
  * Created by Aleks on 10.03.2016.
@@ -35,6 +37,8 @@ public class WelcomeFragment extends GenericFragment {
         View.OnClickListener listener = new Clicker();
         loginUserTv.setOnClickListener(listener);
         registerUserTv.setOnClickListener(listener);
+
+        checkData();
     }
 
     private void checkData() {
@@ -43,8 +47,18 @@ public class WelcomeFragment extends GenericFragment {
             loginUserTv.setVisibility(View.VISIBLE);
             registerUserTv.setVisibility(View.VISIBLE);
         }else {
+            Log.d("checkData", "!isEmpty");
             showProgressDialog();
+            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallback());
+        }
+    }
 
+    private final class NetCallback extends SimpleMainCallBack {
+
+        @Override
+        public void onSuccess() {
+            hideProgressDialog();
+            mActivityBridge.getFragmentLauncher().launchMainFragment();
         }
     }
 
