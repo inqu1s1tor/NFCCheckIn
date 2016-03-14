@@ -13,4 +13,6 @@ public interface NetBridge {
     void autoLoginUser(MainCallBack callback);
 
     void registryUser (BackendlessUser user, MainCallBack mainCallBack);
+
+    void addNewEvent(String idCard, final MainCallBack callback);
 }

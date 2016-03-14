@@ -19,12 +19,15 @@ import com.erminesoft.nfcpp.core.callback.MainCallBack;
 public final class NetManagerFacade implements NetBridge {
 
     private AuthManager authManager;
+    private EventManager eventManager;
 
     public NetManagerFacade (Context context,SharedHelper sharedHelper, DbBridge dbBridge) {
-        authManager = new AuthManager(sharedHelper, dbBridge);
-        initBackendLess(context);
 
+        initBackendLess(context);
+        authManager = new AuthManager(sharedHelper, dbBridge);
+        eventManager = new EventManager();
     }
+
     private void initBackendLess(Context context) {
         Resources res = context.getResources();
         Log.d("init", "APP_ID = " + res.getString(R.string.BACKENDLESS_APP_ID));
@@ -35,7 +38,6 @@ public final class NetManagerFacade implements NetBridge {
     @Override
     public void loginUser(String login, String password, MainCallBack mainCallBack) {
         authManager.logInUser(login, password, mainCallBack);
-
     }
 
     @Override
@@ -46,5 +48,10 @@ public final class NetManagerFacade implements NetBridge {
     @Override
     public void registryUser(BackendlessUser user, MainCallBack mainCallBack) {
         authManager.registryUser(user, mainCallBack);
+    }
+
+    @Override
+    public void addNewEvent(String idCard, MainCallBack callback) {
+        eventManager.addNewEvent(idCard, callback);
     }
 }
