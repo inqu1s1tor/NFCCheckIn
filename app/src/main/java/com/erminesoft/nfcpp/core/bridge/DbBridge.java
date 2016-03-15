@@ -1,7 +1,9 @@
 package com.erminesoft.nfcpp.core.bridge;
 
 import com.backendless.BackendlessUser;
+import com.erminesoft.nfcpp.model.Event;
 
+import java.util.List;
 import java.util.Observer;
 
 /**
@@ -17,4 +19,5 @@ public interface DbBridge {
     void addNewObserver(Observer observer);
 
     void removeObserver(Observer observer);
+
 }

@@ -25,7 +25,7 @@ public final class NetManagerFacade implements NetBridge {
 
         initBackendLess(context);
         authManager = new AuthManager(sharedHelper, dbBridge);
-        eventManager = new EventManager();
+        eventManager = new EventManager(dbBridge);
     }
 
     private void initBackendLess(Context context) {
@@ -54,4 +54,10 @@ public final class NetManagerFacade implements NetBridge {
     public void addNewEvent(String idCard, MainCallBack callback) {
         eventManager.addNewEvent(idCard, callback);
     }
+
+    @Override
+    public void getAllEvents(MainCallBack callback) {
+        eventManager.getAllEvents(callback);
+    }
+
 }

@@ -17,10 +17,12 @@ import android.widget.TextView;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.ui.MainActivity;
 import com.erminesoft.nfcpp.ui.launcher.FragmentLauncher;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Created by Aleks on 10.03.2016.
@@ -47,26 +49,32 @@ public class FragmentMain extends GenericFragment {
         String curStringDate = new SimpleDateFormat("HH:mm").format(curTime);
         currentTimeTv.setText(curStringDate);
 
+        goNfc();
+        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallback());
+        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallback());
 
-
-        nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
-            Log.e("MA", "is adapter enabled = " + nfcAdapter.isEnabled());
-            nfcAdapter.enableReaderMode(getActivity(), new NfcAdapter.ReaderCallback() {
-                @Override
-                public void onTagDiscovered(Tag tag) {
-                    Log.e("MA", "NFC TAG = " + tag.toString());
-
-                    byte[] cardIdArray = tag.getId();
-                    String idCard = byteArrayToHexString(cardIdArray);
-                    Log.d("nfc", "ID_Card = " + idCard);
-                    mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
-
-                }
-            }, NfcAdapter.FLAG_READER_NFC_A, Bundle.EMPTY);
-
+        View.OnClickListener listener = new Clicker();
+        view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
         }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void goNfc() {
+        nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
+        Log.e("MA", "is adapter enabled = " + nfcAdapter.isEnabled());
+        nfcAdapter.enableReaderMode(getActivity(), new NfcAdapter.ReaderCallback() {
+            @Override
+            public void onTagDiscovered(Tag tag) {
+                Log.e("MA", "NFC TAG = " + tag.toString());
 
+                byte[] cardIdArray = tag.getId();
+                String idCard = byteArrayToHexString(cardIdArray);
+                Log.d("nfc", "ID_Card = " + idCard);
+                mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
+
+            }
+        }, NfcAdapter.FLAG_READER_NFC_A, Bundle.EMPTY);
+
+    }
 
     private static String byteArrayToHexString(byte[] bytes) {
         final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
@@ -81,12 +89,26 @@ public class FragmentMain extends GenericFragment {
     }
 
 
-    private final class NetCallback extends SimpleMainCallBack{
+
+    private final class NetCallback extends SimpleMainCallBack {
         @Override
         public void onSuccess() {
             Log.d("NetCallback", "onSuccess");
         }
     }
 
+
+        private final class Clicker implements View.OnClickListener {
+
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.transferToStatisticsButton:
+                        mActivityBridge.getFragmentLauncher().launchStatisticsFragment();
+                        break;
+                }
+
+            }
+        }
 
 }

@@ -11,6 +11,7 @@ import com.erminesoft.nfcpp.ui.fragments.FragmentMain;
 import com.erminesoft.nfcpp.ui.fragments.GenericFragment;
 import com.erminesoft.nfcpp.ui.fragments.SignInFragment;
 import com.erminesoft.nfcpp.ui.fragments.SignUpFragment;
+import com.erminesoft.nfcpp.ui.fragments.StatisticsFragment;
 import com.erminesoft.nfcpp.ui.fragments.WelcomeFragment;
 
 /**
@@ -55,6 +56,11 @@ public class FragmentLauncher {
     public void launchMainFragment() {
         GenericFragment fragmentMain = new FragmentMain();
         launch(fragmentMain, null);
+    }
+
+    public void launchStatisticsFragment() {
+        GenericFragment statisticsFragment = new StatisticsFragment();
+        launch(statisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
 
 
