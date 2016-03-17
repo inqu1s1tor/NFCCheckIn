@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  * Created by Aleks on 15.03.2016.
  */
 public class StatisticsFragment extends GenericFragment {
+
     private ListView statisticsListView;
     private List <Day> dayList;
     private DayAdapter dayAdapter;

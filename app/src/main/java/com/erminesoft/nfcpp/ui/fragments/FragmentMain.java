@@ -46,7 +46,7 @@ public class FragmentMain extends GenericFragment {
         currentTimeTv = (TextView)view.findViewById(R.id.currentTime);
 
         long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat("HH:mm").format(curTime);
+        String curStringDate = new SimpleDateFormat("MM-dd HH:mm").format(curTime);
         currentTimeTv.setText(curStringDate);
 
         goNfc();

@@ -6,5 +6,8 @@
     <string name="LoginUser">Login</string>
     <string name="registerUser">Register</string>
     <string name="statistics">Statistics</string>
+    <string name="today_entry">Today entry</string>
+    <string name="today_exit">Today exit</string>
+    <string name="total_today">Total</string>
 
 </resources>
