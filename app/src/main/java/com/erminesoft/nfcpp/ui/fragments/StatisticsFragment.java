@@ -12,6 +12,7 @@ import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Day;
 import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.ui.adapters.DayAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 public class StatisticsFragment extends GenericFragment {
     private ListView statisticsListView;
     private List <Day> dayList;
+    private DayAdapter dayAdapter;
+
 
     @Nullable
     @Override
@@ -41,6 +44,8 @@ public class StatisticsFragment extends GenericFragment {
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallback());
         dayList = new ArrayList<>();
 
+        dayAdapter = new DayAdapter(getActivity(), dayList);
+        statisticsListView.setAdapter(dayAdapter);
     }
 
     private void handleList(List<Event> eventList) {
@@ -75,20 +80,23 @@ public class StatisticsFragment extends GenericFragment {
                 dayNumber = curDay;
             }
         }
+
         dayList.add(day);
         Log.d("handleList", "dayList.size() =  " + dayList.size());
-        for (Day d : dayList){
-            Log.d("handleList", "Date=" + d.getCurrentDate()
-                    + "    Entry=" + new SimpleDateFormat("HH:mm").format(d.getEntry())
-                    +  "   Exit=" + new SimpleDateFormat("HH:mm").format(d.getExit()));
 
-            long diffInMs = d.getExit().getTime() - d.getEntry().getTime();
-            //int days = (int) TimeUnit.MILLISECONDS.toDays(diffInMs);
-            int hh = (int) (TimeUnit.MILLISECONDS.toHours(diffInMs) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInMs)));
-            int mm = (int) (TimeUnit.MILLISECONDS.toMinutes(diffInMs) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInMs)));
-            Log.d("handleList", "hh="+hh+  "   mm="+mm);
-        }
+//        for (Day d : dayList){
+//            Log.d("handleList", "Date=" + d.getCurrentDate()
+//                    + "    Entry=" + new SimpleDateFormat("HH:mm").format(d.getEntry())
+//                    +  "   Exit=" + new SimpleDateFormat("HH:mm").format(d.getExit()));
+//
+//            long diffInMs = d.getExit().getTime() - d.getEntry().getTime();
+//            //int days = (int) TimeUnit.MILLISECONDS.toDays(diffInMs);
+//            int hh = (int) (TimeUnit.MILLISECONDS.toHours(diffInMs) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInMs)));
+//            int mm = (int) (TimeUnit.MILLISECONDS.toMinutes(diffInMs) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInMs)));
+//            Log.d("handleList", "hh="+hh+  "   mm="+mm);
+//        }
 // adapter
+        dayAdapter.replaceNewData(dayList);
     }
     private final class NetCallback extends SimpleMainCallBack {
 
@@ -97,7 +105,6 @@ public class StatisticsFragment extends GenericFragment {
         Log.d("NetCallBack", "On");
         handleList(eventList);
         }
-
     }
 
 }
