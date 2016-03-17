@@ -1,6 +1,7 @@
 package com.erminesoft.nfcpp.ui.adapters;
 
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.erminesoft.nfcpp.model.Day;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -51,24 +53,26 @@ public class DayAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         Day day = getDay(position);
-        Holder holder ;
+        Holder holder;
 
         if (convertView == null) {
             holder = new Holder();
             convertView = mLayoutInflater.inflate(R.layout.item_day_list, parent, false);
-            holder.dateTv = (TextView)convertView.findViewById(R.id.dateId);
-            holder.entryTimeTv =(TextView)convertView.findViewById(R.id.entryTimeId);
-            holder.exitTimeTv = (TextView)convertView.findViewById(R.id.exitTimeId);
-            holder.totalTimeTv = (TextView)convertView.findViewById(R.id.totalTimeId);
+            holder.dateTv = (TextView) convertView.findViewById(R.id.dateId);
+            holder.entryTimeTv = (TextView) convertView.findViewById(R.id.entryTimeId);
+            holder.exitTimeTv = (TextView) convertView.findViewById(R.id.exitTimeId);
+            holder.totalTimeTv = (TextView) convertView.findViewById(R.id.totalTimeId);
             convertView.setTag(holder);
         } else {
-            holder = (Holder)convertView.getTag();
+            holder = (Holder) convertView.getTag();
         }
 
         holder.dateTv.setText(day.getCurrentDate().toString());
+
         holder.entryTimeTv.setText(getEntryTime(day));
         holder.exitTimeTv.setText(getExitTime(day));
         holder.totalTimeTv.setText(getTotal(day));
+
         return convertView;
     }
 
@@ -76,35 +80,38 @@ public class DayAdapter extends BaseAdapter {
         return ((Day) getItem(position));
     }
 
-    public void replaceNewData(List<Day> newObjects){
+    public void replaceNewData(List<Day> newObjects) {
         objects = newObjects;
         notifyDataSetChanged();
     }
 
-    private  String getEntryTime(Day day){
+    private String getEntryTime(Day day) {
         String entryTime = "no data";
-        if(day.getEntry()!= null) {
-            entryTime = new SimpleDateFormat("HH:mm").format(day.getEntry());
-        }
+        int countEvent = day.getCheckingList().size();
+        Date entry = day.getCheckingList().get(countEvent - 1);
+        entryTime = new SimpleDateFormat("HH:mm").format(entry);
         return entryTime;
     }
 
-    private  String getExitTime(Day day){
+    private String getExitTime(Day day) {
         String exitTime = "no data";
-        if(day.getExit()!= null) {
-            exitTime = new SimpleDateFormat("HH:mm").format(day.getExit());
-        }
+        Date exit = day.getCheckingList().get(0);
+        exitTime = new SimpleDateFormat("HH:mm").format(exit);
+
         return exitTime;
     }
 
-    private  String getTotal(Day day){
+    private String getTotal(Day day) {
         String totalTime = "no data";
-        if(day.getEntry()!= null && day.getExit()!= null) {
-            long diffInMs = day.getExit().getTime() - day.getEntry().getTime();
+
+        if (day.getCheckingList().size() > 1){
+            Date entry = day.getCheckingList().get(1);
+            Date exit = day.getCheckingList().get(0);
+            long diffInMs = exit.getTime() - entry.getTime();
             int hh = (int) (TimeUnit.MILLISECONDS.toHours(diffInMs) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInMs)));
             int mm = (int) (TimeUnit.MILLISECONDS.toMinutes(diffInMs) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInMs)));
-            Log.d("handleList", "hh="+hh+  "   mm="+mm);
-            totalTime = hh+":"+mm;
+            Log.d("handleList", "hh=" + hh + "   mm=" + mm);
+            totalTime = hh + ":" + mm;
         }
 
         return totalTime;

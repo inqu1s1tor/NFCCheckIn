@@ -1,6 +1,8 @@
 package com.erminesoft.nfcpp.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Aleks on 15.03.2016.
@@ -9,18 +11,11 @@ public class Day {
 
 
     private String currentDate;
-    private Date entry;
-    private Date exit;
-//    private String totalTime;
+    private List<Date> checkingList;
 
-//    public Day(String currentDate, String entry, String exit, String totalTime) {
-//        this.currentDate = currentDate;
-//        this.entry = entry;
-//        this.exit = exit;
-//        this.totalTime = totalTime;
-//    }
-
-    public Day(){}
+    public Day() {
+        checkingList = new ArrayList<>();
+    }
 
 
     public String getCurrentDate() {
@@ -31,19 +26,16 @@ public class Day {
         this.currentDate = currentDate;
     }
 
-    public Date getEntry() {
-        return entry;
+    public List<Date> getCheckingList() {
+        return checkingList;
     }
 
-    public void setEntry(Date entry) {
-        this.entry = entry;
+    public void setCheckingList(List<Date> checkingList) {
+        this.checkingList = checkingList;
     }
 
-    public Date getExit() {
-        return exit;
+    public void addNewChecking(Date newChecking) {
+        this.checkingList.add(newChecking);
     }
 
-    public void setExit(Date exit) {
-        this.exit = exit;
-    }
 }

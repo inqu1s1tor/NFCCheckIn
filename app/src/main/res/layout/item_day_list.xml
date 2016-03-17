@@ -17,6 +17,7 @@
         <TextView
             android:id="@+id/dateId"
             android:text="date"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -37,6 +38,7 @@
         <TextView
             android:id="@+id/entryTimeId"
             android:text="entry"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -57,6 +59,7 @@
         <TextView
             android:id="@+id/exitTimeId"
             android:text="exit"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -76,6 +79,7 @@
         <TextView
             android:id="@+id/totalTimeId"
             android:text="total"
+            android:textColor="@android:color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

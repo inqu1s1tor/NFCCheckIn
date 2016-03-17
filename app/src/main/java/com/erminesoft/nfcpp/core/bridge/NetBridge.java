@@ -16,5 +16,7 @@ public interface NetBridge {
 
     void addNewEvent(String idCard, final MainCallBack callback);
 
-    void getAllEvents(final MainCallBack callback);
+    void getAllEvents(String ownerId, MainCallBack callback);
+
+    void getTodayEvents(String ownerId, long curTime, final MainCallBack callback);
 }

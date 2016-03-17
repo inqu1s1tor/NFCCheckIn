@@ -36,26 +36,26 @@ public class FragmentMain extends GenericFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_main, container, false);    }
+        return inflater.inflate(R.layout.fragment_main, container, false);
+    }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        currentTimeTv = (TextView)view.findViewById(R.id.currentTime);
+        currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
 
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat("MM-dd HH:mm").format(curTime);
         currentTimeTv.setText(curStringDate);
 
         goNfc();
-        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallback());
-        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallback());
+        getTodayEvents(curTime);
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
-        }
+    }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void goNfc() {
@@ -88,27 +88,42 @@ public class FragmentMain extends GenericFragment {
         return new String(hexChars);
     }
 
+    private void getTodayEvents(long curTime) {
+        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId();
+        mActivityBridge.getUApplication().getNetBridge().getTodayEvents(myId, curTime, new NetCallback());
+    }
 
+    private void loadTodayScreen(List<Event> eventList){
+        String entry = eventList.get(0).getCreated().toString();
+
+        String exit = "no data";
+        if (eventList.size() > 1) {
+            exit = eventList.get(1).getCreated().toString();
+        }
+        // TODO  load info
+    }
 
     private final class NetCallback extends SimpleMainCallBack {
+
         @Override
-        public void onSuccess() {
-            Log.d("NetCallback", "onSuccess");
+        public void onSuccessGetEvents(List<Event> eventList) {
+            Log.d("NetCallback", "onSuccessGetEvents");
+            loadTodayScreen(eventList);
         }
     }
 
 
-        private final class Clicker implements View.OnClickListener {
+    private final class Clicker implements View.OnClickListener {
 
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.transferToStatisticsButton:
-                        mActivityBridge.getFragmentLauncher().launchStatisticsFragment();
-                        break;
-                }
-
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.transferToStatisticsButton:
+                    mActivityBridge.getFragmentLauncher().launchStatisticsFragment();
+                    break;
             }
+
         }
+    }
 
 }
