@@ -30,6 +30,9 @@ import java.util.List;
 public class FragmentMain extends GenericFragment {
 
     private TextView currentTimeTv;
+    private TextView todayEntryTv;
+    private TextView todayExitTv;
+    private TextView todayTotalTv;
 
     private NfcAdapter nfcAdapter;
 
@@ -45,6 +48,9 @@ public class FragmentMain extends GenericFragment {
         super.onViewCreated(view, savedInstanceState);
 
         currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
+        todayEntryTv = (TextView)view.findViewById(R.id.todayEntry);
+        todayExitTv = (TextView)view.findViewById(R.id.todayExit);
+        todayTotalTv = (TextView)view.findViewById(R.id.totalTimeId);
 
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat("MM-dd HH:mm").format(curTime);
@@ -100,7 +106,8 @@ public class FragmentMain extends GenericFragment {
         if (eventList.size() > 1) {
             exit = eventList.get(1).getCreated().toString();
         }
-        // TODO  load info
+        todayEntryTv.setText(entry);
+        todayExitTv.setText(exit);
     }
 
     private final class NetCallback extends SimpleMainCallBack {
