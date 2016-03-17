@@ -6,10 +6,12 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.Event;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -23,7 +25,7 @@ final class EventManager {
         this.dbBridge = dbBridge;
     }
 
-    void addNewEvent(String idCard, final MainCallBack callback){
+    void addNewEvent(String idCard, final MainCallBack callback) {
 
         Event event = new Event();
         event.setIdCard(idCard);
@@ -45,7 +47,7 @@ final class EventManager {
     }
 
 
-    private void setPermissionGrantForAllRoles(final Event event){
+    private void setPermissionGrantForAllRoles(final Event event) {
         Backendless.Data.Permissions.FIND.grantForAllRoles(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event1) {
@@ -58,14 +60,19 @@ final class EventManager {
             }
         });
     }
-    void getAllEvents(final MainCallBack callback) {
-        Backendless.Data.of( Event.class ).find(new AsyncCallback<BackendlessCollection<Event>>() {
+
+
+    void getAllEvents(String ownerId, final MainCallBack callback) {
+        String whereClause = "ownerId = '" + ownerId + "'";
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setWhereClause(whereClause);
+
+        Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
             @Override
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
                 List<Event> eventList = eventBackendlessCollection.getData();
                 Log.d("getAllevent", "eventList.size() = " + eventList.size());
                 callback.onSuccessGetEvents(eventList);
-
             }
 
             @Override
@@ -74,4 +81,27 @@ final class EventManager {
             }
         });
     }
+
+
+    void getTodayEvents(String ownerId, long curTime, final MainCallBack callback) {
+        String curStringDate = new SimpleDateFormat("MM.dd.yyyy").format(curTime);
+        String whereClause = "ownerId = '" + ownerId + "'  and  created > '" + curStringDate + "'";
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setWhereClause(whereClause);
+
+        Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
+                List<Event> eventList = eventBackendlessCollection.getData();
+                Log.d("getTodayEvents", "eventList.size() = " + eventList.size());
+                callback.onSuccessGetEvents(eventList);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Log.d("getTodayEvents", "backendlessFault = " + backendlessFault.toString());
+            }
+        });
+    }
+
 }
