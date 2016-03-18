@@ -41,6 +41,7 @@ final class EventManager {
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
                 Log.d("addNewEvent", "backendlessFault = " + backendlessFault.toString());
+                callback.onError(backendlessFault.toString());
             }
         });
 
@@ -72,6 +73,9 @@ final class EventManager {
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
                 List<Event> eventList = eventBackendlessCollection.getData();
                 Log.d("getAllevent", "eventList.size() = " + eventList.size());
+                for (Event ev : eventList){
+                    Log.d("getAllEvents", "ev.getCreated() = " + ev.getCreated());
+                }
                 callback.onSuccessGetEvents(eventList);
             }
 
@@ -94,6 +98,9 @@ final class EventManager {
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
                 List<Event> eventList = eventBackendlessCollection.getData();
                 Log.d("getTodayEvents", "eventList.size() = " + eventList.size());
+                for (Event ev : eventList){
+                    Log.d("getTodayEvents", "ev.getCreated() = " + ev.getCreated());
+                }
                 callback.onSuccessGetEvents(eventList);
             }
 

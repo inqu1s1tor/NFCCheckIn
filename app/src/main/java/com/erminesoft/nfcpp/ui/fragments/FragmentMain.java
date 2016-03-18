@@ -57,7 +57,7 @@ public class FragmentMain extends GenericFragment {
         currentTimeTv.setText(curStringDate);
 
         goNfc();
-        getTodayEvents(curTime);
+        getTodayEvents();
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
@@ -94,28 +94,41 @@ public class FragmentMain extends GenericFragment {
         return new String(hexChars);
     }
 
-    private void getTodayEvents(long curTime) {
+    private void getTodayEvents() {
+        long curTime = System.currentTimeMillis();
         String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId();
         mActivityBridge.getUApplication().getNetBridge().getTodayEvents(myId, curTime, new NetCallback());
     }
 
     private void loadTodayScreen(List<Event> eventList){
-        String entry = eventList.get(0).getCreated().toString();
+        if (eventList.size() > 0) {
+            String exit = new SimpleDateFormat("HH:mm").format(eventList.get(0).getCreated());
 
-        String exit = "no data";
-        if (eventList.size() > 1) {
-            exit = eventList.get(1).getCreated().toString();
+            String entry = "no data";
+            if (eventList.size() > 1) {
+                entry = new SimpleDateFormat("HH:mm").format(eventList.get(1).getCreated());
+            }
+            todayEntryTv.setText(entry);
+            todayExitTv.setText(exit);
         }
-        todayEntryTv.setText(entry);
-        todayExitTv.setText(exit);
     }
 
     private final class NetCallback extends SimpleMainCallBack {
 
         @Override
+        public void onSuccess() {
+            getTodayEvents();
+        }
+
+        @Override
         public void onSuccessGetEvents(List<Event> eventList) {
             Log.d("NetCallback", "onSuccessGetEvents");
             loadTodayScreen(eventList);
+        }
+
+        @Override
+        public void onError(String error) {
+
         }
     }
 
