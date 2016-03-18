@@ -103,17 +103,19 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void loadTodayScreen(List<Event> eventList) {
-        Log.d("loadTodayScreen", "eventList = " + eventList.get(0).getCreated());
-        Collections.sort(eventList, new Comparator<Event>() {
-            @Override
-            public int compare(Event lhs, Event rhs) {
-                return lhs.getCreated().compareTo(rhs.getCreated());
-            }
-        });
-
-        Log.d("loadTodayScreen", "eventList2 = " + eventList.get(0).getCreated());
         if (eventList.size() > 0) {
-            loadTodayEvents(eventList);
+            Log.d("loadTodayScreen", "eventList = " + eventList.get(0).getCreated());
+            Collections.sort(eventList, new Comparator<Event>() {
+                @Override
+                public int compare(Event lhs, Event rhs) {
+                    return lhs.getCreated().compareTo(rhs.getCreated());
+                }
+            });
+
+            Log.d("loadTodayScreen", "eventList2 = " + eventList.get(0).getCreated());
+            if (eventList.size() > 0) {
+                loadTodayEvents(eventList);
+            }
         }
     }
 

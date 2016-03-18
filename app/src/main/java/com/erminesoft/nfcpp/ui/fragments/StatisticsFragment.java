@@ -61,23 +61,24 @@ public class StatisticsFragment extends GenericFragment {
         String dayNumber = "";
         Day day = null;
 
-        for (int i = 0; i < eventList.size(); i++) {
-            String curDay = new SimpleDateFormat("dd").format(eventList.get(i).getCreated());
-            Log.d("Element list", "curDay = " + curDay);
-            Log.d("Element list", "IdCard = " + eventList.get(i).getIdCard() + "    Created = " + eventList.get(i).getCreated());
+            for (int i = 0; i < eventList.size(); i++) {
+                String curDay = new SimpleDateFormat("dd").format(eventList.get(i).getCreated());
+                Log.d("Element list", "curDay = " + curDay);
+                Log.d("Element list", "IdCard = " + eventList.get(i).getIdCard() + "    Created = " + eventList.get(i).getCreated());
 
-            if (dayNumber.equals(curDay)) {
-                day.addNewChecking(eventList.get(i).getCreated());
-            } else {
-                if (!dayNumber.equals("")) {
-                    dayList.add(day);
+                if (dayNumber.equals(curDay)) {
+                    day.addNewChecking(eventList.get(i).getCreated());
+                } else {
+                    if (!dayNumber.equals("")) {
+                        dayList.add(day);
+                    }
+                    day = new Day();
+                    day.setCurrentDate(new SimpleDateFormat("dd.MM.yyyy").format(eventList.get(i).getCreated()));
+                    day.addNewChecking(eventList.get(i).getCreated());
+                    dayNumber = curDay;
                 }
-                day = new Day();
-                day.setCurrentDate(new SimpleDateFormat("dd.MM.yyyy").format(eventList.get(i).getCreated()));
-                day.addNewChecking(eventList.get(i).getCreated());
-                dayNumber = curDay;
             }
-        }
+
 
         dayList.add(day);
         Log.d("handleList", "dayList.size() =  " + dayList.size());
