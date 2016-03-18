@@ -105,6 +105,8 @@ public class SignUpFragment extends GenericFragment {
         BackendlessUser user = new BackendlessUser();
         user.setPassword(password);
         user.setProperty("name", login);
+        user.setProperty("firstName", firstName);
+        user.setProperty("lastName", lastName);
         return user;
     }
 

@@ -40,7 +40,7 @@ public class DayAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Day getItem(int position) {
         return objects.get(position);
     }
 
@@ -52,7 +52,7 @@ public class DayAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        Day day = getDay(position);
+        Day day = getItem(position);
         Holder holder;
 
         if (convertView == null) {
@@ -74,10 +74,6 @@ public class DayAdapter extends BaseAdapter {
         holder.totalTimeTv.setText(getTotal(day));
 
         return convertView;
-    }
-
-    Day getDay(int position) {
-        return ((Day) getItem(position));
     }
 
     public void replaceNewData(List<Day> newObjects) {

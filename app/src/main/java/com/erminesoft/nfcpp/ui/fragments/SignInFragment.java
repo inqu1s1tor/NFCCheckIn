@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 
@@ -24,6 +25,7 @@ public class SignInFragment extends GenericFragment {
     private EditText signInLoginEt;
     private EditText signInPasswordEt;
     private Observer observer;
+
 
     @Nullable
     @Override
@@ -88,12 +90,21 @@ public class SignInFragment extends GenericFragment {
         }
     }
 
+    private void checkMode(BackendlessUser user) {
+        if(user.getProperty("name").toString().equals("admin")) {
+            mActivityBridge.getFragmentLauncher().launchAdminFragment();
+        }else {
+            mActivityBridge.getFragmentLauncher().launchMainFragment();
+        }
+    }
+
     private final class DbObserver implements Observer {
 
         @Override
         public void update(Observable observable, Object data) {
             hideProgressDialog();
-            mActivityBridge.getFragmentLauncher().launchMainFragment();
+            BackendlessUser user = mActivityBridge.getUApplication().getDbBridge().getMyUser();
+            checkMode(user);
         }
     }
     private final class Clicker implements View.OnClickListener {

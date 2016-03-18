@@ -128,7 +128,6 @@ public class FragmentMain extends GenericFragment {
 
         @Override
         public void onError(String error) {
-
         }
     }
 
