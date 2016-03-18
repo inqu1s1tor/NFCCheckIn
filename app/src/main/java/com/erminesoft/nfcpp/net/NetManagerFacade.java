@@ -20,12 +20,14 @@ public final class NetManagerFacade implements NetBridge {
 
     private AuthManager authManager;
     private EventManager eventManager;
+    private final UsersManager usersManager;
 
     public NetManagerFacade (Context context,SharedHelper sharedHelper, DbBridge dbBridge) {
 
         initBackendLess(context);
         authManager = new AuthManager(sharedHelper, dbBridge);
         eventManager = new EventManager(dbBridge);
+        usersManager = new UsersManager(dbBridge);
     }
 
     private void initBackendLess(Context context) {
@@ -63,6 +65,11 @@ public final class NetManagerFacade implements NetBridge {
     @Override
     public void getTodayEvents(String ownerId, long curTime, MainCallBack callback) {
         eventManager.getTodayEvents(ownerId, curTime, callback);
+    }
+
+    @Override
+    public void getAllUsers(MainCallBack callback, String searchName) {
+        usersManager.getAllUsers(callback, searchName);
     }
 
 

@@ -19,4 +19,6 @@ public interface NetBridge {
     void getAllEvents(String ownerId, MainCallBack callback);
 
     void getTodayEvents(String ownerId, long curTime, final MainCallBack callback);
+
+    void getAllUsers(final MainCallBack callback, String searchName);
 }

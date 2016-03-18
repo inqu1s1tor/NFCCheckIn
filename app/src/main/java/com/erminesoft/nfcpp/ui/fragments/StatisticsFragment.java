@@ -17,6 +17,8 @@ import com.erminesoft.nfcpp.ui.adapters.DayAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -92,6 +94,12 @@ public class StatisticsFragment extends GenericFragment {
         @Override
         public void onSuccessGetEvents(List<Event> eventList) {
             Log.d("NetCallBack", "On");
+            Collections.sort(eventList, new Comparator<Event>() {
+                @Override
+                public int compare(Event lhs, Event rhs) { // rhs  lhs
+                    return lhs.getCreated().compareTo(rhs.getCreated());
+                }
+            });
             handleList(eventList);
         }
     }

@@ -22,7 +22,11 @@ import com.erminesoft.nfcpp.ui.MainActivity;
 import com.erminesoft.nfcpp.ui.launcher.FragmentLauncher;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Aleks on 10.03.2016.
@@ -31,7 +35,6 @@ public class FragmentMain extends GenericFragment {
 
     private TextView currentTimeTv;
     private TextView todayEntryTv;
-    private TextView todayExitTv;
     private TextView todayTotalTv;
 
     private NfcAdapter nfcAdapter;
@@ -48,12 +51,11 @@ public class FragmentMain extends GenericFragment {
         super.onViewCreated(view, savedInstanceState);
 
         currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
-        todayEntryTv = (TextView)view.findViewById(R.id.todayEntry);
-        todayExitTv = (TextView)view.findViewById(R.id.todayExit);
-        todayTotalTv = (TextView)view.findViewById(R.id.totalTimeId);
+        todayEntryTv = (TextView) view.findViewById(R.id.todayEntry);
+        todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
 
         long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat("MM-dd HH:mm").format(curTime);
+        String curStringDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(curTime);
         currentTimeTv.setText(curStringDate);
 
         goNfc();
@@ -100,18 +102,59 @@ public class FragmentMain extends GenericFragment {
         mActivityBridge.getUApplication().getNetBridge().getTodayEvents(myId, curTime, new NetCallback());
     }
 
-    private void loadTodayScreen(List<Event> eventList){
-        if (eventList.size() > 0) {
-            String exit = new SimpleDateFormat("HH:mm").format(eventList.get(0).getCreated());
-
-            String entry = "no data";
-            if (eventList.size() > 1) {
-                entry = new SimpleDateFormat("HH:mm").format(eventList.get(1).getCreated());
+    private void loadTodayScreen(List<Event> eventList) {
+        Log.d("loadTodayScreen", "eventList = " + eventList.get(0).getCreated());
+        Collections.sort(eventList, new Comparator<Event>() {
+            @Override
+            public int compare(Event lhs, Event rhs) {
+                return lhs.getCreated().compareTo(rhs.getCreated());
             }
-            todayEntryTv.setText(entry);
-            todayExitTv.setText(exit);
+        });
+
+        Log.d("loadTodayScreen", "eventList2 = " + eventList.get(0).getCreated());
+        if (eventList.size() > 0) {
+            loadTodayEvents(eventList);
         }
     }
+
+
+    private void loadTodayEvents(List<Event> eventList) {
+        String totalTime = "";
+
+        Date entry = null;
+        Date exit = null;
+        long diffInMs = 0;
+        String strEvents = "";
+
+        for (int i = 1; i <= eventList.size(); i++) {
+            if (i % 2 == 0) { // 2
+                exit = eventList.get(i - 1).getCreated();
+                diffInMs = diffInMs + (exit.getTime() - entry.getTime());
+                strEvents += "  -  " + dateToFormatString(exit) + "\n";
+            } else {  //1
+                entry = eventList.get(i - 1).getCreated();
+                strEvents += dateToFormatString(entry);
+                if (i == eventList.size()) {
+                    strEvents += "  -  --:--";
+                    Date curDate = new Date(System.currentTimeMillis());
+                    diffInMs = diffInMs + (curDate.getTime() - entry.getTime());
+                }
+            }
+        }
+
+        int hh = (int) (TimeUnit.MILLISECONDS.toHours(diffInMs) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInMs)));
+        int mm = (int) (TimeUnit.MILLISECONDS.toMinutes(diffInMs) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInMs)));
+
+        totalTime = hh + ":" + mm;
+        todayEntryTv.setText(strEvents);
+        todayTotalTv.setText(totalTime);
+    }
+
+    private String dateToFormatString(Date date) {
+        String formatString = new SimpleDateFormat("HH:mm").format(date);
+        return formatString;
+    }
+
 
     private final class NetCallback extends SimpleMainCallBack {
 

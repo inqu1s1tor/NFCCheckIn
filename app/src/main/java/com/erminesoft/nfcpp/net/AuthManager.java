@@ -31,11 +31,6 @@ final class AuthManager {
         Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
             public void handleResponse(BackendlessUser registeredUser) {
                 Log.d("registryUser", "user has been registered and now can login");
-
-//                sharedHelper.setUserName((String) registeredUser.getProperty("name"));
-//                sharedHelper.setUserPassword(registeredUser.getPassword());
-//
-//                dbBridge.setMyUser(registeredUser);
                 String login = registeredUser.getProperty("name").toString();
                 String password = registeredUser.getPassword().toString();
                 logInUser(login, password, mainCallBack);
@@ -52,14 +47,6 @@ final class AuthManager {
 
 
     void autoLogin(MainCallBack callback){
-
-//        String userToken = UserTokenStorageFactory.instance().getStorage().get();
-//        if(!TextUtils.isEmpty(userToken)){
-//            dbBridge.setMyUser(Backendless.UserService.CurrentUser());
-//            callback.onSuccess();
-//            return;
-//        }
-
         String login = sharedHelper.getUserName();
         String password = sharedHelper.getUserPassword();
 
@@ -81,7 +68,6 @@ final class AuthManager {
                 sharedHelper.setUserPassword(password);
 
                 dbBridge.setMyUser(registeredUser);
-
                 callback.onSuccess();
             }
 
