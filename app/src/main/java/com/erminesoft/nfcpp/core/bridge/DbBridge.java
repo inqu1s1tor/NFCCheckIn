@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.core.bridge;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.Users;
 
 import java.util.List;
 import java.util.Observer;

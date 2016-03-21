@@ -94,9 +94,11 @@ public class FragmentMain extends GenericFragment {
 
     private void addNewEvent(String idCard){
 //        mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
+        long currentTime = System.currentTimeMillis();
+
         Event newEvent = new Event();
         newEvent.setIdCard(idCard);
-        newEvent.setCreationTime(65463);
+        newEvent.setCreationTime((int) currentTime);
         Log.d("DB", "addNewEvent id= " + idCard);
         mActivityBridge.getUApplication().getDbBridge().saveEvent(newEvent);
 

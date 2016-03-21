@@ -6,6 +6,7 @@ import android.util.Log;
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.Users;
 import com.erminesoft.nfcpp.util.DateUtil;
 
 import java.text.ParseException;
@@ -104,7 +105,7 @@ public class DbManager extends Observable implements DbBridge {
 
     @Override
     public List<Users> getAllUsers() {
-        return null;
+        return null;  // TODO
     }
 
 }
