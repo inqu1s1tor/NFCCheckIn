@@ -27,6 +27,10 @@ public interface DbBridge {
 
     public List<Event> getEventsByDate(String date);
 
-    List <User> getAllUsers();
+    List<User> getAllUsers();
+
+    void saveUser(List<User> users);
+
+    void saveUser(User user);
 
 }

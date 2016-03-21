@@ -111,4 +111,15 @@ public class DbManager extends Observable implements DbBridge {
         return initRealm().where(User.class).findAll();
     }
 
+    @Override
+    public void saveUser(List<User> users) {
+
+
+    }
+
+    @Override
+    public void saveUser(User user) {
+
+    }
+
 }
