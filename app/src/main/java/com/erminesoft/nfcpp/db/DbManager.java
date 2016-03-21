@@ -80,7 +80,6 @@ public class DbManager extends Observable implements DbBridge {
         Realm realm = initRealm();
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(event);
-//        realm.copyToRealm(event);
         realm.commitTransaction();
         realm.close();
         Log.d("DB", "saveEvent2");
