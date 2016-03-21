@@ -20,12 +20,17 @@ import io.realm.RealmConfiguration;
 
 public class DbManager extends Observable implements DbBridge {
 
-    private final Realm realm;
+    private final RealmConfiguration configuration;
     private BackendlessUser me;
 
     public DbManager(Context context) {
-        RealmConfiguration configuration = new RealmConfiguration.Builder(context).build();
-        realm = Realm.getInstance(configuration);
+        configuration = new RealmConfiguration.Builder(context).build();
+    }
+
+    private Realm initRealm(){
+        Realm realm = Realm.getInstance(configuration);
+        realm.refresh();
+        return realm;
     }
 
     @Override
@@ -52,14 +57,18 @@ public class DbManager extends Observable implements DbBridge {
 
     @Override
     public List<Event> getEvents() {
-        return realm.where(Event.class).findAll();
+        return initRealm().where(Event.class).findAll();
     }
 
     @Override
     public void saveEvent(List<Event> events) {
+
+        Realm realm = initRealm();
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(events);
         realm.commitTransaction();
+        realm.close();
+
         setChanged();
         notifyObservers();
     }
@@ -67,9 +76,12 @@ public class DbManager extends Observable implements DbBridge {
     @Override
     public void saveEvent(Event event) {
         Log.d("DB", "saveEvent");
+
+        Realm realm = initRealm();
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(event);
         realm.commitTransaction();
+        realm.close();
 
         setChanged();
         notifyObservers();
@@ -87,7 +99,7 @@ public class DbManager extends Observable implements DbBridge {
             e.printStackTrace();
         }
 
-        return realm.where(Event.class).between("creationTime", startTime, endTime).findAll();
+        return initRealm().where(Event.class).between("creationTime", startTime, endTime).findAll();
     }
 
 }
