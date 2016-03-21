@@ -62,7 +62,9 @@ public class FragmentMain extends GenericFragment {
         currentTimeTv.setText(curStringDate);
 
         goNfc();
-        getTodayEvents();
+//        getTodayEvents(); 1
+        getEventsFromBd();
+
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
@@ -94,11 +96,13 @@ public class FragmentMain extends GenericFragment {
 
     private void addNewEvent(String idCard){
 //        mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
-        long currentTime = System.currentTimeMillis();
+        int timeUnix = (int) (System.currentTimeMillis() / 1000);
+        Log.d("addNewEvent", "timeUnix = " + timeUnix);
 
         Event newEvent = new Event();
         newEvent.setIdCard(idCard);
-        newEvent.setCreationTime((int) currentTime);
+        newEvent.setCreationTime(timeUnix);
+//        newEvent.setCreated(new Date(System.currentTimeMillis()));
         Log.d("DB", "addNewEvent id= " + idCard);
         mActivityBridge.getUApplication().getDbBridge().saveEvent(newEvent);
 
@@ -116,23 +120,31 @@ public class FragmentMain extends GenericFragment {
         return new String(hexChars);
     }
 
-    private void getTodayEvents() {
-        long curTime = System.currentTimeMillis();
-        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId();
-        mActivityBridge.getUApplication().getNetBridge().getTodayEvents(myId, curTime, new NetCallback());
-    }
+//    private void getTodayEvents() {
+//        long curTime = System.currentTimeMillis();
+//        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId();
+//        mActivityBridge.getUApplication().getNetBridge().getTodayEvents(myId, curTime, new NetCallback());
+//    }
 
     private void loadTodayScreen(List<Event> eventList) {
         if (eventList.size() > 0) {
-            Log.d("loadTodayScreen", "eventList = " + eventList.get(0).getCreated());
-            Collections.sort(eventList, new Comparator<Event>() {
-                @Override
-                public int compare(Event lhs, Event rhs) {
-                    return lhs.getCreated().compareTo(rhs.getCreated());
-                }
-            });
+            Log.d("loadTodayScreen", "eventList = " + eventList.get(0).getCreationTime());
 
-            Log.d("loadTodayScreen", "eventList2 = " + eventList.get(0).getCreated());
+//            Collections.sort(eventList, new Comparator<Event>() {
+//                @Override
+//                public int compare(Event lhs, Event rhs) {
+////                    if (lhs.getCreationTime() > rhs.getCreationTime()){
+////                        return 1;
+////                    }
+////                    if (lhs.getCreationTime() < rhs.getCreationTime()){
+////                        return -1;
+////                    }
+////                    return  0;
+//                    return  lhs.getCreationTime() > rhs.getCreationTime() ? +1 : lhs.getCreationTime() < rhs.getCreationTime() ? -1 : 0;
+//                }
+//            });
+
+            Log.d("loadTodayScreen", "eventList2 = " + eventList.get(0).getCreationTime());
             if (eventList.size() > 0) {
                 loadTodayEvents(eventList);
             }
@@ -150,7 +162,8 @@ public class FragmentMain extends GenericFragment {
 
         for (int i = 1; i <= eventList.size(); i++) {
             if (i % 2 == 0) { // 2
-                exit = eventList.get(i - 1).getCreated();
+//                exit = eventList.get(i - 1).getCreated();
+//                exit  = eventList.get(i - 1).getCreationTime() //  TODo
                 diffInMs = diffInMs + (exit.getTime() - entry.getTime());
                 strEvents += "  -  " + dateToFormatString(exit) + "\n";
             } else {  //1
@@ -178,6 +191,18 @@ public class FragmentMain extends GenericFragment {
     }
 
 
+    private void getEventsFromBd(){
+        long curTime = System.currentTimeMillis();
+        String curStringDate = new SimpleDateFormat("yyyy-MM-dd").format(curTime);
+        List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
+//        List<Event> ev = mActivityBridge.getUApplication().getDbBridge().getAllEvents();
+        Log.d("getEventsFromBd", "eventList.size() = " + eventList.size());
+        for (Event event : eventList){
+            Log.d("getEventsFromBd", "event.getCreationTime() = " + event.getCreationTime());
+        }
+        loadTodayScreen(eventList);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -196,13 +221,13 @@ public class FragmentMain extends GenericFragment {
 
         @Override
         public void onSuccess() {
-            getTodayEvents();
+//            getTodayEvents();
         }
 
         @Override
         public void onSuccessGetEvents(List<Event> eventList) {
             Log.d("NetCallback", "onSuccessGetEvents");
-            loadTodayScreen(eventList);
+//            loadTodayScreen(eventList);
         }
 
         @Override
@@ -229,6 +254,9 @@ public class FragmentMain extends GenericFragment {
         @Override
         public void update(Observable observable, Object data) {
             Log.e("FM", "update");
+
+            getEventsFromBd();
+
 //            hideProgressDialog();
 //            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
         }
