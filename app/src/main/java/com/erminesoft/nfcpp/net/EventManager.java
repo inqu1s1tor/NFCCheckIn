@@ -10,7 +10,6 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.Event;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 

@@ -47,8 +47,10 @@ final class AuthManager {
 
 
     void autoLogin(MainCallBack callback){
+//        Log.d("logInUser", "autoLogin >>");
         String login = sharedHelper.getUserName();
         String password = sharedHelper.getUserPassword();
+
 
         if(TextUtils.isEmpty(login) || TextUtils.isEmpty(password)){
             callback.onError("Empty Login and/or passwd ");

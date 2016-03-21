@@ -81,10 +81,19 @@ public class FragmentMain extends GenericFragment {
                 byte[] cardIdArray = tag.getId();
                 String idCard = byteArrayToHexString(cardIdArray);
                 Log.d("nfc", "ID_Card = " + idCard);
-                mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
+
+                addNewEvent(idCard);
 
             }
         }, NfcAdapter.FLAG_READER_NFC_A, Bundle.EMPTY);
+
+    }
+
+    private void addNewEvent(String idCard){
+//        mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
+        Event newEvent = new Event();
+        newEvent.setIdCard(idCard);
+        mActivityBridge.getUApplication().getDbBridge().saveEvent(newEvent);
 
     }
 
