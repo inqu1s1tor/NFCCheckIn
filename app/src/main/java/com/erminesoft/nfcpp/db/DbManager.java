@@ -1,6 +1,7 @@
 package com.erminesoft.nfcpp.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
@@ -65,9 +66,13 @@ public class DbManager extends Observable implements DbBridge {
 
     @Override
     public void saveEvent(Event event) {
+        Log.d("DB", "saveEvent");
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(event);
         realm.commitTransaction();
+
+        setChanged();
+        notifyObservers();
     }
 
     @Override

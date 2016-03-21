@@ -26,6 +26,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,6 +40,7 @@ public class FragmentMain extends GenericFragment {
     private TextView todayTotalTv;
 
     private NfcAdapter nfcAdapter;
+    private Observer observer;
 
     @Nullable
     @Override
@@ -93,6 +96,7 @@ public class FragmentMain extends GenericFragment {
 //        mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
         Event newEvent = new Event();
         newEvent.setIdCard(idCard);
+        Log.d("DB", "addNewEvent id= " + idCard);
         mActivityBridge.getUApplication().getDbBridge().saveEvent(newEvent);
 
     }
@@ -171,6 +175,20 @@ public class FragmentMain extends GenericFragment {
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        observer = new DbObserver();
+        mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+        observer = null;
+    }
+
     private final class NetCallback extends SimpleMainCallBack {
 
         @Override
@@ -201,6 +219,18 @@ public class FragmentMain extends GenericFragment {
             }
 
         }
+    }
+
+    private final class DbObserver implements Observer {
+
+        @Override
+        public void update(Observable observable, Object data) {
+            Log.e("FM", "update");
+//            hideProgressDialog();
+//            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
+        }
+
+
     }
 
 }
