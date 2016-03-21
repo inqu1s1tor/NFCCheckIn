@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Aleks on 15.03.2016.
- */
 public class Day {
-
 
     private String currentDate;
     private List<Date> checkingList;

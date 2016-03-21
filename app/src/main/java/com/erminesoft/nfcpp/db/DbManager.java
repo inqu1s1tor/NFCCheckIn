@@ -8,12 +8,16 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Created by Aleks on 10.03.2016.
- */
+import io.realm.Realm;
+
 public class DbManager extends Observable implements DbBridge {
+
+    private final Realm realm;
     private BackendlessUser me;
 
+    public DbManager() {
+        realm = Realm.getDefaultInstance();
+    }
 
     @Override
     public BackendlessUser getMyUser() {
@@ -35,6 +39,25 @@ public class DbManager extends Observable implements DbBridge {
     @Override
     public void removeObserver(Observer observer) {
         super.deleteObserver(observer);
+    }
+
+    @Override
+    public List<Event> getEvents() {
+        return realm.where(Event.class).findAll();
+    }
+
+    @Override
+    public void saveEvent(List<Event> events) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(events);
+        realm.commitTransaction();
+    }
+
+    @Override
+    public void saveEvent(Event event) {
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(event);
+        realm.commitTransaction();
     }
 
 }

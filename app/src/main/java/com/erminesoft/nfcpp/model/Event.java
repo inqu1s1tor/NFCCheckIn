@@ -1,22 +1,19 @@
 package com.erminesoft.nfcpp.model;
 
-import android.renderscript.Element;
-
 import java.util.Date;
 
-/**
- * Created by Aleks on 11.03.2016.
- */
-public class Event {
+import io.realm.RealmObject;
+
+public class Event extends RealmObject {
 
     private String objectId;
     private Date created;
     private String idCard;
+    private boolean isSent;
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
     }
-
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
@@ -30,13 +27,20 @@ public class Event {
         return objectId;
     }
 
-
     public Date getCreated() {
         return created;
     }
 
     public String getIdCard() {
         return idCard;
+    }
+
+    public boolean getIsSent() {
+        return isSent;
+    }
+
+    public void setIsSent(boolean sent) {
+        this.isSent = sent;
     }
 }
 
