@@ -163,7 +163,8 @@ public class FragmentMain extends GenericFragment {
         for (int i = 1; i <= eventList.size(); i++) {
             if (i % 2 == 0) { // 2
 //                exit = eventList.get(i - 1).getCreated();
-//                exit  = eventList.get(i - 1).getCreationTime() //  TODo
+                long exitLongv = ((long) eventList.get(i-1).getCreationTime()) * 1000;
+                exit  = eventList.get(i - 1).getCreationTime();
                 diffInMs = diffInMs + (exit.getTime() - entry.getTime());
                 strEvents += "  -  " + dateToFormatString(exit) + "\n";
             } else {  //1
