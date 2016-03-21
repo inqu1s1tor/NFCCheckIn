@@ -9,7 +9,7 @@ public final class DateUtil {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
-    public static Date getStartOfDay(String date) throws ParseException {
+    public static int getStartOfDay(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(format.parse(date));
@@ -17,10 +17,10 @@ public final class DateUtil {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
+        return (int) (calendar.getTimeInMillis()/1000);
     }
 
-    public static Date getEndOfDayInMillis(String date) throws ParseException {
+    public static int getEndOfDayInMillis(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(format.parse(date));
@@ -29,6 +29,6 @@ public final class DateUtil {
         calendar.set(Calendar.SECOND, 60);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        return calendar.getTime();
+        return (int) (calendar.getTimeInMillis()/1000);
     }
 }

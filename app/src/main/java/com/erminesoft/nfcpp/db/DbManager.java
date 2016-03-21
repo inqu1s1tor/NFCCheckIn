@@ -27,7 +27,7 @@ public class DbManager extends Observable implements DbBridge {
         configuration = new RealmConfiguration.Builder(context).build();
     }
 
-    private Realm initRealm(){
+    private Realm initRealm() {
         Realm realm = Realm.getInstance(configuration);
         realm.refresh();
         return realm;
@@ -89,8 +89,8 @@ public class DbManager extends Observable implements DbBridge {
 
     @Override
     public List<Event> getEventsByDate(String date) {
-        Date startTime = Calendar.getInstance().getTime();
-        Date endTime = startTime;
+        int startTime = 0;
+        int endTime = (int) (System.currentTimeMillis() / 1000);
 
         try {
             startTime = DateUtil.getStartOfDay(date);
