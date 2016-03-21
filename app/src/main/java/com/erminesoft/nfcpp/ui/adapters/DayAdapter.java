@@ -69,12 +69,14 @@ public class DayAdapter extends BaseAdapter {
             holder = (Holder) convertView.getTag();
         }
 
-        holder.dateTv.setText(day.getCurrentDate().toString());
-
-        loadTodayData(holder, day.getCheckingList());
-
-//        holder.exitTimeTv.setText(getExitTime(day));
-//        holder.totalTimeTv.setText(getTotal(day));
+        Log.d("adapter", "*day=" + day);
+        if (day != null) {
+            holder.dateTv.setText(day.getCurrentDate().toString());
+            loadTodayData(holder, day.getCheckingList());
+        } else {
+            holder.totalTimeTv.setText("no data");
+            holder.allEventsTv.setText("no data");
+        }
 
         return convertView;
     }

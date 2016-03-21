@@ -68,6 +68,10 @@ public class FragmentMain extends GenericFragment {
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void goNfc() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
+        if (nfcAdapter == null){
+            Log.e("MA", "No NFC");
+            return;
+        }
         Log.e("MA", "is adapter enabled = " + nfcAdapter.isEnabled());
         nfcAdapter.enableReaderMode(getActivity(), new NfcAdapter.ReaderCallback() {
             @Override
