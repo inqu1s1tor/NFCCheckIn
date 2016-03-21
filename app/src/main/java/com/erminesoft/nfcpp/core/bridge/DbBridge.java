@@ -22,4 +22,6 @@ public interface DbBridge {
 
     void saveEvent(Event event);
 
+    public List<Event> getEventsByDate(String date);
+
 }

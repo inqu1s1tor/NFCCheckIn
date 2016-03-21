@@ -5,7 +5,10 @@ import android.content.Context;
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.util.DateUtil;
 
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
@@ -56,6 +59,8 @@ public class DbManager extends Observable implements DbBridge {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(events);
         realm.commitTransaction();
+        setChanged();
+        notifyObservers();
     }
 
     @Override
@@ -65,11 +70,19 @@ public class DbManager extends Observable implements DbBridge {
         realm.commitTransaction();
     }
 
-    public List<Event> getEvenstByDate(Date date){
+    @Override
+    public List<Event> getEventsByDate(String date) {
+        Date startTime = Calendar.getInstance().getTime();
+        Date endTime = startTime;
 
-        //realm.where(Event.class).
+        try {
+            startTime = DateUtil.getStartOfDay(date);
+            endTime = DateUtil.getEndOfDayInMillis(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        return null;
+        return realm.where(Event.class).between("creationTime", startTime, endTime).findAll();
     }
 
 }

@@ -3,12 +3,13 @@ package com.erminesoft.nfcpp.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
-public class DateUtil {
+public final class DateUtil {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
-    public int getStartOfDay(String date) throws ParseException {
+    public static Date getStartOfDay(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(format.parse(date));
@@ -16,12 +17,18 @@ public class DateUtil {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        return (int) ((calendar.getTimeInMillis()) /1000 );
+        return calendar.getTime();
     }
 
-    public long getEndOfDayInMillis(String date) throws ParseException {
-        // Add one day's time to the beginning of the day.
-        // 24 hours * 60 minutes * 60 seconds * 1000 milliseconds = 1 day
-        return getStartOfDay(date) + (24 * 60 * 60 * 1000);
+    public static Date getEndOfDayInMillis(String date) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(format.parse(date));
+        calendar.set(Calendar.HOUR_OF_DAY, 24);
+        calendar.set(Calendar.MINUTE, 60);
+        calendar.set(Calendar.SECOND, 60);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        return calendar.getTime();
     }
 }
