@@ -1,5 +1,7 @@
 package com.erminesoft.nfcpp.net;
 
+import android.util.Log;
+
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
@@ -8,6 +10,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
+import com.erminesoft.nfcpp.util.ExtractorToUser;
 
 import java.util.List;
 
@@ -33,6 +36,8 @@ public class UsersManager {
             public void handleResponse(BackendlessCollection<BackendlessUser> users) {
                 List<BackendlessUser> backendlessUsers = users.getData();
 //                callback.onSearchCompleted(backendlessUsers);  //  TODO
+                dbBridge.saveUser(ExtractorToUser.copyBackendlssUserToUserModel(backendlessUsers));
+                Log.d("my Log", "Save user to db");
             }
 
             @Override
