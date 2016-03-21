@@ -6,12 +6,10 @@ import android.util.Log;
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Event;
-import com.erminesoft.nfcpp.model.Users;
+import com.erminesoft.nfcpp.model.User;
 import com.erminesoft.nfcpp.util.DateUtil;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -57,8 +55,13 @@ public class DbManager extends Observable implements DbBridge {
     }
 
     @Override
-    public List<Event> getEvents() {
+    public List<Event> getAllEvents() {
         return initRealm().where(Event.class).findAll();
+    }
+
+    @Override
+    public List<Event> getUnsentEvents() {
+        return null;
     }
 
     @Override
@@ -104,8 +107,8 @@ public class DbManager extends Observable implements DbBridge {
     }
 
     @Override
-    public List<Users> getAllUsers() {
-        return null;  // TODO
+    public List<User> getAllUsers() {
+        return initRealm().where(User.class).findAll();
     }
 
 }

@@ -2,19 +2,21 @@ package com.erminesoft.nfcpp.model;
 
 import java.util.Date;
 
-/**
- * Created by Evgen on 21.03.2016.
- */
-public class Users {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class User extends RealmObject{
 
     private String objectId;
     private String name;
     private String lastName;
     private String firstName;
-    private String email;
     private Date created;
 
-    public Users() {
+    @PrimaryKey
+    private String email;
+
+    public User() {
     }
 
 

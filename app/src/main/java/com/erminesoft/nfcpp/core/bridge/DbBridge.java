@@ -2,7 +2,7 @@ package com.erminesoft.nfcpp.core.bridge;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.model.Event;
-import com.erminesoft.nfcpp.model.Users;
+import com.erminesoft.nfcpp.model.User;
 
 import java.util.List;
 import java.util.Observer;
@@ -17,7 +17,9 @@ public interface DbBridge {
 
     void removeObserver(Observer observer);
 
-    List<Event> getEvents();
+    List<Event> getAllEvents();
+
+    List<Event> getUnsentEvents();
 
     void saveEvent(List<Event> events);
 
@@ -25,6 +27,6 @@ public interface DbBridge {
 
     public List<Event> getEventsByDate(String date);
 
-    List <Users> getAllUsers();
+    List <User> getAllUsers();
 
 }
