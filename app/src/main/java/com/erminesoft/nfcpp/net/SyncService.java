@@ -12,9 +12,6 @@ import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Event;
 
 import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Queue;
 
 public final class SyncService extends IntentService {
@@ -50,12 +47,13 @@ public final class SyncService extends IntentService {
     }
 
     private void extractUnsentEvents() {
-        unsentEvent = new ArrayDeque<>(dbBridge.getAllEvents());
+        unsentEvent = new ArrayDeque<>(dbBridge.getUnsentEvents());
     }
 
     private void sendEvent() {
         Event event = unsentEvent.poll();
         if (event == null) {
+            isWork = false;
             return;
         }
         netBridge.addNewEvent(event.getIdCard(), new NetCallback());
