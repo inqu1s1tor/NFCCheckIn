@@ -60,6 +60,7 @@ final class AuthManager {
         logInUser(login, password, callback);
     }
 
+
     void logInUser(final String login, final String password, final MainCallBack callback) {
 
         Backendless.UserService.login(login, password, new AsyncCallback<BackendlessUser>() {
