@@ -24,6 +24,6 @@ public interface DbBridge {
 
     public List<Event> getEventsByDate(String date);
 
-    List<Users> getAllUsers ();
+    List <Users> getAllUsers();
 
 }

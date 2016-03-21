@@ -102,4 +102,9 @@ public class DbManager extends Observable implements DbBridge {
         return initRealm().where(Event.class).between("creationTime", startTime, endTime).findAll();
     }
 
+    @Override
+    public List<Users> getAllUsers() {
+        return null;
+    }
+
 }
