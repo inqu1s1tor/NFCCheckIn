@@ -61,7 +61,7 @@ public class DbManager extends Observable implements DbBridge {
 
     @Override
     public List<Event> getUnsentEvents() {
-        return null;
+        return initRealm().where(Event.class).equalTo("isSent", false).findAll();
     }
 
     @Override
