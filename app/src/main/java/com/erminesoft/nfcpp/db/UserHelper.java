@@ -25,4 +25,8 @@ final class UserHelper {
         realm.commitTransaction();
         realm.close();
     }
+
+    User getUserByStringParam(Realm realm,String param, String value){
+        return realm.where(User.class).equalTo(param, value).findFirst();
+    }
 }

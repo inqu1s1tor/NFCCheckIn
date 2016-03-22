@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.backendless.BackendlessUser;
+import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.User;
@@ -19,12 +20,14 @@ import io.realm.RealmConfiguration;
 
 public final class DbManager extends Observable implements DbBridge {
 
+    private final SharedHelper sharedHelper;
     private final RealmConfiguration configuration;
     private final UserHelper userHelper;
     private final EventHelper eventHelper;
     private BackendlessUser me;
 
-    public DbManager(Context context) {
+    public DbManager(Context context, SharedHelper sharedHelper) {
+        this.sharedHelper = sharedHelper;
         configuration = new RealmConfiguration.Builder(context).build();
         userHelper = new UserHelper();
         eventHelper = new EventHelper();
@@ -36,6 +39,11 @@ public final class DbManager extends Observable implements DbBridge {
         return realm;
     }
 
+    private void notifyObserversProcedure() {
+        setChanged();
+        notifyObservers();
+    }
+
     @Override
     public BackendlessUser getMyUser() {
         return me;
@@ -44,8 +52,19 @@ public final class DbManager extends Observable implements DbBridge {
     @Override
     public void setMyUser(BackendlessUser myUser) {
         me = myUser;
-        setChanged();
-        notifyObservers();
+        notifyObserversProcedure();
+    }
+
+    @Override
+    public User getMe() {
+        String param = "name";
+        String value = sharedHelper.getUserName();
+        return userHelper.getUserByStringParam(initRealm(), param, value);
+    }
+
+    @Override
+    public void setMyUser(User myUser) {
+        userHelper.saveUser(initRealm(), myUser);
     }
 
     @Override
@@ -71,15 +90,13 @@ public final class DbManager extends Observable implements DbBridge {
     @Override
     public void saveEvent(List<Event> events) {
         eventHelper.saveEvent(initRealm(), events);
-        setChanged();
-        notifyObservers();
+        notifyObserversProcedure();
     }
 
     @Override
     public void saveEvent(Event event) {
         eventHelper.saveEvent(initRealm(), event);
-        setChanged();
-        notifyObservers();
+        notifyObserversProcedure();
     }
 
     @Override

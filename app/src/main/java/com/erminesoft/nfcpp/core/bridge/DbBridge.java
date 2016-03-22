@@ -9,9 +9,15 @@ import java.util.Observer;
 
 public interface DbBridge {
 
+    @Deprecated
     BackendlessUser getMyUser();
 
+    @Deprecated
     void setMyUser(BackendlessUser myUser);
+
+    User getMe();
+
+    void setMyUser(User myUser);
 
     void addNewObserver(Observer observer);
 
@@ -25,7 +31,7 @@ public interface DbBridge {
 
     void saveEvent(Event event);
 
-    public List<Event> getEventsByDate(String date);
+    List<Event> getEventsByDate(String date);
 
     List<User> getAllUsers();
 
