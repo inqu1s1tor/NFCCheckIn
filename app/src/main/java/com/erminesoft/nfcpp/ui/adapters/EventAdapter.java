@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.ui.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +26,15 @@ public class EventAdapter extends BaseAdapter {
 
     public EventAdapter(Context context, List<EventsToday> eventsTodayList) {
         this.eventsTodayList = eventsTodayList;
-        mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        redColor = context.getResources().getColor(R.color.colorRed);
-        greenColor = context.getResources().getColor(R.color.colorGreen);
+        mLayoutInflater = LayoutInflater.from(context);
+        redColor = ContextCompat.getColor(context, R.color.colorRed);
+        greenColor = ContextCompat.getColor(context, R.color.colorGreen);
     }
 
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        EventsToday eventsToday = getEventItem(position);
+        EventsToday eventsToday = getItem(position);
         Holder holder;
 
         if (convertView == null) {
@@ -73,17 +74,13 @@ public class EventAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    public EventsToday getEventItem(int position) {
+    public EventsToday getItem(int position) {
         return eventsTodayList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return getItem(position).hashCode();
     }
 
     private static final class Holder {
