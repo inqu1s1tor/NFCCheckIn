@@ -1,16 +1,13 @@
 package com.erminesoft.nfcpp.db;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.User;
-import com.erminesoft.nfcpp.util.DateUtil;
 
-import java.text.ParseException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -123,7 +120,7 @@ public final class DbManager extends Observable implements DbBridge {
 
     @Override
     public Event getLastEventByCardId(String idCard) {
-        return null;
+        return eventHelper.getLastEventByCardId(initRealm(), idCard);
     }
 
 }
