@@ -17,8 +17,8 @@ import java.util.Queue;
 public final class SyncService extends IntentService {
 
     private final static String SERVICE_NAME = "synchronius";
-    private final DbBridge dbBridge;
-    private final NetBridge netBridge;
+    private DbBridge dbBridge;
+    private NetBridge netBridge;
     private Queue<Event> unsentEvent;
     private boolean isWork;
 
@@ -29,9 +29,6 @@ public final class SyncService extends IntentService {
 
     public SyncService() {
         super(SERVICE_NAME);
-        NfcApplication application = (NfcApplication) getApplicationContext();
-        dbBridge = application.getDbBridge();
-        netBridge = application.getNetBridge();
         isWork = false;
     }
 
@@ -42,8 +39,15 @@ public final class SyncService extends IntentService {
         }
 
         isWork = true;
+        initModules();
         extractUnsentEvents();
         sendEvent();
+    }
+
+    private void initModules() {
+        NfcApplication application = (NfcApplication) getApplicationContext();
+        dbBridge = application.getDbBridge();
+        netBridge = application.getNetBridge();
     }
 
     private void extractUnsentEvents() {
