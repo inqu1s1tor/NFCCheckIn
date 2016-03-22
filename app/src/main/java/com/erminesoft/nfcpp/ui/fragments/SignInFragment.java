@@ -86,7 +86,7 @@ public class SignInFragment extends GenericFragment {
         @Override
         public void onError(String error) {
             hideProgressDialog();
-            showSrotToast(error);
+            showShortToast(error);
         }
     }
 

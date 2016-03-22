@@ -17,6 +17,7 @@ import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.EventsToday;
+import com.erminesoft.nfcpp.net.SyncService;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.NfcUtil;
@@ -72,6 +73,8 @@ public class FragmentMain extends GenericFragment {
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
+
+        SyncService.start(getActivity());
     }
 
     private void initAdapter() {
