@@ -67,14 +67,16 @@ public class FragmentMain extends GenericFragment {
             return;
         }
 
-        initAdapter();
-        getEventsFromDb();
+//        initAdapter();
+//        getEventsFromDb();
 
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
 
-        SyncService.start(getActivity());
+//        SyncService.start(getActivity());
+        mActivityBridge.getUApplication().getNetBridge().addNewEvent("B7449CB1", new NetCallback());
+
     }
 
     private void initAdapter() {

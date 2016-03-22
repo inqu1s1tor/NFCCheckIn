@@ -60,6 +60,7 @@ public final class SyncService extends IntentService {
             isWork = false;
             return;
         }
+        Log.d("sendEvent", "event.getIdCard() = "+ event.getIdCard());
         netBridge.addNewEvent(event.getIdCard(), new NetCallback());
     }
 
