@@ -39,4 +39,6 @@ public interface DbBridge {
 
     void saveUser(User user);
 
+    Event getLastEventByCardId(String idCard);
+
 }

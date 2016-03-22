@@ -121,4 +121,9 @@ public final class DbManager extends Observable implements DbBridge {
         notifyObserversProcedure();
     }
 
+    @Override
+    public Event getLastEventByCardId(String idCard) {
+        return null;
+    }
+
 }
