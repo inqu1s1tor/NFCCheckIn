@@ -1,25 +1,18 @@
 package com.erminesoft.nfcpp.util;
 
-import android.util.Log;
-
 import com.backendless.BackendlessUser;
-import com.erminesoft.nfcpp.core.bridge.NetBridge;
 import com.erminesoft.nfcpp.model.User;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Aleks on 21.03.2016.
- */
 public final class ExtractorToUser {
 
+    public static List<User> convertBackendlssUserToUserModel(List<BackendlessUser> backendlessUsers) {
+        List<User> users = new ArrayList<>(backendlessUsers.size());
 
-    public static List<User> copyBackendlssUserToUserModel(List<BackendlessUser> backendlessUsers) {
-        List<User> users = new ArrayList<>();
-
-        for(BackendlessUser element : backendlessUsers) {
+        for (BackendlessUser element : backendlessUsers) {
 
             User user = new User();
             user.setName(String.valueOf(element.getProperty("name")));

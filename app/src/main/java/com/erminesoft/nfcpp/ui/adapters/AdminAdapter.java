@@ -1,52 +1,28 @@
 package com.erminesoft.nfcpp.ui.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by Aleks on 22.03.2016.
- */
-public class AdminAdapter extends BaseAdapter {
+public class AdminAdapter extends ArrayAdapter<User> {
 
-    private LayoutInflater mLayoutInflater;
-    private List<User> object;
-    Context ctx;
+    private final LayoutInflater mLayoutInflater;
 
     public AdminAdapter(Context context, ArrayList<User> users) {
-        ctx = context;
-        object = users;
-        mLayoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return object.size();
-    }
-
-    @Override
-    public User getItem(int position) {
-        return object.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+        super(context, 0, users);
+        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
         User user = getItem(position);
         Holder holder;
 
@@ -60,18 +36,13 @@ public class AdminAdapter extends BaseAdapter {
             holder = (Holder) convertView.getTag();
         }
 
-        Log.d("adapter", "*day=" + user);
-        if (user != null) {
-            holder.lastNameTv.setText(user.getLastName().toString());
-            holder.firstNameTv.setText(user.getFirstName().toString());
-        } else {
-            holder.lastNameTv.setText("no data");
-        }
+        holder.lastNameTv.setText(user.getLastName());
+        holder.firstNameTv.setText(user.getFirstName());
 
         return convertView;
     }
 
-    private final class Holder {
+    private static final class Holder {
         TextView firstNameTv;
         TextView lastNameTv;
     }

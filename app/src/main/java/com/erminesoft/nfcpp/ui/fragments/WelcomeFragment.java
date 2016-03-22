@@ -53,18 +53,23 @@ public class WelcomeFragment extends GenericFragment {
         }
     }
 
+    private void doAutologinForAdmin(){
+        SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
+        String loginName = sharedHelper.getUserName();
+
+        if (TextUtils.isEmpty(loginName) && loginName.equals("admin")){
+            mActivityBridge.getFragmentLauncher().launchAdminFragment();
+        } else {
+            mActivityBridge.getFragmentLauncher().launchMainFragment();
+        }
+    }
+
     private final class NetCallback extends SimpleMainCallBack {
 
         @Override
         public void onSuccess() {
             hideProgressDialog();
-            SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
-            String loginName = sharedHelper.getUserName();
-            if (loginName != null && loginName.equals("admin")){
-                mActivityBridge.getFragmentLauncher().launchAdminFragment();
-            } else {
-                mActivityBridge.getFragmentLauncher().launchMainFragment();
-            }
+            doAutologinForAdmin();
         }
     }
 

@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements ActivityBridge {
 
     private void currentTime() {
         long hog = System.currentTimeMillis();
-
     }
 
     @Override

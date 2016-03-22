@@ -39,7 +39,7 @@ public class AdminFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        adminList = (ListView)view.findViewById(R.id.adminList);
+        adminList = (ListView) view.findViewById(R.id.adminList);
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
 
 //        getUsersFromDb();
@@ -59,12 +59,14 @@ public class AdminFragment extends GenericFragment {
     @Override
     public void onStop() {
         super.onStop();
-        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-        observer = null;
+        if (observer != null) {
+            mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+            observer = null;
+        }
     }
 
     private void getUsersFromDb() {
-        List<User> users  = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
+        List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
         Log.d("getUsersFromDb", "users.size() = " + users.size());
     }
 
