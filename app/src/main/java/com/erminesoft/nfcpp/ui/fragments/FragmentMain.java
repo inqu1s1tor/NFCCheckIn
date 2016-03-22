@@ -10,13 +10,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.EventsToday;
+import com.erminesoft.nfcpp.ui.MainActivity;
+import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
+import com.erminesoft.nfcpp.ui.launcher.FragmentLauncher;
+import com.erminesoft.nfcpp.util.DateUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
@@ -29,10 +38,12 @@ import java.util.concurrent.TimeUnit;
 public class FragmentMain extends GenericFragment {
 
     private TextView currentTimeTv;
-    private TextView todayEntryTv;
     private TextView todayTotalTv;
+    private ListView listViewEvents;
 
     private NfcAdapter nfcAdapter;
+    private EventAdapter eventAdapter;
+    private List<EventsToday> eventsTodayList;
     private Observer observer;
 
     @Nullable
@@ -47,20 +58,27 @@ public class FragmentMain extends GenericFragment {
         super.onViewCreated(view, savedInstanceState);
 
         currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
-        todayEntryTv = (TextView) view.findViewById(R.id.todayEntry);
         todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
+        listViewEvents = (ListView) view.findViewById(R.id.list_events);
+
 
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(curTime);
         currentTimeTv.setText(curStringDate);
 
         goNfc();
-//        getTodayEvents(); 1
+        initAdapter();
         getEventsFromDb();
 
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
+    }
+
+    private void initAdapter(){
+        eventsTodayList = new ArrayList<>();
+        eventAdapter = new EventAdapter(getActivity(), eventsTodayList);
+        listViewEvents.setAdapter(eventAdapter);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -90,15 +108,11 @@ public class FragmentMain extends GenericFragment {
     private void addNewEvent(String idCard) {
 //        mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
         long now = System.currentTimeMillis();
-        Log.d("addNewEvent", "now = " + now);
         int timeUnix = (int) (System.currentTimeMillis() / 1000);
-        Log.d("addNewEvent", "timeUnix = " + timeUnix);
 
         Event newEvent = new Event();
         newEvent.setIdCard(idCard);
         newEvent.setCreationTime(timeUnix);
-//        newEvent.setCreated(new Date(System.currentTimeMillis()));
-        Log.d("DB", "addNewEvent id= " + idCard);
         mActivityBridge.getUApplication().getDbBridge().saveEvent(newEvent);
 
     }
@@ -115,51 +129,44 @@ public class FragmentMain extends GenericFragment {
         return new String(hexChars);
     }
 
-//    private void getTodayEvents() {
-//        long curTime = System.currentTimeMillis();
-//        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId();
-//        mActivityBridge.getUApplication().getNetBridge().getTodayEvents(myId, curTime, new NetCallback());
-//    }
 
-
-
-    private void loadTodayEvents(List<Event> eventList) {
+    private void loadTodayEventsList(List<Event> eventList) {
         if (eventList.size() > 0) {
-            String totalTime = "";
+            eventsTodayList.clear();
             long entryLong = 0;
             long exitLong = 0;
             long diffInMs = 0;
-            String strEvents = "";
 
             for (int i = 1; i <= eventList.size(); i++) {
                 if (i % 2 == 0) { // 2
                     exitLong = ((long) eventList.get(i - 1).getCreationTime() * (long) 1000);
+
                     Log.d("loadTodayEvents", "exitLong = " + exitLong);
                     diffInMs = diffInMs + (exitLong - entryLong);
-                    strEvents += "  -  " + dateToFormatString(exitLong) + "\n";
+                    eventsTodayList.add(new EventsToday(DateUtil.dateToFormatString(entryLong),
+                            DateUtil.dateToFormatString(exitLong),
+                            DateUtil.getDifferenceTime(exitLong - entryLong),
+                            false));
                 } else {  //1
                     entryLong = ((long) eventList.get(i - 1).getCreationTime() * (long) 1000);
-                    strEvents += dateToFormatString(entryLong);
                     if (i == eventList.size()) {
-                        strEvents += "  -  --:--";
                         Date curDate = new Date(System.currentTimeMillis());
+                        eventsTodayList.add(new EventsToday(DateUtil.dateToFormatString(entryLong),
+                                " --:-- ",
+                                DateUtil.getDifferenceTime(curDate.getTime() - entryLong),
+                                false));
+
                         diffInMs = diffInMs + (curDate.getTime() - entryLong);
                     }
                 }
             }
 
-            int hh = (int) (TimeUnit.MILLISECONDS.toHours(diffInMs) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInMs)));
-            int mm = (int) (TimeUnit.MILLISECONDS.toMinutes(diffInMs) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInMs)));
+            todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
 
-            totalTime = hh + ":" + mm;
-            todayEntryTv.setText(strEvents);
-            todayTotalTv.setText(totalTime);
+            Log.d("loadTodayEventsList", "eventsTodayList.size() = " + eventsTodayList.size());
+            eventAdapter.replaceNewData(eventsTodayList);
+
         }
-    }
-
-    private String dateToFormatString(long creationTime) {
-        String formatString = new SimpleDateFormat("HH:mm").format(new Date(creationTime));
-        return formatString;
     }
 
 
@@ -167,8 +174,7 @@ public class FragmentMain extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat("yyyy-MM-dd").format(curTime);
         List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-//        List<Event> ev = mActivityBridge.getUApplication().getDbBridge().getAllEvents();
-        loadTodayEvents(eventList);
+        loadTodayEventsList(eventList);
     }
 
     @Override
@@ -189,7 +195,7 @@ public class FragmentMain extends GenericFragment {
 
         @Override
         public void onSuccess() {
-//            getTodayEvents();
+//            getEventsFromBd();
         }
 
         @Override
@@ -222,8 +228,12 @@ public class FragmentMain extends GenericFragment {
         @Override
         public void update(Observable observable, Object data) {
             Log.e("FM", "update");
-            getEventsFromDb();
-//            hideProgressDialog();
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    getEventsFromDb();
+                }
+            });
         }
 
 

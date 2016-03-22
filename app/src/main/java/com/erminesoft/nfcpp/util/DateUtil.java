@@ -1,9 +1,12 @@
 package com.erminesoft.nfcpp.util;
 
+import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public final class DateUtil {
 
@@ -31,4 +34,22 @@ public final class DateUtil {
 
         return (int) (calendar.getTimeInMillis()/1000);
     }
+
+
+    public static String getDifferenceTime(long diffInMs) {
+        int hh = (int) (TimeUnit.MILLISECONDS.toHours(diffInMs) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInMs)));
+        int mm = (int) (TimeUnit.MILLISECONDS.toMinutes(diffInMs) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInMs)));
+        String hoursString = (hh < 10 ? "0"+hh : String.valueOf(hh));
+        String minutesString = (mm < 10 ? "0"+mm : String.valueOf(mm));
+        String differenceTime = hoursString + ":" + minutesString;
+        return differenceTime;
+    }
+
+    public static String dateToFormatString(long creationTime) {
+        String formatString = new SimpleDateFormat("HH:mm").format(new Date(creationTime));
+        Log.d("dateToFormatString", "formatString = " + formatString);
+        return formatString;
+    }
+
+
 }
