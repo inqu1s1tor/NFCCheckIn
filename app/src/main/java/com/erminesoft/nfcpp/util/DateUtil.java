@@ -48,7 +48,6 @@ public final class DateUtil {
 
     public static String dateToFormatString(long creationTime) {
         String formatString = new SimpleDateFormat("HH:mm").format(new Date(creationTime));
-        Log.d("dateToFormatString", "formatString = " + formatString);
         return formatString;
     }
 

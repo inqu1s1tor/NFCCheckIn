@@ -11,6 +11,7 @@ import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.Event;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,6 +29,11 @@ final class EventManager {
 
         Event event = new Event();
         event.setIdCard(idCard);
+//        event.setIsSent(true);
+//        event.setObjectId("");
+//        event.setCreationTime(125);
+//        event.setCreated(new Date(System.currentTimeMillis()));
+        
 
         Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override
