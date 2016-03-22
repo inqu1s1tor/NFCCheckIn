@@ -47,12 +47,11 @@ public class DayAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return getItem(position).hashCode();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
         Day day = getItem(position);
         Holder holder;
 
