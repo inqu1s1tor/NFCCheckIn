@@ -24,7 +24,6 @@ import com.erminesoft.nfcpp.util.SortUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -119,7 +118,7 @@ public class FragmentMain extends GenericFragment {
 
     private void getEventsFromDb() {
         long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat("yyyy-MM-dd").format(curTime);
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
         loadTodayEventsList(eventList);
     }
@@ -134,8 +133,10 @@ public class FragmentMain extends GenericFragment {
     @Override
     public void onStop() {
         super.onStop();
-        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-        observer = null;
+        if (observer != null) {
+            mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+            observer = null;
+        }
     }
 
     private final class NetCallback extends SimpleMainCallBack {
