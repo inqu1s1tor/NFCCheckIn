@@ -58,7 +58,13 @@ public class WelcomeFragment extends GenericFragment {
         @Override
         public void onSuccess() {
             hideProgressDialog();
-            mActivityBridge.getFragmentLauncher().launchMainFragment();
+            SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
+            String loginName = sharedHelper.getUserName();
+            if (loginName != null && loginName.equals("admin")){
+                mActivityBridge.getFragmentLauncher().launchAdminFragment();
+            } else {
+                mActivityBridge.getFragmentLauncher().launchMainFragment();
+            }
         }
     }
 

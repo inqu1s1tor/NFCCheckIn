@@ -1,5 +1,7 @@
 package com.erminesoft.nfcpp.util;
 
+import android.util.Log;
+
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
 import com.erminesoft.nfcpp.model.User;
@@ -18,12 +20,14 @@ public final class ExtractorToUser {
         List<User> users = new ArrayList<>();
 
         for(BackendlessUser element : backendlessUsers) {
+
             User user = new User();
-            user.setName(element.getProperty("name").toString());
-            user.setObjectId(element.getProperty("objectId").toString());
-            user.setFirstName(element.getProperty("firstName").toString());
-            user.setLastName(element.getProperty("lastName").toString());
+            user.setName(String.valueOf(element.getProperty("name")));
+            user.setObjectId(String.valueOf(element.getProperty("objectId")));
+            user.setFirstName(String.valueOf(element.getProperty("firstName")));
+            user.setLastName(String.valueOf(element.getProperty("lastName")));
             user.setCreated((Date) element.getProperty("created"));
+            user.setEmail(String.valueOf(element.getProperty("name")));
 
             users.add(user);
         }

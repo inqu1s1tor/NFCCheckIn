@@ -35,9 +35,10 @@ public class UsersManager {
             @Override
             public void handleResponse(BackendlessCollection<BackendlessUser> users) {
                 List<BackendlessUser> backendlessUsers = users.getData();
-//                callback.onSearchCompleted(backendlessUsers);  //  TODO
-                dbBridge.saveUser(ExtractorToUser.copyBackendlssUserToUserModel(backendlessUsers));
-                Log.d("my Log", "Save user to db");
+                if(backendlessUsers.size()!= 0) {
+                    dbBridge.saveUser(ExtractorToUser.copyBackendlssUserToUserModel(backendlessUsers));
+                }
+
             }
 
             @Override

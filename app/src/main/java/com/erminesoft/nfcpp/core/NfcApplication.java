@@ -19,7 +19,7 @@ public final class NfcApplication extends Application {
         super.onCreate();
 
         sharedHelper = new SharedHelper(this);
-        dbBridge = new DbManager(this);
+        dbBridge = new DbManager(this, sharedHelper);
         netBridge = new NetManagerFacade(this, sharedHelper, dbBridge);
     }
 

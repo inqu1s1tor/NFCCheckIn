@@ -1,13 +1,11 @@
 package com.erminesoft.nfcpp.ui.fragments;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +13,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
-import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Event;
-import com.erminesoft.nfcpp.ui.MainActivity;
-import com.erminesoft.nfcpp.ui.launcher.FragmentLauncher;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
@@ -63,7 +56,7 @@ public class FragmentMain extends GenericFragment {
 
         goNfc();
 //        getTodayEvents(); 1
-        getEventsFromBd();
+        getEventsFromDb();
 
 
         View.OnClickListener listener = new Clicker();
@@ -170,7 +163,7 @@ public class FragmentMain extends GenericFragment {
     }
 
 
-    private void getEventsFromBd() {
+    private void getEventsFromDb() {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat("yyyy-MM-dd").format(curTime);
         List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
@@ -229,7 +222,7 @@ public class FragmentMain extends GenericFragment {
         @Override
         public void update(Observable observable, Object data) {
             Log.e("FM", "update");
-            getEventsFromBd();
+            getEventsFromDb();
 //            hideProgressDialog();
         }
 

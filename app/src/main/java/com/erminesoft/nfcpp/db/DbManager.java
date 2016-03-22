@@ -112,11 +112,15 @@ public final class DbManager extends Observable implements DbBridge {
     @Override
     public void saveUser(List<User> users) {
         userHelper.saveUser(initRealm(), users);
+        setChanged();
+        notifyObservers();
     }
 
     @Override
     public void saveUser(User user) {
         userHelper.saveUser(initRealm(), user);
+        setChanged();
+        notifyObservers();
     }
 
 }
