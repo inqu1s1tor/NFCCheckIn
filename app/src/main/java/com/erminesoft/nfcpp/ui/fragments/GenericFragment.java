@@ -23,11 +23,11 @@ public abstract class GenericFragment extends Fragment {
         mActivityBridge = (ActivityBridge)getActivity();
     }
 
-    protected void showSrotToast(int resId) {
-        showSrotToast(getString(resId));
+    protected void showShortToast(int resId) {
+        showShortToast(getString(resId));
     }
 
-    protected void showSrotToast(String contentString) {
+    protected void showShortToast(String contentString) {
         Toast.makeText(getActivity(), contentString, Toast.LENGTH_SHORT).show();
     }
 

@@ -10,6 +10,10 @@ public class EventsToday {
     private String total_hours;
     private boolean selector;
 
+    public EventsToday(){
+
+    }
+
     public EventsToday(String entry, String exit, String total_hours, boolean selector){
         this.entry = entry;
         this.exit = exit;

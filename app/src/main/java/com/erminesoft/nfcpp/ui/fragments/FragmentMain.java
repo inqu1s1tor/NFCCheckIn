@@ -17,20 +17,17 @@ import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.EventsToday;
-import com.erminesoft.nfcpp.ui.MainActivity;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
-import com.erminesoft.nfcpp.ui.launcher.FragmentLauncher;
 import com.erminesoft.nfcpp.util.DateUtil;
+import com.erminesoft.nfcpp.util.NfcUtil;
+import com.erminesoft.nfcpp.util.SortUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Aleks on 10.03.2016.
@@ -63,10 +60,13 @@ public class FragmentMain extends GenericFragment {
 
 
         long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat("yyyy-MM-dd HH:mm").format(curTime);
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
         currentTimeTv.setText(curStringDate);
 
-        goNfc();
+        if (!initNFC()) {
+            return;
+        }
+
         initAdapter();
         getEventsFromDb();
 
@@ -75,38 +75,26 @@ public class FragmentMain extends GenericFragment {
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
     }
 
-    private void initAdapter(){
+    private void initAdapter() {
         eventsTodayList = new ArrayList<>();
         eventAdapter = new EventAdapter(getActivity(), eventsTodayList);
         listViewEvents.setAdapter(eventAdapter);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private void goNfc() {
+    private boolean initNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
+
         if (nfcAdapter == null) {
-            Log.e("MA", "No NFC");
-            return;
+            showShortToast("No NFC module");
+            return false;
         }
-        Log.e("MA", "is adapter enabled = " + nfcAdapter.isEnabled());
-        nfcAdapter.enableReaderMode(getActivity(), new NfcAdapter.ReaderCallback() {
-            @Override
-            public void onTagDiscovered(Tag tag) {
-                Log.e("MA", "NFC TAG = " + tag.toString());
 
-                byte[] cardIdArray = tag.getId();
-                String idCard = byteArrayToHexString(cardIdArray);
-                Log.d("nfc", "ID_Card = " + idCard);
-
-                addNewEvent(idCard);
-
-            }
-        }, NfcAdapter.FLAG_READER_NFC_A, Bundle.EMPTY);
-
+        nfcAdapter.enableReaderMode(getActivity(), new NfcCallback(), NfcAdapter.FLAG_READER_NFC_A, Bundle.EMPTY);
+        return true;
     }
 
     private void addNewEvent(String idCard) {
-//        mActivityBridge.getUApplication().getNetBridge().addNewEvent(idCard, new NetCallback());
         long now = System.currentTimeMillis();
         int timeUnix = (int) (System.currentTimeMillis() / 1000);
 
@@ -117,56 +105,15 @@ public class FragmentMain extends GenericFragment {
 
     }
 
-    private static String byteArrayToHexString(byte[] bytes) {
-        final char[] hexArray = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-        char[] hexChars = new char[bytes.length * 2];
-        int v;
-        for (int j = 0; j < bytes.length; j++) {
-            v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-        }
-        return new String(hexChars);
-    }
-
-
     private void loadTodayEventsList(List<Event> eventList) {
-        if (eventList.size() > 0) {
-            eventsTodayList.clear();
-            long entryLong = 0;
-            long exitLong = 0;
-            long diffInMs = 0;
-
-            for (int i = 1; i <= eventList.size(); i++) {
-                if (i % 2 == 0) { // 2
-                    exitLong = ((long) eventList.get(i - 1).getCreationTime() * (long) 1000);
-
-                    Log.d("loadTodayEvents", "exitLong = " + exitLong);
-                    diffInMs = diffInMs + (exitLong - entryLong);
-                    eventsTodayList.add(new EventsToday(DateUtil.dateToFormatString(entryLong),
-                            DateUtil.dateToFormatString(exitLong),
-                            DateUtil.getDifferenceTime(exitLong - entryLong),
-                            false));
-                } else {  //1
-                    entryLong = ((long) eventList.get(i - 1).getCreationTime() * (long) 1000);
-                    if (i == eventList.size()) {
-                        Date curDate = new Date(System.currentTimeMillis());
-                        eventsTodayList.add(new EventsToday(DateUtil.dateToFormatString(entryLong),
-                                " --:-- ",
-                                DateUtil.getDifferenceTime(curDate.getTime() - entryLong),
-                                false));
-
-                        diffInMs = diffInMs + (curDate.getTime() - entryLong);
-                    }
-                }
-            }
-
-            todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
-
-            Log.d("loadTodayEventsList", "eventsTodayList.size() = " + eventsTodayList.size());
-            eventAdapter.replaceNewData(eventsTodayList);
-
+        if (eventList.size() <= 0) {
+            return;
         }
+
+        eventsTodayList.clear();
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(eventList, eventsTodayList);
+        todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
+        eventAdapter.replaceNewData(eventsTodayList);
     }
 
 
@@ -209,7 +156,6 @@ public class FragmentMain extends GenericFragment {
         }
     }
 
-
     private final class Clicker implements View.OnClickListener {
 
         @Override
@@ -219,6 +165,22 @@ public class FragmentMain extends GenericFragment {
                     mActivityBridge.getFragmentLauncher().launchStatisticsFragment();
                     break;
             }
+
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private final class NfcCallback implements NfcAdapter.ReaderCallback {
+
+        @Override
+        public void onTagDiscovered(Tag tag) {
+            Log.e("MA", "NFC TAG = " + tag.toString());
+
+            byte[] cardIdArray = tag.getId();
+            String idCard = NfcUtil.byteArrayToHexString(cardIdArray);
+            Log.d("nfc", "ID_Card = " + idCard);
+
+            addNewEvent(idCard);
 
         }
     }

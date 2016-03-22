@@ -10,10 +10,11 @@ import java.util.concurrent.TimeUnit;
 
 public final class DateUtil {
 
-    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    public static final String DATE_FORMAT_Y_M_D = "yyyy-MM-dd";
+    public static final String DATE_FORMAT_Y_M_D_H_M = "yyyy-MM-dd HH:mm";
 
     public static int getStartOfDay(String date) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_Y_M_D);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(format.parse(date));
         calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -24,7 +25,7 @@ public final class DateUtil {
     }
 
     public static int getEndOfDayInMillis(String date) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_Y_M_D);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(format.parse(date));
         calendar.set(Calendar.HOUR_OF_DAY, 24);
