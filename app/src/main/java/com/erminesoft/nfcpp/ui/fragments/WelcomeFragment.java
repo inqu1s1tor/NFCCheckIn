@@ -57,7 +57,7 @@ public class WelcomeFragment extends GenericFragment {
         SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
         String loginName = sharedHelper.getUserName();
 
-        if (TextUtils.isEmpty(loginName) && loginName.equals("admin")){
+        if (loginName.equals("admin")){
             mActivityBridge.getFragmentLauncher().launchAdminFragment();
         } else {
             mActivityBridge.getFragmentLauncher().launchMainFragment();

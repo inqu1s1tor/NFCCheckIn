@@ -27,13 +27,11 @@ import java.util.concurrent.TimeUnit;
 public class DayAdapter extends BaseAdapter {
 
     private LayoutInflater mLayoutInflater;
-    private Context ctx;
     private List<Day> objects;
 
     public DayAdapter(Context context, List<Day> days) {
-        ctx = context;
         objects = days;
-        mLayoutInflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLayoutInflater = LayoutInflater.from(context);
     }
 
 

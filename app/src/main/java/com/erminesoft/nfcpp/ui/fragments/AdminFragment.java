@@ -33,6 +33,7 @@ public class AdminFragment extends GenericFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_admin, container, false);
+
     }
 
     @Override
@@ -40,12 +41,13 @@ public class AdminFragment extends GenericFragment {
         super.onViewCreated(view, savedInstanceState);
 
         adminList = (ListView) view.findViewById(R.id.adminList);
+        adminList.setEmptyView(view.findViewById(R.id.empty_list_item_admin));
+
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
 
-//        getUsersFromDb();
-//        AdminAdapter adminAdapter = new AdminAdapter(getActivity(), (ArrayList<User>) mActivityBridge.getUApplication().getDbBridge().getAllUsers());
 
-//        adminList.setAdapter(adminAdapter);
+        AdminAdapter adminAdapter = new AdminAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
+        adminList.setAdapter(adminAdapter);
 
     }
 
@@ -74,6 +76,7 @@ public class AdminFragment extends GenericFragment {
         @Override
         public void onSuccess() {
             Log.d("myLog", "save success");
+            getUsersFromDb();
         }
     }
 
