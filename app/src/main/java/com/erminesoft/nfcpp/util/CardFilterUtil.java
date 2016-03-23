@@ -15,7 +15,7 @@ public final class CardFilterUtil {
             return false;
         }
 
-        if (currentTime - event.getCreationTime() < 20) {
+        if (currentTime - event.getCreationTime() < TWELVE_SEC) {
             return true;
         }
 
