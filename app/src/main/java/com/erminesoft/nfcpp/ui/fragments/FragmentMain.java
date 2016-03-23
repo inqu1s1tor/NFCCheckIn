@@ -77,7 +77,7 @@ public class FragmentMain extends GenericFragment {
 
 //        SyncService.start(getActivity());
       //  mActivityBridge.getUApplication().getNetBridge().addNewEvent("B7449CB1", new NetCallback());
-
+        SyncService.start(getActivity());
     }
 
     private void initAdapter() {
@@ -112,9 +112,12 @@ public class FragmentMain extends GenericFragment {
 
 
     private void getEventsFromDb() {
+//        SyncService.start(getActivity());
+
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
+        Log.d("getEventsFromDb","eventList.size() = " + eventList.size());
         loadTodayEventsList(eventList);
     }
 
@@ -141,7 +144,7 @@ public class FragmentMain extends GenericFragment {
         mActivityBridge.getUApplication().getDbBridge().saveEvent(event);
 
         Log.e("FM", "start sync");
-        SyncService.start(getActivity());
+//        SyncService.start(getActivity());
     }
 
     @Override

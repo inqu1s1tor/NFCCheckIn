@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.backendless:backendless:3.0.11'
+    compile 'com.netflix.rxjava:rxjava-android:+'
+
 }
