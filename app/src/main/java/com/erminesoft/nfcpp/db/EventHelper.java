@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import io.realm.Sort;
 
 final class EventHelper {
@@ -48,6 +49,11 @@ final class EventHelper {
     }
 
     Event getLastEventByCardId(Realm realm, String cardId){
-        return realm.where(Event.class).equalTo("idCard", cardId).findAllSorted("creationTime", Sort.DESCENDING).first();
+        RealmResults<Event> results = realm.where(Event.class).equalTo("idCard", cardId).findAllSorted("creationTime", Sort.DESCENDING);
+
+        if(results != null && !results.isEmpty()){
+            return results.first();
+        }
+        return null;
     }
 }
