@@ -5,7 +5,7 @@ import android.content.Context;
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.User;
 
 import java.util.List;
@@ -75,29 +75,29 @@ public final class DbManager extends Observable implements DbBridge {
     }
 
     @Override
-    public List<Event> getAllEvents() {
+    public List<RealmEvent> getAllEvents() {
         return eventHelper.getAllEvents(initRealm());
     }
 
     @Override
-    public List<Event> getUnsentEvents() {
+    public List<RealmEvent> getUnsentEvents() {
         return eventHelper.getUnsentEvents(initRealm());
     }
 
     @Override
-    public void saveEvent(List<Event> events) {
-        eventHelper.saveEvent(initRealm(), events);
+    public void saveEvent(List<RealmEvent> realmEvents) {
+        eventHelper.saveEvent(initRealm(), realmEvents);
         notifyObserversProcedure();
     }
 
     @Override
-    public void saveEvent(Event event) {
-        eventHelper.saveEvent(initRealm(), event);
+    public void saveEvent(RealmEvent realmEvent) {
+        eventHelper.saveEvent(initRealm(), realmEvent);
         notifyObserversProcedure();
     }
 
     @Override
-    public List<Event> getEventsByDate(String date) {
+    public List<RealmEvent> getEventsByDate(String date) {
         return eventHelper.getEventsByDate(initRealm(), date);
     }
 
@@ -119,7 +119,7 @@ public final class DbManager extends Observable implements DbBridge {
     }
 
     @Override
-    public Event getLastEventByCardId(String idCard) {
+    public RealmEvent getLastEventByCardId(String idCard) {
         return eventHelper.getLastEventByCardId(initRealm(), idCard);
     }
 

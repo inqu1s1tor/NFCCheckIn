@@ -8,11 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Day;
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.ui.adapters.DayAdapter;
 
 import java.text.SimpleDateFormat;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -57,24 +55,24 @@ public class StatisticsFragment extends GenericFragment {
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(myId, new NetCallback());
     }
 
-    private void handleList(List<Event> eventList) {
+    private void handleList(List<RealmEvent> realmEventList) {
         String dayNumber = "";
         Day day = null;
 
-            for (int i = 0; i < eventList.size(); i++) {
-                String curDay = new SimpleDateFormat("dd").format(eventList.get(i).getCreated());
+            for (int i = 0; i < realmEventList.size(); i++) {
+                String curDay = new SimpleDateFormat("dd").format(realmEventList.get(i).getCreated());
                 Log.d("Element list", "curDay = " + curDay);
-                Log.d("Element list", "IdCard = " + eventList.get(i).getIdCard() + "    Created = " + eventList.get(i).getCreated());
+                Log.d("Element list", "IdCard = " + realmEventList.get(i).getIdCard() + "    Created = " + realmEventList.get(i).getCreated());
 
                 if (dayNumber.equals(curDay)) {
-                    day.addNewChecking(eventList.get(i).getCreated());
+                    day.addNewChecking(realmEventList.get(i).getCreated());
                 } else {
                     if (!dayNumber.equals("")) {
                         dayList.add(day);
                     }
                     day = new Day();
-                    day.setCurrentDate(new SimpleDateFormat("dd.MM.yyyy").format(eventList.get(i).getCreated()));
-                    day.addNewChecking(eventList.get(i).getCreated());
+                    day.setCurrentDate(new SimpleDateFormat("dd.MM.yyyy").format(realmEventList.get(i).getCreated()));
+                    day.addNewChecking(realmEventList.get(i).getCreated());
                     dayNumber = curDay;
                 }
             }
@@ -93,15 +91,15 @@ public class StatisticsFragment extends GenericFragment {
     private final class NetCallback extends SimpleMainCallBack {
 
         @Override
-        public void onSuccessGetEvents(List<Event> eventList) {
+        public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
             Log.d("NetCallBack", "On");
-            Collections.sort(eventList, new Comparator<Event>() {
+            Collections.sort(realmEventList, new Comparator<RealmEvent>() {
                 @Override
-                public int compare(Event lhs, Event rhs) { // rhs  lhs
+                public int compare(RealmEvent lhs, RealmEvent rhs) { // rhs  lhs
                     return lhs.getCreated().compareTo(rhs.getCreated());
                 }
             });
-            handleList(eventList);
+            handleList(realmEventList);
         }
     }
 

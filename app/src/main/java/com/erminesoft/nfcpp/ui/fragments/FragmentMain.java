@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.net.SyncService;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
@@ -99,13 +99,13 @@ public class FragmentMain extends GenericFragment {
         return true;
     }
 
-    private void loadTodayEventsList(List<Event> eventList) {
-        if (eventList.size() <= 0) {
+    private void loadTodayEventsList(List<RealmEvent> realmEventList) {
+        if (realmEventList.size() <= 0) {
             return;
         }
 
         eventsTodayList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(eventList, eventsTodayList);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsTodayList);
         todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsTodayList);
     }
@@ -114,9 +114,9 @@ public class FragmentMain extends GenericFragment {
     private void getEventsFromDb() {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
-        List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-        Log.d("getEventsFromDb","eventList.size() = " + eventList.size());
-        loadTodayEventsList(eventList);
+        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
+        Log.d("getEventsFromDb","realmEventList.size() = " + realmEventList.size());
+        loadTodayEventsList(realmEventList);
     }
 
     @Override
@@ -135,11 +135,11 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void createNewEvent(String cardId) {
-        Event event = new Event();
-        event.setIdCard(cardId);
-        event.setCreationTime((int) (System.currentTimeMillis() / 1000));
-        event.setIsSent(false);
-        mActivityBridge.getUApplication().getDbBridge().saveEvent(event);
+        RealmEvent realmEvent = new RealmEvent();
+        realmEvent.setIdCard(cardId);
+        realmEvent.setCreationTime((int) (System.currentTimeMillis() / 1000));
+        realmEvent.setIsSent(false);
+        mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEvent);
 
         Log.e("FM", "start sync");
 //        SyncService.start(getActivity());
@@ -162,9 +162,9 @@ public class FragmentMain extends GenericFragment {
         }
 
         @Override
-        public void onSuccessGetEvents(List<Event> eventList) {
+        public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
             Log.d("NetCallback", "onSuccessGetEvents");
-//            loadTodayScreen(eventList);
+//            loadTodayScreen(realmEventList);
         }
 
         @Override

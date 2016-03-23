@@ -5,19 +5,17 @@ import java.util.Date;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Event extends RealmObject {
+public class RealmEvent extends RealmObject {
 
     private String objectId;
     private Date created;
-    private Date updated;
+//    private Date updated;
 
     private String idCard;
     private boolean isSent;
 
     @PrimaryKey
     private int creationTime;
-
-    public Event() {}
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
@@ -59,13 +57,6 @@ public class Event extends RealmObject {
         this.creationTime = creationTime;
     }
 
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
 }
 
 

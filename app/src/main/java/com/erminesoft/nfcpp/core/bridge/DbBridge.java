@@ -1,7 +1,7 @@
 package com.erminesoft.nfcpp.core.bridge;
 
 import com.backendless.BackendlessUser;
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.User;
 
 import java.util.List;
@@ -23,15 +23,15 @@ public interface DbBridge {
 
     void removeObserver(Observer observer);
 
-    List<Event> getAllEvents();
+    List<RealmEvent> getAllEvents();
 
-    List<Event> getUnsentEvents();
+    List<RealmEvent> getUnsentEvents();
 
-    void saveEvent(List<Event> events);
+    void saveEvent(List<RealmEvent> realmEvents);
 
-    void saveEvent(Event event);
+    void saveEvent(RealmEvent realmEvent);
 
-    List<Event> getEventsByDate(String date);
+    List<RealmEvent> getEventsByDate(String date);
 
     List<User> getAllUsers();
 
@@ -39,6 +39,6 @@ public interface DbBridge {
 
     void saveUser(User user);
 
-    Event getLastEventByCardId(String idCard);
+    RealmEvent getLastEventByCardId(String idCard);
 
 }

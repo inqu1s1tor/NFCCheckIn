@@ -1,8 +1,6 @@
 package com.erminesoft.nfcpp.util;
 
-import android.util.Log;
-
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.EventsToday;
 
 import java.util.Date;
@@ -10,7 +8,7 @@ import java.util.List;
 
 public final class SortUtil {
 
-    public static long sortEventsOnTodayAndReturnTotalWorkingTime(List<Event> allEventsList, List<EventsToday> todayEventsList) {
+    public static long sortEventsOnTodayAndReturnTotalWorkingTime(List<RealmEvent> allEventsList, List<EventsToday> todayEventsList) {
 
         long entryLong = 0;
         long exitLong = 0;

@@ -8,8 +8,7 @@ import android.util.Log;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
-import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -19,7 +18,7 @@ public final class SyncService extends IntentService {
     private final static String SERVICE_NAME = "synchronius";
     private DbBridge dbBridge;
     private NetBridge netBridge;
-    private Queue<Event> unsentEvent;
+    private Queue<RealmEvent> unsentRealmEvent;
     private boolean isWork;
 
     public static void start(Context context) {
@@ -51,27 +50,27 @@ public final class SyncService extends IntentService {
     }
 
     private void extractUnsentEvents() {
-        unsentEvent = new ArrayDeque<>(dbBridge.getUnsentEvents());
+        unsentRealmEvent = new ArrayDeque<>(dbBridge.getUnsentEvents());
     }
 
     private void sendEvent() {
-        Event event = unsentEvent.poll();
-        if (event == null) {
+        RealmEvent realmEvent = unsentRealmEvent.poll();
+        if (realmEvent == null) {
             isWork = false;
             return;
         }
 
-        Log.d("sendEvent", "event.getIsSent()=" + event.getIsSent());
-        Log.d("sendEvent", "event.getCreationTime()=" + event.getCreationTime());
-        Log.d("sendEvent", "event.getIdCard()=" + event.getIdCard());
+        Log.d("sendEvent", "realmEvent.getIsSent()=" + realmEvent.getIsSent());
+        Log.d("sendEvent", "realmEvent.getCreationTime()=" + realmEvent.getCreationTime());
+        Log.d("sendEvent", "realmEvent.getIdCard()=" + realmEvent.getIdCard());
 
-        Event savedEvent = netBridge.addNewEventBolt(event);
-        Log.d("sendEvent", "savedEvent.getCreationTime()=" + savedEvent.getCreationTime());
-        Log.d("sendEvent", "savedEvent.getIdCard()=" + savedEvent.getIdCard());
+        RealmEvent savedRealmEvent = netBridge.addNewEventBolt(realmEvent);
+        Log.d("sendEvent", "savedRealmEvent.getCreationTime()=" + savedRealmEvent.getCreationTime());
+        Log.d("sendEvent", "savedRealmEvent.getIdCard()=" + savedRealmEvent.getIdCard());
 
-        if (savedEvent != null) {
-            savedEvent.setIsSent(true);
-            dbBridge.saveEvent(savedEvent);
+        if (savedRealmEvent != null) {
+            savedRealmEvent.setIsSent(true);
+            dbBridge.saveEvent(savedRealmEvent);
            // sendEvent();
         }
     }

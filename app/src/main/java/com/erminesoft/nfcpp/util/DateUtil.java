@@ -12,6 +12,7 @@ public final class DateUtil {
 
     public static final String DATE_FORMAT_Y_M_D = "yyyy-MM-dd";
     public static final String DATE_FORMAT_Y_M_D_H_M = "yyyy-MM-dd HH:mm";
+    public static final String DATE_FORMAT_M_D_Y = "MM.dd.yyyy";
 
     public static int getStartOfDay(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_Y_M_D);

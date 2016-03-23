@@ -1,6 +1,6 @@
 package com.erminesoft.nfcpp.core.callback;
 
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 
 import java.util.List;
 
@@ -13,5 +13,5 @@ public interface MainCallBack {
 
     void onError(String error);
 
-    void onSuccessGetEvents(List<Event> eventList);
+    void onSuccessGetEvents(List<RealmEvent> realmEventList);
 }

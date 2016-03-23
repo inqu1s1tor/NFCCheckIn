@@ -2,7 +2,7 @@ package com.erminesoft.nfcpp.core.bridge;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
-import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.RealmEvent;
 
 /**
  * Created by Aleks on 09.03.2016.
@@ -15,9 +15,9 @@ public interface NetBridge {
 
     void registryUser (BackendlessUser user, MainCallBack mainCallBack);
 
-    void addNewEvent(Event event, final MainCallBack callback);
+    void addNewEvent(RealmEvent realmEvent, final MainCallBack callback);
 
-    Event addNewEventBolt(Event eventToSave);
+    RealmEvent addNewEventBolt(RealmEvent realmEventToSave);
 
     void getAllEvents(String ownerId, MainCallBack callback);
 

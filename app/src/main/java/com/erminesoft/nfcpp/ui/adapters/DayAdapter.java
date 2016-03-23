@@ -1,7 +1,6 @@
 package com.erminesoft.nfcpp.ui.adapters;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,8 @@ import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.Day;
-import com.erminesoft.nfcpp.model.Event;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
