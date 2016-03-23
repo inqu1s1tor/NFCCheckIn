@@ -50,6 +50,4 @@ public final class DateUtil {
         String formatString = new SimpleDateFormat("HH:mm").format(new Date(creationTime));
         return formatString;
     }
-
-
 }

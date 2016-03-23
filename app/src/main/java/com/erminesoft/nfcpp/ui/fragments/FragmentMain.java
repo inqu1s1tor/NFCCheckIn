@@ -19,6 +19,7 @@ import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.net.SyncService;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
+import com.erminesoft.nfcpp.util.CardFilterUtil;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.NfcUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
@@ -98,17 +99,6 @@ public class FragmentMain extends GenericFragment {
         return true;
     }
 
-    private void addNewEvent(String idCard) {
-        long now = System.currentTimeMillis();
-        int timeUnix = (int) (System.currentTimeMillis() / 1000);
-
-        Event newEvent = new Event();
-        newEvent.setIdCard(idCard);
-        newEvent.setCreationTime(timeUnix);
-        mActivityBridge.getUApplication().getDbBridge().saveEvent(newEvent);
-
-    }
-
     private void loadTodayEventsList(List<Event> eventList) {
         if (eventList.size() <= 0) {
             return;
@@ -133,6 +123,23 @@ public class FragmentMain extends GenericFragment {
         super.onStart();
         observer = new DbObserver();
         mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
+    }
+
+    private void doubleCheckInFilter(String cardId) {
+        if (CardFilterUtil.isDoubleCheckIn(mActivityBridge.getUApplication().getDbBridge(), cardId)) {
+            showShortToast("It is a double checkin!");
+        } else {
+            createNewEvent(cardId);
+        }
+    }
+
+    private void createNewEvent(String cardId) {
+        Event event = new Event();
+        event.setIdCard(cardId);
+        event.setCreationTime((int) (System.currentTimeMillis() / 1000));
+        event.setIsSent(false);
+        mActivityBridge.getUApplication().getDbBridge().saveEvent(event);
+        //TODO update UI
     }
 
     @Override
@@ -180,14 +187,8 @@ public class FragmentMain extends GenericFragment {
 
         @Override
         public void onTagDiscovered(Tag tag) {
-            Log.e("MA", "NFC TAG = " + tag.toString());
-
-            byte[] cardIdArray = tag.getId();
-            String idCard = NfcUtil.byteArrayToHexString(cardIdArray);
-            Log.d("nfc", "ID_Card = " + idCard);
-
-            addNewEvent(idCard);
-
+            String idCard = NfcUtil.byteArrayToHexString(tag.getId());
+            doubleCheckInFilter(idCard);
         }
     }
 

@@ -11,6 +11,7 @@ import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
+import com.erminesoft.nfcpp.model.Event;
 
 
 /**
@@ -18,15 +19,21 @@ import com.erminesoft.nfcpp.core.callback.MainCallBack;
  */
 public final class NetManagerFacade implements NetBridge {
 
-    private AuthManager authManager;
-    private EventManager eventManager;
+    private final AuthManager authManager;
+
+    private final EventManager eventManager;
+    private final BoltsEventManager boltsEventManager;
+
     private final UsersManager usersManager;
 
     public NetManagerFacade (Context context,SharedHelper sharedHelper, DbBridge dbBridge) {
 
         initBackendLess(context);
         authManager = new AuthManager(sharedHelper, dbBridge);
+
         eventManager = new EventManager(dbBridge);
+        boltsEventManager = new BoltsEventManager();
+
         usersManager = new UsersManager(dbBridge);
     }
 
@@ -55,6 +62,11 @@ public final class NetManagerFacade implements NetBridge {
     @Override
     public void addNewEvent(String idCard, MainCallBack callback) {
         eventManager.addNewEvent(idCard, callback);
+    }
+
+    @Override
+    public Event addNewEventBolt(Event eventToSave) {
+        return boltsEventManager.addNewEvent(eventToSave);
     }
 
     @Override

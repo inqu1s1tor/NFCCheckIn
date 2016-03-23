@@ -61,20 +61,9 @@ public final class SyncService extends IntentService {
             return;
         }
         Log.d("sendEvent", "event.getIdCard() = "+ event.getIdCard());
-        netBridge.addNewEvent(event.getIdCard(), new NetCallback());
-    }
 
-    private final class NetCallback extends SimpleMainCallBack {
-
-        @Override
-        public void onSuccess() {
-            sendEvent();
-        }
-
-        @Override
-        public void onError(String error) {
-            Log.w(SERVICE_NAME, error);
-        }
+        Event savedEvent = netBridge.addNewEventBolt(event);
+        Log.d("sevedEvent", "event = "+ savedEvent.getObjectId());
     }
 
 }
