@@ -68,15 +68,15 @@ public class FragmentMain extends GenericFragment {
             return;
         }
 
-//        initAdapter();
-//        getEventsFromDb();
+        initAdapter();
+        getEventsFromDb();
 
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
 
 //        SyncService.start(getActivity());
-        mActivityBridge.getUApplication().getNetBridge().addNewEvent("B7449CB1", new NetCallback());
+      //  mActivityBridge.getUApplication().getNetBridge().addNewEvent("B7449CB1", new NetCallback());
 
     }
 
@@ -139,7 +139,9 @@ public class FragmentMain extends GenericFragment {
         event.setCreationTime((int) (System.currentTimeMillis() / 1000));
         event.setIsSent(false);
         mActivityBridge.getUApplication().getDbBridge().saveEvent(event);
-        //TODO update UI
+
+        Log.e("FM", "start sync");
+        SyncService.start(getActivity());
     }
 
     @Override

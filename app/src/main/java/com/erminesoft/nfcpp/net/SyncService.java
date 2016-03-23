@@ -63,7 +63,7 @@ public final class SyncService extends IntentService {
         Log.d("sendEvent", "event.getIdCard() = "+ event.getIdCard());
 
         Event savedEvent = netBridge.addNewEventBolt(event);
-        Log.d("sevedEvent", "event = "+ savedEvent.getObjectId());
+        Log.e("sevedEvent", "event = "+ savedEvent.getObjectId());
     }
 
 }
