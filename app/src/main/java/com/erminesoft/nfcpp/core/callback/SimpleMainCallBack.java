@@ -22,4 +22,9 @@ public class SimpleMainCallBack implements MainCallBack {
     public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
 
     }
+
+    @Override
+    public void onSuccessGetEvent(RealmEvent realmEvent) {
+
+    }
 }

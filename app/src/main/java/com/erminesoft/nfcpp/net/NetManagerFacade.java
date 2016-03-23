@@ -60,10 +60,6 @@ public final class NetManagerFacade implements NetBridge {
         eventManager.addNewEvent(realmEvent, callback);
     }
 
-    @Override
-    public RealmEvent addNewEventBolt(RealmEvent realmEventToSave) {
-        return eventManager.addNewEvent(realmEventToSave);
-    }
 
     @Override
     public void getAllEvents(String ownerId, MainCallBack callback) {

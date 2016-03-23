@@ -8,6 +8,7 @@ import android.util.Log;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
+import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.RealmEvent;
 
 import java.util.ArrayDeque;
@@ -64,14 +65,31 @@ public final class SyncService extends IntentService {
         Log.d("sendEvent", "realmEvent.getCreationTime()=" + realmEvent.getCreationTime());
         Log.d("sendEvent", "realmEvent.getIdCard()=" + realmEvent.getIdCard());
 
-        RealmEvent savedRealmEvent = netBridge.addNewEventBolt(realmEvent);
-        Log.d("sendEvent", "savedRealmEvent.getCreationTime()=" + savedRealmEvent.getCreationTime());
-        Log.d("sendEvent", "savedRealmEvent.getIdCard()=" + savedRealmEvent.getIdCard());
+        netBridge.addNewEvent(realmEvent, new NetCallback());
 
-        if (savedRealmEvent != null) {
-            savedRealmEvent.setIsSent(true);
-            dbBridge.saveEvent(savedRealmEvent);
-           // sendEvent();
+//        RealmEvent savedRealmEvent = netBridge.addNewEventBolt(realmEvent);
+//        Log.d("sendEvent", "savedRealmEvent.getCreationTime()=" + savedRealmEvent.getCreationTime());
+//        Log.d("sendEvent", "savedRealmEvent.getIdCard()=" + savedRealmEvent.getIdCard());
+
+//        if (savedRealmEvent != null) {
+//            savedRealmEvent.setIsSent(true);
+//            dbBridge.saveEvent(savedRealmEvent);
+//           // sendEvent();
+//        }
+    }
+
+    private final class NetCallback extends SimpleMainCallBack {
+
+//        @Override
+//        public void onSuccessGetEvent(RealmEvent realmEvent) {
+//            Log.d("!!", "onSuccessGetEvent");
+//        }
+
+
+        @Override
+        public void onSuccess() {
+            Log.d("!!", "onSuccess()");
+            sendEvent();
         }
     }
 }

@@ -115,7 +115,10 @@ public class FragmentMain extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-        Log.d("getEventsFromDb","realmEventList.size() = " + realmEventList.size());
+        Log.d("getEventsFromDb", "realmEventList.size() = " + realmEventList.size());
+        for (RealmEvent rl : realmEventList){
+            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId="+rl.getObjectId());
+        }
         loadTodayEventsList(realmEventList);
     }
 

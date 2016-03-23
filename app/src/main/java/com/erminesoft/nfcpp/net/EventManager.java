@@ -9,6 +9,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
+import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.util.DateUtil;
 
@@ -28,15 +29,17 @@ final class EventManager {
     void addNewEvent(RealmEvent realmEvent, final MainCallBack callback) {
 
         Event event = EventConverter.realmEventToClearEvent(realmEvent);
+//        Log.d("handleResponse", "*event" + event.getCreationTime());
         Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event) {
-//                setPermissionGrantForAllRoles(event, callback);
+                Log.d("save", "handleResponse");
+                setPermissionGrantForAllRoles(event, callback);
             }
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-//                callback.onError(backendlessFault.toString());
+                callback.onError(backendlessFault.toString());
             }
         });
     }
@@ -47,7 +50,9 @@ final class EventManager {
             @Override
             public void handleResponse(Event event1) {
                 RealmEvent realmEvent = EventConverter.clearEventToRealmEvent(event);
+                Log.d("handleResponse", "*getCreationTime" + realmEvent.getCreationTime());
                 dbBridge.saveEvent(realmEvent);
+//                mainCallBack.onSuccessGetEvent(realmEvent);
                 mainCallBack.onSuccess();
             }
 
@@ -109,58 +114,11 @@ final class EventManager {
 
     RealmEvent addNewEvent(RealmEvent realmEventToSave) {
         Event event = EventConverter.realmEventToClearEvent(realmEventToSave);
-        Event event2 = Backendless.Persistence.save(event);
-
-        return EventConverter.clearEventToRealmEvent(event2);
+//        Event event2 = Backendless.Persistence.save(event);
+        addNewEvent(realmEventToSave, null);
+        return EventConverter.clearEventToRealmEvent(event);
     }
 
-    static final class Event {
-        private String idCard;
-        private boolean isSent;
-        private double creationTime;
-        private String objectId;
-        private Date created;
-
-        public void setIdCard(String idCard) {
-            this.idCard = idCard;
-        }
-
-        public String getIdCard() {
-            return idCard;
-        }
-
-        public boolean getIsSent() {
-            return isSent;
-        }
-
-        public void setIsSent(boolean sent) {
-            this.isSent = sent;
-        }
-
-        public double getCreationTime() {
-            return creationTime;
-        }
-
-        public void setCreationTime(double creationTime) {
-            this.creationTime = creationTime;
-        }
-
-        public String getObjectId() {
-            return objectId;
-        }
-
-        public void setObjectId(String objectId) {
-            this.objectId = objectId;
-        }
-
-        public Date getCreated() {
-            return created;
-        }
-
-        public void setCreated(Date created) {
-            this.created = created;
-        }
-    }
 
     static final class EventConverter {
 
@@ -168,13 +126,14 @@ final class EventManager {
             Event clearEvent = new Event();
             clearEvent.setCreationTime((double) realmRealmEvent.getCreationTime());
             clearEvent.setIdCard(realmRealmEvent.getIdCard());
+            clearEvent.setIsSent(true);
             return clearEvent;
         }
 
         static RealmEvent clearEventToRealmEvent(Event event) {
             RealmEvent realmEvent = new RealmEvent();
             realmEvent.setObjectId(event.getObjectId());
-            realmEvent.setCreationTime((int) event.getCreationTime());
+            realmEvent.setCreationTime(event.getCreationTime().intValue());
             realmEvent.setIdCard(event.getIdCard());
             realmEvent.setCreated(event.getCreated());
             realmEvent.setIsSent(true);

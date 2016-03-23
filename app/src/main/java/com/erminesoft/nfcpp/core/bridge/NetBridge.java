@@ -17,7 +17,6 @@ public interface NetBridge {
 
     void addNewEvent(RealmEvent realmEvent, final MainCallBack callback);
 
-    RealmEvent addNewEventBolt(RealmEvent realmEventToSave);
 
     void getAllEvents(String ownerId, MainCallBack callback);
 
