@@ -15,6 +15,8 @@ public class Event extends RealmObject {
     @PrimaryKey
     private int creationTime;
 
+    public Event() {}
+
     public void setObjectId(String objectId) {
         this.objectId = objectId;
     }
