@@ -112,8 +112,6 @@ public class FragmentMain extends GenericFragment {
 
 
     private void getEventsFromDb() {
-//        SyncService.start(getActivity());
-
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);

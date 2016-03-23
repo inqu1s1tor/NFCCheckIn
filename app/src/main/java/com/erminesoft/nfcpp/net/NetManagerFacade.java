@@ -60,8 +60,8 @@ public final class NetManagerFacade implements NetBridge {
     }
 
     @Override
-    public void addNewEvent(String idCard, MainCallBack callback) {
-        eventManager.addNewEvent(idCard, callback);
+    public void addNewEvent(Event event, MainCallBack callback) {
+        eventManager.addNewEvent(event, callback);
     }
 
     @Override

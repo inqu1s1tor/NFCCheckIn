@@ -25,15 +25,7 @@ final class EventManager {
         this.dbBridge = dbBridge;
     }
 
-    void addNewEvent(String idCard, final MainCallBack callback) {
-
-        Event event = new Event();
-        event.setIdCard(idCard);
-//        event.setIsSent(true);
-//        event.setObjectId("");
-//        event.setCreationTime(125);
-//        event.setCreated(new Date(System.currentTimeMillis()));
-        
+    void addNewEvent(Event event, final MainCallBack callback) {
 
         Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override

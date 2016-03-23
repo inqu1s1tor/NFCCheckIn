@@ -65,16 +65,14 @@ public final class SyncService extends IntentService {
         Log.d("sendEvent", "event.getCreationTime()=" + event.getCreationTime());
         Log.d("sendEvent", "event.getIdCard()=" + event.getIdCard());
 
-        if (!event.getIsSent()) {
-            Event savedEvent = netBridge.addNewEventBolt(event);
-            Log.d("sendEvent", "savedEvent.getCreationTime()=" + savedEvent.getCreationTime());
-            Log.d("sendEvent", "savedEvent.getIdCard()=" + savedEvent.getIdCard());
+        Event savedEvent = netBridge.addNewEventBolt(event);
+        Log.d("sendEvent", "savedEvent.getCreationTime()=" + savedEvent.getCreationTime());
+        Log.d("sendEvent", "savedEvent.getIdCard()=" + savedEvent.getIdCard());
 
-            if (savedEvent != null) {
-                savedEvent.setIsSent(true);
-                dbBridge.saveEvent(savedEvent);
-//                sendEvent();
-            }
+        if (savedEvent != null) {
+            savedEvent.setIsSent(true);
+            dbBridge.saveEvent(savedEvent);
+           // sendEvent();
         }
     }
 }
