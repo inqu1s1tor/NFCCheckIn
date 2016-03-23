@@ -60,10 +60,13 @@ public final class SyncService extends IntentService {
             isWork = false;
             return;
         }
-        Log.d("sendEvent", "event.getIdCard() = "+ event.getIdCard());
 
         Event savedEvent = netBridge.addNewEventBolt(event);
-        Log.e("sevedEvent", "event = "+ savedEvent.getObjectId());
-    }
 
+        if (savedEvent != null) {
+            savedEvent.setIsSent(true);
+            dbBridge.saveEvent(savedEvent);
+            sendEvent();
+        }
+    }
 }
