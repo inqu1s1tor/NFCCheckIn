@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public final class ExtractorToUser {
+public final class ExtractorToUserUtil {
 
     public static List<User> convertBackendlssUserToUserModel(List<BackendlessUser> backendlessUsers) {
         List<User> users = new ArrayList<>(backendlessUsers.size());

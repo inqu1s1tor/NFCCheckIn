@@ -8,7 +8,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
-import com.erminesoft.nfcpp.util.ExtractorToUser;
+import com.erminesoft.nfcpp.util.ExtractorToUserUtil;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class UsersManager {
             public void handleResponse(BackendlessCollection<BackendlessUser> users) {
                 List<BackendlessUser> backendlessUsers = users.getData();
                 if(backendlessUsers.size()!= 0) {
-                    dbBridge.saveUser(ExtractorToUser.convertBackendlssUserToUserModel(backendlessUsers));
+                    dbBridge.saveUser(ExtractorToUserUtil.convertBackendlssUserToUserModel(backendlessUsers));
                 }
 
             }
