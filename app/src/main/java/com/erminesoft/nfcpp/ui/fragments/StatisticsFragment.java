@@ -51,8 +51,9 @@ public class StatisticsFragment extends GenericFragment {
     }
 
     private void getMyEvents() {
-        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId().toString();
-        mActivityBridge.getUApplication().getNetBridge().getAllEvents(myId, new NetCallback());
+//        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId().toString();
+//        mActivityBridge.getUApplication().getNetBridge().getAllEvents(myId, new NetCallback());
+
     }
 
     private void handleList(List<RealmEvent> realmEventList) {
@@ -93,13 +94,13 @@ public class StatisticsFragment extends GenericFragment {
         @Override
         public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
             Log.d("NetCallBack", "On");
-            Collections.sort(realmEventList, new Comparator<RealmEvent>() {
-                @Override
-                public int compare(RealmEvent lhs, RealmEvent rhs) { // rhs  lhs
-                    return lhs.getCreated().compareTo(rhs.getCreated());
-                }
-            });
-            handleList(realmEventList);
+//            Collections.sort(eventList, new Comparator<Event>() {
+//                @Override
+//                public int compare(Event lhs, Event rhs) { // rhs  lhs
+//                    return lhs.getCreated().compareTo(rhs.getCreated());
+//                }
+//            });
+//            handleList(eventList); 1
         }
     }
 

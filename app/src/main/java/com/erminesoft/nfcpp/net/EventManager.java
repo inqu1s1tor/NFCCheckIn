@@ -31,12 +31,12 @@ final class EventManager {
         Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event) {
-                setPermissionGrantForAllRoles(event, callback);
+//                setPermissionGrantForAllRoles(event, callback);
             }
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                callback.onError(backendlessFault.toString());
+//                callback.onError(backendlessFault.toString());
             }
         });
     }
@@ -109,14 +109,15 @@ final class EventManager {
 
     RealmEvent addNewEvent(RealmEvent realmEventToSave) {
         Event event = EventConverter.realmEventToClearEvent(realmEventToSave);
-        event = Backendless.Persistence.save(event);
-        return EventConverter.clearEventToRealmEvent(event);
+        Event event2 = Backendless.Persistence.save(event);
+
+        return EventConverter.clearEventToRealmEvent(event2);
     }
 
     static final class Event {
         private String idCard;
         private boolean isSent;
-        private int creationTime;
+        private double creationTime;
         private String objectId;
         private Date created;
 
@@ -136,11 +137,11 @@ final class EventManager {
             this.isSent = sent;
         }
 
-        public int getCreationTime() {
+        public double getCreationTime() {
             return creationTime;
         }
 
-        public void setCreationTime(int creationTime) {
+        public void setCreationTime(double creationTime) {
             this.creationTime = creationTime;
         }
 
@@ -165,7 +166,7 @@ final class EventManager {
 
         static Event realmEventToClearEvent(RealmEvent realmRealmEvent) {
             Event clearEvent = new Event();
-            clearEvent.setCreationTime(realmRealmEvent.getCreationTime());
+            clearEvent.setCreationTime((double) realmRealmEvent.getCreationTime());
             clearEvent.setIdCard(realmRealmEvent.getIdCard());
             return clearEvent;
         }
@@ -173,7 +174,7 @@ final class EventManager {
         static RealmEvent clearEventToRealmEvent(Event event) {
             RealmEvent realmEvent = new RealmEvent();
             realmEvent.setObjectId(event.getObjectId());
-            realmEvent.setCreationTime(event.getCreationTime());
+            realmEvent.setCreationTime((int) event.getCreationTime());
             realmEvent.setIdCard(event.getIdCard());
             realmEvent.setCreated(event.getCreated());
             realmEvent.setIsSent(true);
