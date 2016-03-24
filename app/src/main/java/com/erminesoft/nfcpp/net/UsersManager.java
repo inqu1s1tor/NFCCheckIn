@@ -36,7 +36,6 @@ public class UsersManager {
                 if(backendlessUsers.size()!= 0) {
                     dbBridge.saveUser(ExtractorToUserUtil.convertBackendlssUserToUserModel(backendlessUsers));
                 }
-
             }
 
             @Override

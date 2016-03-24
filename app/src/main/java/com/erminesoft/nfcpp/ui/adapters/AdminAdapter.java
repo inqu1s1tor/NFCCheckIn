@@ -16,12 +16,10 @@ import java.util.List;
 public class AdminAdapter extends ArrayAdapter<User> {
 
     private final LayoutInflater mLayoutInflater;
-    private List<User> users;
 
     public AdminAdapter(Context context, List<User> users) {
         super(context, 0, users);
         mLayoutInflater = LayoutInflater.from(context);
-        this.users = users;
     }
 
     @Override
@@ -48,5 +46,11 @@ public class AdminAdapter extends ArrayAdapter<User> {
     private static final class Holder {
         TextView firstNameTv;
         TextView lastNameTv;
+    }
+
+    public void swapDataList(List<User> users) {
+        clear();
+        addAll(users);
+        notifyDataSetChanged();
     }
 }

@@ -28,6 +28,7 @@ public class AdminFragment extends GenericFragment {
 
     private ListView adminList;
     private Observer observer;
+    private AdminAdapter adminAdapter;
 
 
     @Nullable
@@ -47,7 +48,7 @@ public class AdminFragment extends GenericFragment {
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
 
 
-        AdminAdapter adminAdapter = new AdminAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
+        adminAdapter = new AdminAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
         adminList.setAdapter(adminAdapter);
 
         AdapterView.OnItemClickListener listener = new ItemClicker();
@@ -76,14 +77,13 @@ public class AdminFragment extends GenericFragment {
 
     private void getUsersFromDb() {
         List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
-        Log.d("getUsersFromDb", "users.size() = " + users.size());
+        adminAdapter.swapDataList(users);
     }
 
     private final class NetCallBack extends SimpleMainCallBack {
         @Override
-        public void onSuccess() {
-            Log.d("myLog", "save success");
-            getUsersFromDb();
+        public void onError(String error) {
+            showShortToast(error);
         }
     }
 
@@ -93,7 +93,6 @@ public class AdminFragment extends GenericFragment {
         public void update(Observable observable, Object data) {
             Log.e("FM", "update");
             getUsersFromDb();
-//            hideProgressDialog();
         }
 
 
