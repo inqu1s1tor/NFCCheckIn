@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -49,6 +50,12 @@ public class AdminFragment extends GenericFragment {
         AdminAdapter adminAdapter = new AdminAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
         adminList.setAdapter(adminAdapter);
 
+        AdapterView.OnItemClickListener listener = new ItemClicker();
+        adminList.setOnItemClickListener(listener);
+
+
+//        adminList.get
+
     }
 
     @Override
@@ -59,7 +66,7 @@ public class AdminFragment extends GenericFragment {
     }
 
     @Override
-    public void onStop() {
+        public void onStop() {
         super.onStop();
         if (observer != null) {
             mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
@@ -91,4 +98,14 @@ public class AdminFragment extends GenericFragment {
 
 
     }
+
+    private final class ItemClicker implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        }
+    }
+
+
 }

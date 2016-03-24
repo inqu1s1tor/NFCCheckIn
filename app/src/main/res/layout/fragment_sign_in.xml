@@ -12,7 +12,7 @@
         android:id="@+id/signInloginUserET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Login"
+        android:hint="@string/sign_in_login_hint"
         android:text="" />
     </android.support.design.widget.TextInputLayout>
 
@@ -25,7 +25,7 @@
         android:id="@+id/signInPasswordUserET"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="@string/sign_in_password"
         android:text="" />
 </android.support.design.widget.TextInputLayout>
 
@@ -34,6 +34,6 @@
         android:id="@+id/signInButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Sign in" />
+        android:text="@string/sign_in_buton" />
 
 </LinearLayout>

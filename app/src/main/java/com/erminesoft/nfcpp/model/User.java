@@ -17,9 +17,7 @@ public class User extends RealmObject{
     private String email;
 
     public User() {
-
     }
-
 
     public String getObjectId() {
         return objectId;

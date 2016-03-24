@@ -8,5 +8,14 @@
     <string name="statistics">my statistics</string>
     <string name="today_events">Events today</string>
     <string name="total_today">Hours today</string>
+    <string name="empty_admin_list">Empty List</string>
+    <string name="sign_in_login_hint">Login</string>
+    <string name="sign_in_password">Password</string>
+    <string name="sign_in_buton">Sign in</string>
+    <string name="first_name_hint_sign_up">First name</string>
+    <string name="last_name_hint_sign_up">Last name</string>
+    <string name="login_hint_sign_up">Login</string>
+    <string name="password_hint_sign_up">Password</string>
+    <string name="sign_up_buutton_text">Sign up</string>
 
 </resources>
