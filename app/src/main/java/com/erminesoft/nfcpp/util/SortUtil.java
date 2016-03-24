@@ -24,7 +24,7 @@ public final class SortUtil {
                 eventsToday.setEntry(DateUtil.dateToFormatString(entryLong));
                 eventsToday.setExit(DateUtil.dateToFormatString(exitLong));
                 eventsToday.setTotal_hours(DateUtil.getDifferenceTime(exitLong - entryLong));
-                eventsToday.setSelector(false);
+                eventsToday.setSelector(allEventsList.get(i - 1).getIsSent());
                 todayEventsList.add(eventsToday);
 
             } else {  //1
@@ -36,7 +36,7 @@ public final class SortUtil {
                     eventsToday.setEntry(DateUtil.dateToFormatString(entryLong));
                     eventsToday.setExit(" --:-- ");
                     eventsToday.setTotal_hours(DateUtil.getDifferenceTime(curDate.getTime() - entryLong));
-                    eventsToday.setSelector(false);
+                    eventsToday.setSelector(allEventsList.get(i - 1).getIsSent());
 
                     todayEventsList.add(eventsToday);
 

@@ -59,7 +59,6 @@ public class FragmentMain extends GenericFragment {
         todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
         listViewEvents = (ListView) view.findViewById(R.id.list_events);
 
-
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
         currentTimeTv.setText(curStringDate);
@@ -71,13 +70,8 @@ public class FragmentMain extends GenericFragment {
         initAdapter();
         getEventsFromDb();
 
-
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
-
-//        SyncService.start(getActivity());
-      //  mActivityBridge.getUApplication().getNetBridge().addNewEvent("B7449CB1", new NetCallback());
-        SyncService.start(getActivity());
     }
 
     private void initAdapter() {
@@ -108,6 +102,7 @@ public class FragmentMain extends GenericFragment {
         long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsTodayList);
         todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsTodayList);
+        SyncService.start(getActivity());
     }
 
 
@@ -115,7 +110,6 @@ public class FragmentMain extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-        Log.d("getEventsFromDb", "realmEventList.size() = " + realmEventList.size());
         for (RealmEvent rl : realmEventList){
             Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId="+rl.getObjectId());
         }
@@ -143,9 +137,6 @@ public class FragmentMain extends GenericFragment {
         realmEvent.setCreationTime((int) (System.currentTimeMillis() / 1000));
         realmEvent.setIsSent(false);
         mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEvent);
-
-        Log.e("FM", "start sync");
-//        SyncService.start(getActivity());
     }
 
     @Override
@@ -159,20 +150,6 @@ public class FragmentMain extends GenericFragment {
 
     private final class NetCallback extends SimpleMainCallBack {
 
-        @Override
-        public void onSuccess() {
-//            getEventsFromBd();
-        }
-
-        @Override
-        public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
-            Log.d("NetCallback", "onSuccessGetEvents");
-//            loadTodayScreen(realmEventList);
-        }
-
-        @Override
-        public void onError(String error) {
-        }
     }
 
     private final class Clicker implements View.OnClickListener {

@@ -60,35 +60,12 @@ public final class SyncService extends IntentService {
             isWork = false;
             return;
         }
-
-        Log.d("sendEvent", "realmEvent.getIsSent()=" + realmEvent.getIsSent());
-        Log.d("sendEvent", "realmEvent.getCreationTime()=" + realmEvent.getCreationTime());
-        Log.d("sendEvent", "realmEvent.getIdCard()=" + realmEvent.getIdCard());
-
         netBridge.addNewEvent(realmEvent, new NetCallback());
-
-//        RealmEvent savedRealmEvent = netBridge.addNewEventBolt(realmEvent);
-//        Log.d("sendEvent", "savedRealmEvent.getCreationTime()=" + savedRealmEvent.getCreationTime());
-//        Log.d("sendEvent", "savedRealmEvent.getIdCard()=" + savedRealmEvent.getIdCard());
-
-//        if (savedRealmEvent != null) {
-//            savedRealmEvent.setIsSent(true);
-//            dbBridge.saveEvent(savedRealmEvent);
-//           // sendEvent();
-//        }
     }
 
     private final class NetCallback extends SimpleMainCallBack {
-
-//        @Override
-//        public void onSuccessGetEvent(RealmEvent realmEvent) {
-//            Log.d("!!", "onSuccessGetEvent");
-//        }
-
-
         @Override
         public void onSuccess() {
-            Log.d("!!", "onSuccess()");
             sendEvent();
         }
     }
