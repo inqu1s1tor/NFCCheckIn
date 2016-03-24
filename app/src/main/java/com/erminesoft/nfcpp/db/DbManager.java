@@ -102,6 +102,12 @@ public final class DbManager extends Observable implements DbBridge {
     }
 
     @Override
+    public List<RealmEvent> getEventsByMonth(String date) {
+        return eventHelper.getEventsByMonth(initRealm(), date);
+    }
+
+
+    @Override
     public List<User> getAllUsers() {
         return userHelper.getAllUsers(initRealm());
     }

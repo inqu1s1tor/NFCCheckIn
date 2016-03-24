@@ -33,6 +33,9 @@ public interface DbBridge {
 
     List<RealmEvent> getEventsByDate(String date);
 
+    List<RealmEvent> getEventsByMonth(String date);
+
+
     List<User> getAllUsers();
 
     void saveUser(List<User> users);

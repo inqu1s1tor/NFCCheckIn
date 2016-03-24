@@ -38,6 +38,20 @@ public final class DateUtil {
     }
 
 
+    public static int getStartOfMonth(String date) throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_Y_M_D);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(format.parse(date));
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return (int) (calendar.getTimeInMillis()/1000);
+    }
+
+
+
     public static String getDifferenceTime(long diffInMs) {
         int hh = (int) (TimeUnit.MILLISECONDS.toHours(diffInMs) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(diffInMs)));
         int mm = (int) (TimeUnit.MILLISECONDS.toMinutes(diffInMs) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(diffInMs)));

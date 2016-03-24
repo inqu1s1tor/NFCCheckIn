@@ -1,7 +1,6 @@
 package com.erminesoft.nfcpp.net;
 
 import android.util.Log;
-
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
@@ -12,10 +11,8 @@ import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.util.DateUtil;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 final class EventManager {
@@ -27,9 +24,7 @@ final class EventManager {
     }
 
     void addNewEvent(RealmEvent realmEvent, final MainCallBack callback) {
-
         Event event = EventConverter.realmEventToClearEvent(realmEvent);
-//        Log.d("handleResponse", "*event" + event.getCreationTime());
         Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event) {
@@ -52,7 +47,6 @@ final class EventManager {
                 RealmEvent realmEvent = EventConverter.clearEventToRealmEvent(event);
                 Log.d("handleResponse", "*getCreationTime" + realmEvent.getCreationTime());
                 dbBridge.saveEvent(realmEvent);
-//                mainCallBack.onSuccessGetEvent(realmEvent);
                 mainCallBack.onSuccess();
             }
 
@@ -110,13 +104,6 @@ final class EventManager {
                 Log.d("getTodayEvents", "backendlessFault = " + backendlessFault.toString());
             }
         });
-    }
-
-    RealmEvent addNewEvent(RealmEvent realmEventToSave) {
-        Event event = EventConverter.realmEventToClearEvent(realmEventToSave);
-//        Event event2 = Backendless.Persistence.save(event);
-        addNewEvent(realmEventToSave, null);
-        return EventConverter.clearEventToRealmEvent(event);
     }
 
 

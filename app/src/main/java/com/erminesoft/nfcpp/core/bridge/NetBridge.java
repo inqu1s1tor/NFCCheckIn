@@ -17,7 +17,6 @@ public interface NetBridge {
 
     void addNewEvent(RealmEvent realmEvent, final MainCallBack callback);
 
-
     void getAllEvents(String ownerId, MainCallBack callback);
 
     void getTodayEvents(String ownerId, long curTime, final MainCallBack callback);

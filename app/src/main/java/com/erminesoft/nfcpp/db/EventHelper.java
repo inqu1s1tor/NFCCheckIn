@@ -18,6 +18,7 @@ final class EventHelper {
 
     List<RealmEvent> getUnsentEvents(Realm realm) {
         return realm.where(RealmEvent.class).equalTo("isSent", false).findAll();
+//        return realm.where(RealmEvent.class).findAll();
     }
 
     void saveEvent(Realm realm, List<RealmEvent> realmEvents) {
@@ -45,6 +46,19 @@ final class EventHelper {
             e.printStackTrace();
         }
 
+        return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAll();
+    }
+
+    List<RealmEvent> getEventsByMonth(Realm realm, String date) {
+        int startTime = 0;
+        int endTime = (int) (System.currentTimeMillis() / 1000);
+
+        try {
+            startTime = DateUtil.getStartOfMonth(date);
+            endTime = DateUtil.getEndOfDayInMillis(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAll();
     }
 

@@ -13,6 +13,7 @@ import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Day;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.ui.adapters.DayAdapter;
+import com.erminesoft.nfcpp.util.DateUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +54,14 @@ public class StatisticsFragment extends GenericFragment {
     private void getMyEvents() {
 //        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId().toString();
 //        mActivityBridge.getUApplication().getNetBridge().getAllEvents(myId, new NetCallback());
-
+        Log.d("getMyEvents", "getMyEvents");
+        long curTime = System.currentTimeMillis();
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
+        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curStringDate);
+        for (RealmEvent rl : realmEventList){
+            Log.d("getMyEvents", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId="+rl.getObjectId());
+        }
+//        loadTodayEventsList(realmEventList);
     }
 
     private void handleList(List<RealmEvent> realmEventList) {
