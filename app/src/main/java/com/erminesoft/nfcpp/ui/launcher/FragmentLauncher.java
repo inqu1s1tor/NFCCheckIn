@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.ui.fragments.AdminFragment;
+import com.erminesoft.nfcpp.ui.fragments.DetailStatisticsFragment;
 import com.erminesoft.nfcpp.ui.fragments.FragmentMain;
 import com.erminesoft.nfcpp.ui.fragments.GenericFragment;
 import com.erminesoft.nfcpp.ui.fragments.SignInFragment;
@@ -68,6 +69,12 @@ public class FragmentLauncher {
         GenericFragment adminFragmnent = new AdminFragment();
         launch(adminFragmnent, null);
 
+    }
+
+    public void launchDetailStatisticsFragment(String date){
+        GenericFragment detailStatisticsFragment = new DetailStatisticsFragment();
+        detailStatisticsFragment.setArguments(DetailStatisticsFragment.buildArguments(date));
+        launch(detailStatisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
 
 

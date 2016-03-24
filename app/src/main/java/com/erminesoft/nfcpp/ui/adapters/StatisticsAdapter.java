@@ -15,17 +15,16 @@ import java.util.List;
 /**
  * Created by Evgen on 24.03.2016.
  */
-public class StatisticsAdapter extends BaseAdapter{
+public class StatisticsAdapter extends BaseAdapter {
 
     private LayoutInflater mLayoutInflater;
     private List<DayStatistics> objectsDays;
 
 
-    public StatisticsAdapter(Context context, List<DayStatistics> objectsDays){
+    public StatisticsAdapter(Context context, List<DayStatistics> objectsDays) {
         this.objectsDays = objectsDays;
         mLayoutInflater = LayoutInflater.from(context);
     }
-
 
 
     @Override
@@ -43,9 +42,9 @@ public class StatisticsAdapter extends BaseAdapter{
             holder = (Holder) convertView.getTag();
         }
 
-        if (dayStatistics != null){
+        if (dayStatistics != null) {
             holder.dateTv.setText(dayStatistics.getDate());
-            holder.totalTimeTv.setText(dayStatistics.getTotalTime());
+            holder.totalTimeTv.setText("(" + dayStatistics.getTotalTime() + ")");
         }
 
         return convertView;

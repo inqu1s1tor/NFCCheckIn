@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.erminesoft.nfcpp.R;
@@ -52,6 +54,7 @@ public class StatisticsFragment extends GenericFragment {
         dayList = new ArrayList<>();
         statisticsAdapter = new StatisticsAdapter(getActivity(), dayList);
         statisticsListView.setAdapter(statisticsAdapter);
+        statisticsListView.setOnItemClickListener(new ItemClicker());
 
         getMyEvents();
     }
@@ -101,6 +104,22 @@ public class StatisticsFragment extends GenericFragment {
         }
 
         statisticsAdapter.replaceNewData(dayList);
+    }
+
+
+    private void selectedItem(DayStatistics dayStatistics){
+        Log.d("ItemClicker", "dayStatistics.getDate() = " + dayStatistics.getDate());
+        mActivityBridge.getFragmentLauncher().launchDetailStatisticsFragment(dayStatistics.getDate());
+    }
+
+
+    private final class ItemClicker implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            DayStatistics dayStatistics = (DayStatistics) parent.getItemAtPosition(position);
+            selectedItem(dayStatistics);
+        }
     }
 
 

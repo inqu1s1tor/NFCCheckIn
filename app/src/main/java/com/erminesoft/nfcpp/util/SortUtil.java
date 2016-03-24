@@ -58,10 +58,6 @@ public final class SortUtil {
                 diffInMs = diffInMs + (exitLong - entryLong);
             } else {  //1
                 entryLong = (allEventsList.get(i - 1) * (long) 1000);
-//                if (i == allEventsList.size()) {
-//                    Date curDate = new Date(System.currentTimeMillis());
-//                    diffInMs = diffInMs + (curDate.getTime() - entryLong);
-//                }
             }
         }
         return diffInMs;
