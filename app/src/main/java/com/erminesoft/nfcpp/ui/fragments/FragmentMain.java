@@ -5,6 +5,8 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -110,8 +112,8 @@ public class FragmentMain extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-        for (RealmEvent rl : realmEventList){
-            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId="+rl.getObjectId());
+        for (RealmEvent rl : realmEventList) {
+            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
         }
         loadTodayEventsList(realmEventList);
     }
@@ -125,7 +127,12 @@ public class FragmentMain extends GenericFragment {
 
     private void doubleCheckInFilter(String cardId) {
         if (CardFilterUtil.isDoubleCheckIn(mActivityBridge.getUApplication().getDbBridge(), cardId)) {
-            showShortToast("It is a double checkin!");
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    showShortToast("It is a double checkin!");
+                }
+            });
         } else {
             createNewEvent(cardId);
         }
