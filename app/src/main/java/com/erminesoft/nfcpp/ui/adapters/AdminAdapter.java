@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
@@ -13,13 +14,29 @@ import com.erminesoft.nfcpp.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminAdapter extends ArrayAdapter<User> {
+public class AdminAdapter extends BaseAdapter {
 
     private final LayoutInflater mLayoutInflater;
+    private List<User> users;
 
     public AdminAdapter(Context context, List<User> users) {
-        super(context, 0, users);
+        this.users = users;
         mLayoutInflater = LayoutInflater.from(context);
+    }
+
+    @Override
+    public int getCount() {
+        return users.size();
+    }
+
+    @Override
+    public User getItem(int position) {
+        return users.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).getObjectId().hashCode();
     }
 
     @Override
@@ -49,8 +66,7 @@ public class AdminAdapter extends ArrayAdapter<User> {
     }
 
     public void swapDataList(List<User> users) {
-        clear();
-        addAll(users);
+        this.users = users;
         notifyDataSetChanged();
     }
 }
