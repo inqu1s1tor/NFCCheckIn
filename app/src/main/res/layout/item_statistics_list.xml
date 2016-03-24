@@ -9,6 +9,7 @@
         android:id="@+id/asDate"
         android:text="Date"
         android:textSize="20dp"
+        android:textColor="@android:color/black"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:layout_width="wrap_content"
@@ -16,6 +17,7 @@
 
     <TextView
         android:id="@+id/asTotalTime"
+        android:textColor="@android:color/black"
         android:text="(00:00)"
         android:textSize="20dp"
         android:layout_marginLeft="30dp"

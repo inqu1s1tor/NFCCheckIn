@@ -31,6 +31,7 @@ public class AdminFragment extends GenericFragment {
     private AdminAdapter adminAdapter;
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,9 +54,6 @@ public class AdminFragment extends GenericFragment {
 
         AdapterView.OnItemClickListener listener = new ItemClicker();
         adminList.setOnItemClickListener(listener);
-
-
-//        adminList.get
 
     }
 
