@@ -11,14 +11,19 @@ import android.widget.ListView;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Day;
+import com.erminesoft.nfcpp.model.DayStatistics;
+import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.ui.adapters.DayAdapter;
+import com.erminesoft.nfcpp.ui.adapters.StatisticsAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
+import com.erminesoft.nfcpp.util.SortUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 
@@ -28,8 +33,8 @@ import java.util.List;
 public class StatisticsFragment extends GenericFragment {
 
     private ListView statisticsListView;
-    private List<Day> dayList;
-    private DayAdapter dayAdapter;
+    private List<DayStatistics> dayList;
+    private StatisticsAdapter statisticsAdapter;
 
 
     @Nullable
@@ -44,72 +49,64 @@ public class StatisticsFragment extends GenericFragment {
 
         statisticsListView = (ListView) view.findViewById(R.id.statisticsList);
 
-        getMyEvents();
         dayList = new ArrayList<>();
+        statisticsAdapter = new StatisticsAdapter(getActivity(), dayList);
+        statisticsListView.setAdapter(statisticsAdapter);
 
-        dayAdapter = new DayAdapter(getActivity(), dayList);
-        statisticsListView.setAdapter(dayAdapter);
+        getMyEvents();
     }
 
     private void getMyEvents() {
-//        String myId = mActivityBridge.getUApplication().getDbBridge().getMyUser().getObjectId().toString();
-//        mActivityBridge.getUApplication().getNetBridge().getAllEvents(myId, new NetCallback());
         Log.d("getMyEvents", "getMyEvents");
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curStringDate);
-        for (RealmEvent rl : realmEventList){
-            Log.d("getMyEvents", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId="+rl.getObjectId());
-        }
-//        loadTodayEventsList(realmEventList);
+//        for (RealmEvent rl : realmEventList) {
+//            Log.d("getMyEvents", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
+//        }
+        handleList(realmEventList);
     }
+
 
     private void handleList(List<RealmEvent> realmEventList) {
         String dayNumber = "";
-        Day day = null;
+        DayStatistics dayStatistics = null;
+        List<Long> creationTimeList = new ArrayList<>();
 
-            for (int i = 0; i < realmEventList.size(); i++) {
-                String curDay = new SimpleDateFormat("dd").format(realmEventList.get(i).getCreated());
-                Log.d("Element list", "curDay = " + curDay);
-                Log.d("Element list", "IdCard = " + realmEventList.get(i).getIdCard() + "    Created = " + realmEventList.get(i).getCreated());
+        for (int i = 0; i < realmEventList.size(); i++) {
+            long creationTime = realmEventList.get(i).getCreationTime();
+            String curDay = DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_D);
 
-                if (dayNumber.equals(curDay)) {
-                    day.addNewChecking(realmEventList.get(i).getCreated());
-                } else {
-                    if (!dayNumber.equals("")) {
-                        dayList.add(day);
-                    }
-                    day = new Day();
-                    day.setCurrentDate(new SimpleDateFormat("dd.MM.yyyy").format(realmEventList.get(i).getCreated()));
-                    day.addNewChecking(realmEventList.get(i).getCreated());
-                    dayNumber = curDay;
+            if (dayNumber.equals(curDay)) {
+                creationTimeList.add(creationTime);
+                if (i == realmEventList.size() - 1) {
+                    long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
+                    dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
+                    dayList.add(dayStatistics);
                 }
+
+            } else {
+                if (!dayNumber.equals("")) {
+                    long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
+                    dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
+                    dayList.add(dayStatistics);
+                    creationTimeList = new ArrayList<>();
+                }
+                dayStatistics = new DayStatistics();
+                dayStatistics.setDate(DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_Y_M_D));
+
+                creationTimeList.add(creationTime);
+                dayNumber = curDay;
             }
+        }
 
-
-        dayList.add(day);
-        Log.d("handleList", "dayList.size() =  " + dayList.size());
-
-//        for (Day d : dayList) {
-//            Log.d("handleList", "Date=" + d.getCheckingList().toString());
-//        }
-
-        dayAdapter.replaceNewData(dayList);
+        statisticsAdapter.replaceNewData(dayList);
     }
+
+
 
     private final class NetCallback extends SimpleMainCallBack {
 
-        @Override
-        public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
-            Log.d("NetCallBack", "On");
-//            Collections.sort(eventList, new Comparator<Event>() {
-//                @Override
-//                public int compare(Event lhs, Event rhs) { // rhs  lhs
-//                    return lhs.getCreated().compareTo(rhs.getCreated());
-//                }
-//            });
-//            handleList(eventList); 1
-        }
     }
 
 }

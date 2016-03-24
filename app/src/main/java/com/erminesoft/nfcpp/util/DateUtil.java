@@ -13,6 +13,8 @@ public final class DateUtil {
     public static final String DATE_FORMAT_Y_M_D = "yyyy-MM-dd";
     public static final String DATE_FORMAT_Y_M_D_H_M = "yyyy-MM-dd HH:mm";
     public static final String DATE_FORMAT_M_D_Y = "MM.dd.yyyy";
+    public static final String DATE_FORMAT_H_M = "HH:mm";
+    public static final String DATE_FORMAT_D = "dd";
 
     public static int getStartOfDay(String date) throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT_Y_M_D);
@@ -61,8 +63,8 @@ public final class DateUtil {
         return differenceTime;
     }
 
-    public static String dateToFormatString(long creationTime) {
-        String formatString = new SimpleDateFormat("HH:mm").format(new Date(creationTime));
+    public static String dateToFormatString(long creationTime, String dateFormat) {
+        String formatString = new SimpleDateFormat(dateFormat).format(new Date(creationTime));
         return formatString;
     }
 }
