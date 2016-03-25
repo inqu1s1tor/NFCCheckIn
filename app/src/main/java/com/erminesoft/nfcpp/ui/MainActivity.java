@@ -1,5 +1,6 @@
 package com.erminesoft.nfcpp.ui;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.erminesoft.nfcpp.R;
@@ -22,6 +23,12 @@ public class MainActivity extends AppCompatActivity implements ActivityBridge {
         application = (NfcApplication) getApplication();
         fragmentLauncher = new FragmentLauncher(getSupportFragmentManager());
         fragmentLauncher.launchWelcomeFragment();
+
+
+        android.support.v4.app.FragmentManager.OnBackStackChangedListener listener = new Clicker();
+
+        getSupportFragmentManager().addOnBackStackChangedListener(listener);
+        shouldDisplayHomeUp();
     }
 
 
@@ -47,6 +54,26 @@ public class MainActivity extends AppCompatActivity implements ActivityBridge {
     @Override
     public FragmentLauncher getFragmentLauncher() {
         return fragmentLauncher;
+    }
+
+
+    public void shouldDisplayHomeUp(){
+        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getSupportFragmentManager().popBackStack();
+        return true;
+    }
+
+    private final class Clicker implements android.support.v4.app.FragmentManager.OnBackStackChangedListener {
+
+        @Override
+        public void onBackStackChanged() {
+            shouldDisplayHomeUp();
+        }
     }
 }
 
