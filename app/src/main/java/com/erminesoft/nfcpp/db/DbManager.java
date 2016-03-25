@@ -42,17 +42,6 @@ public final class DbManager extends Observable implements DbBridge {
     }
 
     @Override
-    public BackendlessUser getMyUser() {
-        return me;
-    }
-
-    @Override
-    public void setMyUser(BackendlessUser myUser) {
-        me = myUser;
-        notifyObserversProcedure();
-    }
-
-    @Override
     public User getMe() {
         String param = "name";
         String value = sharedHelper.getUserName();
@@ -62,6 +51,7 @@ public final class DbManager extends Observable implements DbBridge {
     @Override
     public void setMyUser(User myUser) {
         userHelper.saveUser(initRealm(), myUser);
+        notifyObserversProcedure();
     }
 
     @Override

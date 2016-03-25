@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.User;
 
 /**
  * Created by Aleks on 10.03.2016.

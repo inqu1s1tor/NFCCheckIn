@@ -1,19 +1,11 @@
 package com.erminesoft.nfcpp.core.bridge;
 
-import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.User;
-
 import java.util.List;
 import java.util.Observer;
 
 public interface DbBridge {
-
-    @Deprecated
-    BackendlessUser getMyUser();
-
-    @Deprecated
-    void setMyUser(BackendlessUser myUser);
 
     User getMe();
 

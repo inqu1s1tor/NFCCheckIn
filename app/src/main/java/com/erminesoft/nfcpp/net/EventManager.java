@@ -44,18 +44,6 @@ final class EventManager {
         });
     }
 
-    RealmEvent addNewEvent(RealmEvent realmEvent) {
-        Event event = EventConverter.realmEventToClearEvent(realmEvent);
-        event = Backendless.Persistence.save(event);
-        if (event != null) {
-            Backendless.Data.Permissions.FIND.grantForAllRoles(event);
-            RealmEvent updatedEvent = EventConverter.clearEventToRealmEvent(event);
-            dbBridge.saveEvent(updatedEvent);
-            return updatedEvent;
-        } else {
-            return null;
-        }
-    }
 
     private void setPermissionGrantForAllRoles(final Event event, final MainCallBack mainCallBack) {
 

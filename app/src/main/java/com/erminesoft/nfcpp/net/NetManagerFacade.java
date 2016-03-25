@@ -19,6 +19,7 @@ public final class NetManagerFacade implements NetBridge {
     private final AuthManager authManager;
 
     private final EventManager eventManager;
+    private final BoltsEventManager boltsEventManager;
 
     private final UsersManager usersManager;
 
@@ -27,6 +28,7 @@ public final class NetManagerFacade implements NetBridge {
 
         authManager = new AuthManager(sharedHelper, dbBridge);
         eventManager = new EventManager(dbBridge);
+        boltsEventManager = new BoltsEventManager(dbBridge);
         usersManager = new UsersManager(dbBridge);
     }
 
@@ -36,7 +38,7 @@ public final class NetManagerFacade implements NetBridge {
         Log.d("init", "KEY = " + res.getString(R.string.BACKENDLESS_KEY));
         Backendless.initApp(context, res.getString(R.string.BACKENDLESS_APP_ID), res.getString(R.string.BACKENDLESS_KEY), "v1");
 
-//        Log.d("init", "getMe = " + dbBridge.getMe());
+        Log.d("init", "getMe = " + dbBridge.getMe());
     }
 
     @Override
@@ -61,7 +63,7 @@ public final class NetManagerFacade implements NetBridge {
 
     @Override
     public RealmEvent addNewEvent(RealmEvent realmEvent) {
-        return eventManager.addNewEvent(realmEvent);
+        return boltsEventManager.addNewEvent(realmEvent);
     }
 
 
