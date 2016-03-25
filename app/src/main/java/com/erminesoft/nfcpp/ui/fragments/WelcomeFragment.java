@@ -43,35 +43,22 @@ public class WelcomeFragment extends GenericFragment {
     }
 
     private void checkData() {
-        SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
-        if (TextUtils.isEmpty(sharedHelper.getUserName())) {
+        User user = mActivityBridge.getUApplication().getDbBridge().getMe();
+        if (user == null) {
             loginUserTv.setVisibility(View.VISIBLE);
             registerUserTv.setVisibility(View.VISIBLE);
-        }else {
-            Log.d("checkData", "!isEmpty");
-            showProgressDialog();
-            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallback());
-        }
-    }
-
-    private void doAutologinForAdmin(){
-        SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
-        String loginName = sharedHelper.getUserName();
-
-        if (loginName.equals("admin")){
-            mActivityBridge.getFragmentLauncher().launchAdminFragment();
         } else {
-            mActivityBridge.getFragmentLauncher().launchMainFragment();
+            if (user.getUserRoles().contains("Admin")) {  // TODO
+                mActivityBridge.getFragmentLauncher().launchAdminFragment();
+            } else {
+                mActivityBridge.getFragmentLauncher().launchMainFragment();
+            }
         }
     }
+
 
     private final class NetCallback extends SimpleMainCallBack {
 
-        @Override
-        public void onSuccess() {
-            hideProgressDialog();
-            doAutologinForAdmin();
-        }
     }
 
 

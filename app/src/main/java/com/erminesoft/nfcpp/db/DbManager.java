@@ -1,6 +1,7 @@
 package com.erminesoft.nfcpp.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.SharedHelper;
@@ -50,6 +51,7 @@ public final class DbManager extends Observable implements DbBridge {
 
     @Override
     public void setMyUser(User myUser) {
+        Log.d("setMyUser", "*getUserRoles()="+myUser.getUserRoles());
         userHelper.saveUser(initRealm(), myUser);
         notifyObserversProcedure();
     }

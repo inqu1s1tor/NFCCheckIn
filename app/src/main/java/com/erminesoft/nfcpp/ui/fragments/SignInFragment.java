@@ -92,7 +92,7 @@ public class SignInFragment extends GenericFragment {
     }
 
     private void checkMode(User user) {
-        if (user.getUserRoles().contains("Admin")) { // TODO
+        if (user.getUserRoles().contains("Admins")) { // TODO
             mActivityBridge.getFragmentLauncher().launchAdminFragment();
         } else {
             mActivityBridge.getFragmentLauncher().launchMainFragment();
