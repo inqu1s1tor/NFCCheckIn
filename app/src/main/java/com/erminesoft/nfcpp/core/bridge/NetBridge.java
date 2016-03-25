@@ -4,18 +4,17 @@ import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.RealmEvent;
 
-/**
- * Created by Aleks on 09.03.2016.
- */
 public interface NetBridge {
 
-    void loginUser (String login, String password, MainCallBack mainCallBack);
+    void loginUser(String login, String password, MainCallBack mainCallBack);
 
     void autoLoginUser(MainCallBack callback);
 
-    void registryUser (BackendlessUser user, MainCallBack mainCallBack);
+    void registryUser(BackendlessUser user, MainCallBack mainCallBack);
 
     void addNewEvent(RealmEvent realmEvent, final MainCallBack callback);
+
+    RealmEvent addNewEvent(RealmEvent realmEvent);
 
     void getAllEvents(String ownerId, MainCallBack callback);
 

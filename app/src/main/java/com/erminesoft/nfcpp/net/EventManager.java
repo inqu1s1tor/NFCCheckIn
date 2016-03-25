@@ -1,6 +1,7 @@
 package com.erminesoft.nfcpp.net;
 
 import android.util.Log;
+
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
@@ -11,10 +12,13 @@ import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.util.DateUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import io.realm.annotations.PrimaryKey;
 
 final class EventManager {
 
@@ -39,6 +43,7 @@ final class EventManager {
             }
         });
     }
+
 
     private void setPermissionGrantForAllRoles(final Event event, final MainCallBack mainCallBack) {
 

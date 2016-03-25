@@ -10,6 +10,7 @@ import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.RealmEvent;
+import com.erminesoft.nfcpp.util.SystemUtils;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -34,7 +35,7 @@ public final class SyncService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        if (isWork) {
+        if (isWork && SystemUtils.isNetworkConnected(this)) {
             return;
         }
 
@@ -60,13 +61,16 @@ public final class SyncService extends IntentService {
             isWork = false;
             return;
         }
-        netBridge.addNewEvent(realmEvent, new NetCallback());
-    }
-
-    private final class NetCallback extends SimpleMainCallBack {
-        @Override
-        public void onSuccess() {
+        realmEvent = netBridge.addNewEvent(realmEvent);
+        if(realmEvent != null){
             sendEvent();
         }
     }
+
+//    private final class NetCallback extends SimpleMainCallBack {
+//        @Override
+//        public void onSuccess() {
+//            sendEvent();
+//        }
+//    }
 }

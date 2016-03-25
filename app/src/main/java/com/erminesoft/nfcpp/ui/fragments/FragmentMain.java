@@ -25,6 +25,7 @@ import com.erminesoft.nfcpp.util.CardFilterUtil;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.NfcUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
+import com.erminesoft.nfcpp.util.SystemUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -104,7 +105,10 @@ public class FragmentMain extends GenericFragment {
         long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsTodayList);
         todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsTodayList);
-        SyncService.start(getActivity());
+
+        if (SystemUtils.isNetworkConnected(getActivity())) {
+            SyncService.start(getActivity());
+        }
     }
 
 
