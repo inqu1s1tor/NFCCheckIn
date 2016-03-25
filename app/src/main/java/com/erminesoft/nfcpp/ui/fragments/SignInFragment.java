@@ -13,6 +13,7 @@ import android.widget.EditText;
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.User;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -37,8 +38,8 @@ public class SignInFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        signInLoginEt = (EditText)view.findViewById(R.id.signInloginUserET);
-        signInPasswordEt = (EditText)view.findViewById(R.id.signInPasswordUserET);
+        signInLoginEt = (EditText) view.findViewById(R.id.signInloginUserET);
+        signInPasswordEt = (EditText) view.findViewById(R.id.signInPasswordUserET);
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.signInButton).setOnClickListener(listener);
@@ -90,10 +91,10 @@ public class SignInFragment extends GenericFragment {
         }
     }
 
-    private void checkMode(BackendlessUser user) {
-        if(user.getProperty("name").toString().equals("admin")) {
+    private void checkMode(User user) {
+        if (user.getUserRoles().contains("Admin")) { // TODO
             mActivityBridge.getFragmentLauncher().launchAdminFragment();
-        }else {
+        } else {
             mActivityBridge.getFragmentLauncher().launchMainFragment();
         }
     }
@@ -103,14 +104,15 @@ public class SignInFragment extends GenericFragment {
         @Override
         public void update(Observable observable, Object data) {
             hideProgressDialog();
-            BackendlessUser user = mActivityBridge.getUApplication().getDbBridge().getMyUser();
+            User user = mActivityBridge.getUApplication().getDbBridge().getMe();
             checkMode(user);
         }
     }
+
     private final class Clicker implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
+            switch (v.getId()) {
                 case R.id.signInButton:
                     buttonSignInPressed();
             }

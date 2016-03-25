@@ -38,7 +38,7 @@ public final class NetManagerFacade implements NetBridge {
         Log.d("init", "KEY = " + res.getString(R.string.BACKENDLESS_KEY));
         Backendless.initApp(context, res.getString(R.string.BACKENDLESS_APP_ID), res.getString(R.string.BACKENDLESS_KEY), "v1");
 
-//        Log.d("init", "getMe = " + dbBridge.getMe());
+        Log.d("init", "getMe = " + dbBridge.getMe());
     }
 
     @Override

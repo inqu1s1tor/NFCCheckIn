@@ -1,6 +1,8 @@
 package com.erminesoft.nfcpp.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -12,6 +14,7 @@ public class User extends RealmObject{
     private String lastName;
     private String firstName;
     private Date created;
+    private String userRoles;
 
     @PrimaryKey
     private String email;
@@ -65,5 +68,13 @@ public class User extends RealmObject{
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(String userRoles) {
+        this.userRoles = userRoles;
     }
 }
