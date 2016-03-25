@@ -60,7 +60,10 @@ public final class SyncService extends IntentService {
             isWork = false;
             return;
         }
-        netBridge.addNewEvent(realmEvent, new NetCallback());
+        realmEvent = netBridge.addNewEvent(realmEvent);
+        if(realmEvent != null){
+            sendEvent();
+        }
     }
 
     private final class NetCallback extends SimpleMainCallBack {

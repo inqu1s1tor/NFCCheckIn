@@ -14,9 +14,6 @@ import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.RealmEvent;
 
 
-/**
- * Created by Aleks on 09.03.2016.
- */
 public final class NetManagerFacade implements NetBridge {
 
     private final AuthManager authManager;
@@ -25,7 +22,7 @@ public final class NetManagerFacade implements NetBridge {
 
     private final UsersManager usersManager;
 
-    public NetManagerFacade (Context context,SharedHelper sharedHelper, DbBridge dbBridge) {
+    public NetManagerFacade(Context context, SharedHelper sharedHelper, DbBridge dbBridge) {
         initBackendLess(context, dbBridge);
 
         authManager = new AuthManager(sharedHelper, dbBridge);
@@ -60,6 +57,11 @@ public final class NetManagerFacade implements NetBridge {
     @Override
     public void addNewEvent(RealmEvent realmEvent, MainCallBack callback) {
         eventManager.addNewEvent(realmEvent, callback);
+    }
+
+    @Override
+    public RealmEvent addNewEvent(RealmEvent realmEvent) {
+        return eventManager.addNewEvent(realmEvent);
     }
 
 
