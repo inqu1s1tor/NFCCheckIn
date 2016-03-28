@@ -29,14 +29,12 @@ public class SignInFragment extends GenericFragment {
     private EditText signInLoginEt;
     private EditText signInPasswordEt;
     private Observer observer;
-    private Tracker mTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        NfcApplication application = (NfcApplication) mActivityBridge.getUApplication();
-        mTracker = application.getDefaultTracker();
+
 
     }
 
@@ -95,11 +93,6 @@ public class SignInFragment extends GenericFragment {
 
         showProgressDialog();
         mActivityBridge.getUApplication().getNetBridge().loginUser(name, password, new NetCallBack());
-
-        mTracker.send(new HitBuilders.EventBuilder()
-                .setCategory("Action")
-                .setAction("Share")
-                .build());
     }
 
     private final class NetCallBack extends SimpleMainCallBack {

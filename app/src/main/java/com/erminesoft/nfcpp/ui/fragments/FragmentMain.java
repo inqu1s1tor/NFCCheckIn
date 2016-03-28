@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
+import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.EventsToday;
@@ -26,6 +27,8 @@ import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.NfcUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
 import com.erminesoft.nfcpp.util.SystemUtils;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +49,7 @@ public class FragmentMain extends GenericFragment {
     private EventAdapter eventAdapter;
     private List<EventsToday> eventsTodayList;
     private Observer observer;
+    private Tracker mTracker;
 
     @Nullable
     @Override
@@ -57,6 +61,9 @@ public class FragmentMain extends GenericFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        NfcApplication application = (NfcApplication) mActivityBridge.getUApplication();
+        mTracker = application.getDefaultTracker();
 
         currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
         todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
@@ -163,10 +170,21 @@ public class FragmentMain extends GenericFragment {
         realmEvent.setCreationTime((int) (System.currentTimeMillis() / 1000));
         realmEvent.setIsSent(false);
         mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEvent);
+
+        sendLog("createNewEvent");
     }
 
     private void checkUpdateDataFromBackendless(List<RealmEvent> realmEventList) {
         mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEventList);
+    }
+
+    private void sendLog(String Category){
+        String myName = mActivityBridge.getUApplication().getDbBridge().getMe().getName();
+        
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory(Category)
+                .setAction(myName)
+                .build());
     }
 
     @Override
