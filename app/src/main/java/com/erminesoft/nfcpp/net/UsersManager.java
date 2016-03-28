@@ -1,5 +1,7 @@
 package com.erminesoft.nfcpp.net;
 
+import android.util.Log;
+
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
@@ -25,6 +27,8 @@ public class UsersManager {
 
     void getAllUsers(final MainCallBack callback, String searchName) {
 
+        final String myId = dbBridge.getMe().getObjectId();
+
         String whereClause = "name LIKE '%" + searchName + "%'";
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
@@ -33,7 +37,12 @@ public class UsersManager {
             @Override
             public void handleResponse(BackendlessCollection<BackendlessUser> users) {
                 List<BackendlessUser> backendlessUsers = users.getData();
-                if(backendlessUsers.size()!= 0) {
+                if (backendlessUsers.size() != 0) {
+                    for (int i = 0; i < backendlessUsers.size(); i++) {
+                        if (backendlessUsers.get(i).getObjectId().equals(myId)){
+                            backendlessUsers.remove(backendlessUsers.get(i));
+                        }
+                    }
                     dbBridge.saveUser(ExtractorToUserUtil.convertBackendlssUserToUserModel(backendlessUsers));
                 }
             }

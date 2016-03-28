@@ -11,6 +11,7 @@ public class Event {
     private Double creationTime;
     private String objectId;
     private Date created;
+    private String ownerId;
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
@@ -50,5 +51,13 @@ public class Event {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }

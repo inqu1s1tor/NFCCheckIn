@@ -62,7 +62,7 @@ public class DetailStatisticsFragment extends GenericFragment {
         dateTv.setText(date);
 
         initAdapter();
-        getEventsFromDb();
+        getEventsFromDb(date);
     }
 
     private void initAdapter(){
@@ -71,10 +71,12 @@ public class DetailStatisticsFragment extends GenericFragment {
         eventsListView.setAdapter(eventAdapter);
     }
 
-    private void getEventsFromDb() {
-        long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
-        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
+    private void getEventsFromDb(String dateString) {
+        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
+
+        for (RealmEvent rl : realmEventList) {
+            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
+        }
         loadTodayEventsList(realmEventList);
     }
 

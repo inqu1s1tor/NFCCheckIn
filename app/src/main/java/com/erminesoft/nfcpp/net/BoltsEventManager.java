@@ -15,7 +15,8 @@ public class BoltsEventManager {
     }
 
     RealmEvent addNewEvent(RealmEvent realmEvent) {
-        Event event = EventManager.EventConverter.realmEventToClearEvent(realmEvent);
+        String myId = dbBridge.getMe().getObjectId();
+        Event event = EventManager.EventConverter.realmEventToClearEvent(myId, realmEvent);
         try {
             event = Backendless.Persistence.save(event);
             if (event != null) {

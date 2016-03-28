@@ -68,14 +68,20 @@ public final class NetManagerFacade implements NetBridge {
 
 
     @Override
-    public void getAllEvents(String ownerId, MainCallBack callback) {
-        eventManager.getAllEvents(ownerId, callback);
+    public void getAllEventsByUserId(String ownerId, MainCallBack callback) {
+        eventManager.getAllEventsByUserId(ownerId, callback);
     }
 
     @Override
-    public void getTodayEvents(String ownerId, long curTime, MainCallBack callback) {
-        eventManager.getTodayEvents(ownerId, curTime, callback);
+    public void getTodayEventsByUserId(String ownerId, long curTime, MainCallBack callback) {
+        eventManager.getTodayEventsByUserId(ownerId, curTime, callback);
     }
+
+    @Override
+    public void getAllEvents(MainCallBack mainCallBack) {
+        eventManager.getAllEvents(mainCallBack);
+    }
+
 
     @Override
     public void getAllUsers(MainCallBack callback, String searchName) {

@@ -22,6 +22,8 @@ import io.realm.annotations.PrimaryKey;
 
 final class EventManager {
 
+    private int PAGE_SIZE = 100;
+
     private DbBridge dbBridge;
 
     public EventManager(DbBridge dbBridge) {
@@ -29,7 +31,8 @@ final class EventManager {
     }
 
     void addNewEvent(RealmEvent realmEvent, final MainCallBack callback) {
-        Event event = EventConverter.realmEventToClearEvent(realmEvent);
+        String myId = dbBridge.getMe().getObjectId();
+        Event event = EventConverter.realmEventToClearEvent(myId, realmEvent);
         Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event) {
@@ -64,19 +67,23 @@ final class EventManager {
     }
 
 
-    void getAllEvents(String ownerId, final MainCallBack mainCallBack) {
+    void getAllEventsByUserId(String ownerId, final MainCallBack mainCallBack) {
         String whereClause = "ownerId = '" + ownerId + "'";
+        Log.d("getAllEvents", "*whereClause=" + whereClause);
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
+        query.setPageSize(PAGE_SIZE);
 
         Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
             @Override
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
                 List<Event> eventList = eventBackendlessCollection.getData();
+                Log.d("getAllEvents", "*eventList.size()=" + eventList.size());
                 List<RealmEvent> realmEvents = new ArrayList<RealmEvent>(eventList.size());
                 for (Event ev : eventList) {
                     realmEvents.add(EventConverter.clearEventToRealmEvent(ev));
                 }
+                mainCallBack.onSuccessGetEvents(realmEvents);
             }
 
             @Override
@@ -87,11 +94,13 @@ final class EventManager {
     }
 
 
-    void getTodayEvents(String ownerId, long curTime, final MainCallBack callback) {
+    void getTodayEventsByUserId(String ownerId, long curTime, final MainCallBack callback) {
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_M_D_Y).format(curTime);
         String whereClause = "ownerId = '" + ownerId + "'  and  created > '" + curStringDate + "'";
+        Log.d("getTodayEvents", "*whereClause="+whereClause);
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
+        query.setPageSize(PAGE_SIZE);
 
         Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
             @Override
@@ -113,13 +122,37 @@ final class EventManager {
     }
 
 
+    void getAllEvents(final MainCallBack mainCallBack) {
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setPageSize(PAGE_SIZE);
+
+        Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
+                List<Event> eventList = eventBackendlessCollection.getData();
+                List<RealmEvent> realmEvents = new ArrayList<RealmEvent>(eventList.size());
+                for (Event ev : eventList) {
+                    realmEvents.add(EventConverter.clearEventToRealmEvent(ev));
+                }
+                mainCallBack.onSuccessGetEvents(realmEvents);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                mainCallBack.onError(backendlessFault.getMessage());
+            }
+        });
+    }
+
+
     static final class EventConverter {
 
-        static Event realmEventToClearEvent(RealmEvent realmRealmEvent) {
+        static Event realmEventToClearEvent(String ownerId, RealmEvent realmRealmEvent) {
             Event clearEvent = new Event();
             clearEvent.setCreationTime((double) realmRealmEvent.getCreationTime());
             clearEvent.setIdCard(realmRealmEvent.getIdCard());
             clearEvent.setIsSent(true);
+            clearEvent.setOwnerId(ownerId);
             return clearEvent;
         }
 
@@ -130,6 +163,7 @@ final class EventManager {
             realmEvent.setIdCard(event.getIdCard());
             realmEvent.setCreated(event.getCreated());
             realmEvent.setIsSent(true);
+            Log.d("", "getCreationTime=" + realmEvent.getCreationTime() + "");
             return realmEvent;
         }
     }
