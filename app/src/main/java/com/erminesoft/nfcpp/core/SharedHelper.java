@@ -11,6 +11,7 @@ public final class SharedHelper {
     private static final String NAME = "NFC-Chec";
     private static final String USER_NAME = "userName";
     private static final String User_PASSWORD = "userPassword";
+    private static final String LAST_SYNC_DATE = "lastSyncDate";
 
     private final SharedPreferences mSharedPreferences;
 
@@ -26,12 +27,22 @@ public final class SharedHelper {
         mSharedPreferences.edit().putString(User_PASSWORD, userPassword).apply();
     }
 
+    public void setLastSyncDate (long lastSyncDate) {
+        mSharedPreferences.edit().putLong(LAST_SYNC_DATE, lastSyncDate).apply();
+    }
+
+
+
     public String getUserName() {
         return mSharedPreferences.getString(USER_NAME, "");
     }
 
     public String getUserPassword() {
         return mSharedPreferences.getString(User_PASSWORD, "");
+    }
+
+    public long getLastSyncDate(){
+        return mSharedPreferences.getLong(LAST_SYNC_DATE, 0);
     }
 
     public void sharedHelperClear() {

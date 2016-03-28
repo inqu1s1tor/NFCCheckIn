@@ -46,7 +46,7 @@ final class EventHelper {
             e.printStackTrace();
         }
 
-        return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAll();
+        return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAllSorted("creationTime", Sort.ASCENDING);
     }
 
     List<RealmEvent> getEventsByMonth(Realm realm, String date) {
@@ -59,7 +59,7 @@ final class EventHelper {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAll();
+        return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAllSorted("creationTime", Sort.ASCENDING);
     }
 
     RealmEvent getLastEventByCardId(Realm realm, String cardId){

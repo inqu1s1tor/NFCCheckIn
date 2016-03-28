@@ -75,6 +75,8 @@ public class FragmentMain extends GenericFragment {
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
+
+        loadEventsFromBackendless();
     }
 
     private void initAdapter() {
@@ -120,6 +122,19 @@ public class FragmentMain extends GenericFragment {
 //            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
 //        }
         loadTodayEventsList(realmEventList);
+
+    }
+
+    private void loadEventsFromBackendless() {
+        long lastSyncDate = mActivityBridge.getUApplication().getSharedHelper().getLastSyncDate();
+        String myId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
+        long curTime = System.currentTimeMillis();
+        if (lastSyncDate == 0) {
+            mActivityBridge.getUApplication().getNetBridge().getAllEventsByUserId(myId, new NetCallback());
+        } else {
+            mActivityBridge.getUApplication().getNetBridge().getTodayEventsByUserId(myId, lastSyncDate, new NetCallback());
+        }
+        mActivityBridge.getUApplication().getSharedHelper().setLastSyncDate(curTime);
     }
 
     @Override
@@ -150,6 +165,10 @@ public class FragmentMain extends GenericFragment {
         mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEvent);
     }
 
+    private void checkUpdateDataFromBackendless(List<RealmEvent> realmEventList) {
+        mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEventList);
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -160,7 +179,10 @@ public class FragmentMain extends GenericFragment {
     }
 
     private final class NetCallback extends SimpleMainCallBack {
-
+        @Override
+        public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
+            checkUpdateDataFromBackendless(realmEventList);
+        }
     }
 
     private final class Clicker implements View.OnClickListener {
@@ -198,7 +220,6 @@ public class FragmentMain extends GenericFragment {
                 }
             });
         }
-
 
     }
 
