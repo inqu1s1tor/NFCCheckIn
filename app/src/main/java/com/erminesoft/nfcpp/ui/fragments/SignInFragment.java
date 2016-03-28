@@ -12,8 +12,11 @@ import android.widget.EditText;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
+import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.User;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -26,7 +29,16 @@ public class SignInFragment extends GenericFragment {
     private EditText signInLoginEt;
     private EditText signInPasswordEt;
     private Observer observer;
+    private Tracker mTracker;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        NfcApplication application = (NfcApplication) mActivityBridge.getUApplication();
+        mTracker = application.getDefaultTracker();
+
+    }
 
     @Nullable
     @Override
@@ -43,6 +55,8 @@ public class SignInFragment extends GenericFragment {
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.signInButton).setOnClickListener(listener);
+
+
 
     }
 
@@ -81,6 +95,11 @@ public class SignInFragment extends GenericFragment {
 
         showProgressDialog();
         mActivityBridge.getUApplication().getNetBridge().loginUser(name, password, new NetCallBack());
+
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Action")
+                .setAction("Share")
+                .build());
     }
 
     private final class NetCallBack extends SimpleMainCallBack {

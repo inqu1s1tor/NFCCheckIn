@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_id": "nfccheckin",
+    "project_number": "605356918615",
+    "name": "NFCCheckin"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605356918615:android:27690e86d8478f65",
+        "client_id": "android:com.erminesoft.nfcpp",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "com.erminesoft.nfcpp",
+          "certificate_hash": []
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-75669386-1"
+          }
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

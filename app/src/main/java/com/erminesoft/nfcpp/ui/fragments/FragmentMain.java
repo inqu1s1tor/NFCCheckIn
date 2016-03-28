@@ -191,7 +191,7 @@ public class FragmentMain extends GenericFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.transferToStatisticsButton:
-                    mActivityBridge.getFragmentLauncher().launchStatisticsFragment();
+                    mActivityBridge.getFragmentLauncher().launchStatisticsFragment(null);
                     break;
             }
 
