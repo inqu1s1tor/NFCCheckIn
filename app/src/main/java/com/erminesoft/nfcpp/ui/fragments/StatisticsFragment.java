@@ -37,6 +37,16 @@ public class StatisticsFragment extends GenericFragment {
     private ListView statisticsListView;
     private List<DayStatistics> dayList;
     private StatisticsAdapter statisticsAdapter;
+    private String objectUserId;
+
+    private final static String OBJECT_ID = "object_id";
+
+
+    public static Bundle buildArguments(String objectId) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(OBJECT_ID, objectId);
+        return bundle;
+    }
 
 
     @Nullable
@@ -57,7 +67,13 @@ public class StatisticsFragment extends GenericFragment {
         statisticsListView.setOnItemClickListener(new ItemClicker());
 
         getMyEvents();
+
+        Bundle bundle = getArguments();
+        if(bundle != null) {
+            objectUserId = (String) bundle.getSerializable(OBJECT_ID);
+        }
     }
+
 
     private void getMyEvents() {
         Log.d("getMyEvents", "getMyEvents");

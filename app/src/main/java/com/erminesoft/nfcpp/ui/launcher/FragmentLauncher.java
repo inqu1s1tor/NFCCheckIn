@@ -60,15 +60,15 @@ public class FragmentLauncher {
         launch(fragmentMain, null);
     }
 
-    public void launchStatisticsFragment() {
+    public void launchStatisticsFragment(String objectId) {
         GenericFragment statisticsFragment = new StatisticsFragment();
+        statisticsFragment.setArguments(StatisticsFragment.buildArguments(objectId));
         launch(statisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
 
     public void launchAdminFragment() {
         GenericFragment adminFragmnent = new AdminFragment();
         launch(adminFragmnent, null);
-
     }
 
     public void launchDetailStatisticsFragment(String date){
