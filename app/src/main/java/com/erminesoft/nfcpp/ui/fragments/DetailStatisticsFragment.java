@@ -86,7 +86,7 @@ public class DetailStatisticsFragment extends GenericFragment {
         }
 
         eventsList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsList);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsList, false);
         totalTime.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsList);
     }

@@ -111,7 +111,7 @@ public class FragmentMain extends GenericFragment {
         }
 
         eventsTodayList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsTodayList);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsTodayList, true);
         todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsTodayList);
 
@@ -180,7 +180,7 @@ public class FragmentMain extends GenericFragment {
 
     private void sendLog(String Category){
         String myName = mActivityBridge.getUApplication().getDbBridge().getMe().getName();
-        
+
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory(Category)
                 .setAction(myName)
