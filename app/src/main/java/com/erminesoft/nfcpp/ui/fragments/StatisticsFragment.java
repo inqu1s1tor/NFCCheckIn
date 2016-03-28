@@ -66,12 +66,15 @@ public class StatisticsFragment extends GenericFragment {
         statisticsListView.setAdapter(statisticsAdapter);
         statisticsListView.setOnItemClickListener(new ItemClicker());
 
-        getMyEvents();
+
 
         Bundle bundle = getArguments();
         if(bundle != null) {
             objectUserId = (String) bundle.getSerializable(OBJECT_ID);
+
         }
+
+        getMyEvents();
     }
 
 

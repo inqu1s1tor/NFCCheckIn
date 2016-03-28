@@ -27,4 +27,11 @@ public class SimpleMainCallBack implements MainCallBack {
     public void onSuccessGetEvent(RealmEvent realmEvent) {
 
     }
+
+    @Override
+    public void onSuccessGetAllUsersFromBl() {
+
+    }
+
+
 }

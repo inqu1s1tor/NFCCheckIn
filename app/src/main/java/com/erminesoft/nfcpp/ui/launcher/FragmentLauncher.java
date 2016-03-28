@@ -76,6 +76,4 @@ public class FragmentLauncher {
         detailStatisticsFragment.setArguments(DetailStatisticsFragment.buildArguments(date));
         launch(detailStatisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
-
-
 }
