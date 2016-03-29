@@ -74,6 +74,5 @@ public class StatisticsAdapter extends BaseAdapter {
     private static final class Holder {
         TextView dateTv;
         TextView totalTimeTv;
-
     }
 }

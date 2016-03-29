@@ -38,6 +38,6 @@ public interface DbBridge {
 
     RealmEvent getLastEventByCardId(String idCard);
 
-    List<RealmEvent> getEventsByIdPerMonth(String userId, String date);
+    List<RealmEvent> getEventsByIdPerMonth(String ownerId, String date);
 
 }

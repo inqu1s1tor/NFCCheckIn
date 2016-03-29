@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
-import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.User;
@@ -110,5 +108,4 @@ public class AdminFragment extends GenericFragment {
             selectedItem(user);
         }
     }
-
 }

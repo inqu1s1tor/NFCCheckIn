@@ -164,6 +164,7 @@ final class EventManager {
             realmEvent.setIdCard(event.getIdCard());
             realmEvent.setCreated(event.getCreated());
             realmEvent.setIsSent(true);
+            realmEvent.setOwnerId(event.getOwnerId());
             Log.d("", "getCreationTime=" + realmEvent.getCreationTime() + "");
             return realmEvent;
         }

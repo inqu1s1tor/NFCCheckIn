@@ -9,8 +9,8 @@ public class RealmEvent extends RealmObject {
 
     private String objectId;
     private Date created;
-//    private Date updated;
-
+    //    private Date updated;
+    private String ownerId;
     private String idCard;
     private boolean isSent;
 
@@ -55,6 +55,14 @@ public class RealmEvent extends RealmObject {
 
     public void setCreationTime(int creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
 }
