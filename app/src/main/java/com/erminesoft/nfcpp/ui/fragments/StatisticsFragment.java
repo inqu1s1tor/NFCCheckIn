@@ -77,8 +77,6 @@ public class StatisticsFragment extends GenericFragment {
             getMyEvents();
         }
 
-
-
     }
 
 
@@ -159,12 +157,6 @@ public class StatisticsFragment extends GenericFragment {
             DayStatistics dayStatistics = (DayStatistics) parent.getItemAtPosition(position);
             selectedItem(dayStatistics);
         }
-    }
-
-
-
-    private final class NetCallback extends SimpleMainCallBack {
-
     }
 
 }

@@ -17,11 +17,6 @@ public final class NfcApplication extends Application {
     private SharedHelper sharedHelper;
     private NetBridge netBridge;
     private DbBridge dbBridge;
-
-    public Tracker getmTracker() {
-        return mTracker;
-    }
-
     private Tracker mTracker;
 
     @Override

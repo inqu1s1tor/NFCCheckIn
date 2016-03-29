@@ -19,5 +19,4 @@ public interface MainCallBack {
 
     void onSuccessGetEvent(RealmEvent realmEvent);
 
-    void onSuccessGetAllUsersFromBl();
 }

@@ -28,10 +28,4 @@ public class SimpleMainCallBack implements MainCallBack {
 
     }
 
-    @Override
-    public void onSuccessGetAllUsersFromBl() {
-
-    }
-
-
 }

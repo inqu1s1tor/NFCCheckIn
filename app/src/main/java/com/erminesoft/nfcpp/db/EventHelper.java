@@ -73,7 +73,7 @@ final class EventHelper {
             e.printStackTrace();
         }
         return realm.where(RealmEvent.class)
-                .equalTo("objectId", userId)
+                .equalTo("ownerId", userId)
                 .between("creationTime", startTime, endTime)
                 .findAllSorted("creationTime", Sort.ASCENDING);
     }
