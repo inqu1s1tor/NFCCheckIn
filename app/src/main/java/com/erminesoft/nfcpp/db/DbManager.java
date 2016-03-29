@@ -123,7 +123,7 @@ public final class DbManager extends Observable implements DbBridge {
 
     @Override
     public List<RealmEvent> getEventsByIdPerMonth(String userId, String date) {
-        return null;
+        return eventHelper.getMonthEventsByUserId(initRealm(), date, userId);
     }
 
 }
