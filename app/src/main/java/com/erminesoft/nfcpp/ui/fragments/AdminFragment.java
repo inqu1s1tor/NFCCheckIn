@@ -8,11 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
-import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.User;
 import com.erminesoft.nfcpp.ui.adapters.AdminAdapter;
 
@@ -50,6 +49,9 @@ public class AdminFragment extends GenericFragment {
 
         AdapterView.OnItemClickListener listener = new ItemClicker();
         adminList.setOnItemClickListener(listener);
+
+        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
+
     }
 
     @Override
@@ -82,6 +84,11 @@ public class AdminFragment extends GenericFragment {
         public void onError(String error) {
             showShortToast(error);
         }
+
+        @Override
+        public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
+            Log.d("myLog", "realmEventList.size()" + realmEventList.size());
+        }
     }
 
     private final class DbObserver implements Observer {
@@ -101,6 +108,4 @@ public class AdminFragment extends GenericFragment {
             selectedItem(user);
         }
     }
-
-
 }

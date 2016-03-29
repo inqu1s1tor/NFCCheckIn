@@ -66,12 +66,17 @@ public class StatisticsFragment extends GenericFragment {
         statisticsListView.setAdapter(statisticsAdapter);
         statisticsListView.setOnItemClickListener(new ItemClicker());
 
-        getMyEvents();
+
 
         Bundle bundle = getArguments();
         if(bundle != null) {
             objectUserId = (String) bundle.getSerializable(OBJECT_ID);
+            getEventsAdminMode();
+//            getMyEvents();
+        } else {
+            getMyEvents();
         }
+
     }
 
 
@@ -80,6 +85,20 @@ public class StatisticsFragment extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curStringDate);
+        for (RealmEvent rl : realmEventList) {
+            Log.d("getMyEvents", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
+            long gg  =  rl.getCreationTime() *(long)1000;
+            Log.d("getMyEvents", "getCreationTime ="+(DateUtil.dateToFormatString(gg, DateUtil.DATE_FORMAT_Y_M_D_H_M)));
+        }
+        handleList(realmEventList);
+    }
+
+    private void getEventsAdminMode() {
+        Log.d("getEventsAdmin", "getEventsAdmin");
+        long curTime = System.currentTimeMillis();
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
+        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge()
+                .getEventsByIdPerMonth(objectUserId, curStringDate);
         for (RealmEvent rl : realmEventList) {
             Log.d("getMyEvents", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
             long gg  =  rl.getCreationTime() *(long)1000;
@@ -138,12 +157,6 @@ public class StatisticsFragment extends GenericFragment {
             DayStatistics dayStatistics = (DayStatistics) parent.getItemAtPosition(position);
             selectedItem(dayStatistics);
         }
-    }
-
-
-
-    private final class NetCallback extends SimpleMainCallBack {
-
     }
 
 }

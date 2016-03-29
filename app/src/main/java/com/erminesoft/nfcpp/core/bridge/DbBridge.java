@@ -5,6 +5,8 @@ import com.erminesoft.nfcpp.model.User;
 import java.util.List;
 import java.util.Observer;
 
+import io.realm.Realm;
+
 public interface DbBridge {
 
     User getMe();
@@ -35,5 +37,7 @@ public interface DbBridge {
     void saveUser(User user);
 
     RealmEvent getLastEventByCardId(String idCard);
+
+    List<RealmEvent> getEventsByIdPerMonth(String ownerId, String date);
 
 }

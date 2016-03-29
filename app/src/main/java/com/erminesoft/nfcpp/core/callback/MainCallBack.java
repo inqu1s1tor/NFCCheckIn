@@ -18,4 +18,5 @@ public interface MainCallBack {
     void onSuccessGetEvents(List<RealmEvent> realmEventList);
 
     void onSuccessGetEvent(RealmEvent realmEvent);
+
 }

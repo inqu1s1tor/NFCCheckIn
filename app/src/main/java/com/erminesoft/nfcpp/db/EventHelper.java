@@ -62,10 +62,26 @@ final class EventHelper {
         return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAllSorted("creationTime", Sort.ASCENDING);
     }
 
-    RealmEvent getLastEventByCardId(Realm realm, String cardId){
+    List<RealmEvent> getMonthEventsByUserId(Realm realm, String date, String userId) {
+        int startTime = 0;
+        int endTime = (int) (System.currentTimeMillis() / 1000);
+
+        try {
+            startTime = DateUtil.getStartOfMonth(date);
+            endTime = DateUtil.getEndOfDayInMillis(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return realm.where(RealmEvent.class)
+                .equalTo("ownerId", userId)
+                .between("creationTime", startTime, endTime)
+                .findAllSorted("creationTime", Sort.ASCENDING);
+    }
+
+    RealmEvent getLastEventByCardId(Realm realm, String cardId) {
         RealmResults<RealmEvent> results = realm.where(RealmEvent.class).equalTo("idCard", cardId).findAllSorted("creationTime", Sort.DESCENDING);
 
-        if(results != null && !results.isEmpty()){
+        if (results != null && !results.isEmpty()) {
             return results.first();
         }
         return null;

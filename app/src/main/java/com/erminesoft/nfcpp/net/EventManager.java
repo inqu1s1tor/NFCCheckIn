@@ -134,7 +134,8 @@ final class EventManager {
                 for (Event ev : eventList) {
                     realmEvents.add(EventConverter.clearEventToRealmEvent(ev));
                 }
-                mainCallBack.onSuccessGetEvents(realmEvents);
+                dbBridge.saveEvent(realmEvents);
+//                mainCallBack.onSuccessGetEvents(realmEvents);
             }
 
             @Override
@@ -163,6 +164,7 @@ final class EventManager {
             realmEvent.setIdCard(event.getIdCard());
             realmEvent.setCreated(event.getCreated());
             realmEvent.setIsSent(true);
+            realmEvent.setOwnerId(event.getOwnerId());
             Log.d("", "getCreationTime=" + realmEvent.getCreationTime() + "");
             return realmEvent;
         }

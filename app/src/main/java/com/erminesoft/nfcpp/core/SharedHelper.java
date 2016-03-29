@@ -32,7 +32,6 @@ public final class SharedHelper {
     }
 
 
-
     public String getUserName() {
         return mSharedPreferences.getString(USER_NAME, "");
     }
