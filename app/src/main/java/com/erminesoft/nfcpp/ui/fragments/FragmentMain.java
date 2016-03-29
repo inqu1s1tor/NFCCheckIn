@@ -50,6 +50,7 @@ public class FragmentMain extends GenericFragment {
     private List<EventsToday> eventsTodayList;
     private Observer observer;
     private Tracker mTracker;
+    private String cardIdDoor;
 
     @Nullable
     @Override
@@ -64,6 +65,8 @@ public class FragmentMain extends GenericFragment {
 
         NfcApplication application = (NfcApplication) mActivityBridge.getUApplication();
         mTracker = application.getDefaultTracker();
+
+        cardIdDoor = getActivity().getResources().getString(R.string.CARD_ID);
 
         currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
         todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
@@ -165,13 +168,15 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void createNewEvent(String cardId) {
-        RealmEvent realmEvent = new RealmEvent();
-        realmEvent.setIdCard(cardId);
-        realmEvent.setCreationTime((int) (System.currentTimeMillis() / 1000));
-        realmEvent.setIsSent(false);
-        mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEvent);
+        if (cardId.equals(cardIdDoor)) {
+            RealmEvent realmEvent = new RealmEvent();
+            realmEvent.setIdCard(cardId);
+            realmEvent.setCreationTime((int) (System.currentTimeMillis() / 1000));
+            realmEvent.setIsSent(false);
+            mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEvent);
 
-        sendLog("createNewEvent");
+            sendLog("createNewEvent");
+        }
     }
 
     private void checkUpdateDataFromBackendless(List<RealmEvent> realmEventList) {
@@ -230,7 +235,6 @@ public class FragmentMain extends GenericFragment {
 
         @Override
         public void update(Observable observable, Object data) {
-            Log.e("FM", "update");
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

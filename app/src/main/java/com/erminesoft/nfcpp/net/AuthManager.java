@@ -51,7 +51,6 @@ final class AuthManager {
 
 
     void autoLogin(MainCallBack callback){
-//        Log.d("logInUser", "autoLogin >>");
         String login = sharedHelper.getUserName();
         String password = sharedHelper.getUserPassword();
 
@@ -69,8 +68,6 @@ final class AuthManager {
 
         Backendless.UserService.login(login, password, new AsyncCallback<BackendlessUser>() {
             public void handleResponse(BackendlessUser registeredUser) {
-                Log.d("logInUser", "login as " + login);
-
                 sharedHelper.setUserName(registeredUser.getProperty("name").toString());
                 sharedHelper.setUserPassword(password);
                 getRole(registeredUser, callback);

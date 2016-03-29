@@ -58,7 +58,6 @@ public class DetailStatisticsFragment extends GenericFragment {
             date = (String) bundle.getSerializable(DATE_ID);
         }
 
-        Log.d("", "date = " + date);
         dateTv.setText(date);
 
         initAdapter();
@@ -73,10 +72,6 @@ public class DetailStatisticsFragment extends GenericFragment {
 
     private void getEventsFromDb(String dateString) {
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
-
-        for (RealmEvent rl : realmEventList) {
-            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
-        }
         loadTodayEventsList(realmEventList);
     }
 

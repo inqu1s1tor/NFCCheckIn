@@ -63,7 +63,6 @@ public class DayAdapter extends BaseAdapter {
             holder = (Holder) convertView.getTag();
         }
 
-        Log.d("adapter", "*day=" + day);
         if (day != null) {
             holder.dateTv.setText(day.getCurrentDate().toString());
             loadTodayData(holder, day.getCheckingList());
@@ -82,7 +81,6 @@ public class DayAdapter extends BaseAdapter {
 
 
     private void loadTodayData(Holder holder, List<Date> dateList) {
-//        Log.d("loadTodayScreen", "eventList = " + eventList.get(0).getCreated());
         Collections.sort(dateList, new Comparator<Date>() {
             @Override
             public int compare(Date lhs, Date rhs) {
@@ -90,7 +88,6 @@ public class DayAdapter extends BaseAdapter {
             }
         });
 
-//        Log.d("loadTodayScreen", "eventList2 = " + eventList.get(0).getCreated());
         if (dateList.size() > 0) {
             loadTodayEvents(holder, dateList);
         }

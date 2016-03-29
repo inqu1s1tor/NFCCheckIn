@@ -85,17 +85,12 @@ public class AdminFragment extends GenericFragment {
             showShortToast(error);
         }
 
-        @Override
-        public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
-            Log.d("myLog", "realmEventList.size()" + realmEventList.size());
-        }
     }
 
     private final class DbObserver implements Observer {
 
         @Override
         public void update(Observable observable, Object data) {
-            Log.e("FM", "update");
             getUsersFromDb();
         }
     }
