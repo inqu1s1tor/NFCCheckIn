@@ -37,7 +37,7 @@ public class StatisticsFragment extends GenericFragment {
     private ListView statisticsListView;
     private List<DayStatistics> dayList;
     private StatisticsAdapter statisticsAdapter;
-    private String objectUserId;
+    private String objectUserId = null;
 
     private final static String OBJECT_ID = "object_id";
 
@@ -71,8 +71,10 @@ public class StatisticsFragment extends GenericFragment {
         Bundle bundle = getArguments();
         if(bundle != null) {
             objectUserId = (String) bundle.getSerializable(OBJECT_ID);
+        }
+
+        if (objectUserId != null){
             getEventsAdminMode();
-//            getMyEvents();
         } else {
             getMyEvents();
         }
@@ -81,29 +83,17 @@ public class StatisticsFragment extends GenericFragment {
 
 
     private void getMyEvents() {
-        Log.d("getMyEvents", "getMyEvents");
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curStringDate);
-        for (RealmEvent rl : realmEventList) {
-            Log.d("getMyEvents", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
-            long gg  =  rl.getCreationTime() *(long)1000;
-            Log.d("getMyEvents", "getCreationTime ="+(DateUtil.dateToFormatString(gg, DateUtil.DATE_FORMAT_Y_M_D_H_M)));
-        }
         handleList(realmEventList);
     }
 
     private void getEventsAdminMode() {
-        Log.d("getEventsAdmin", "getEventsAdmin");
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge()
                 .getEventsByIdPerMonth(objectUserId, curStringDate);
-        for (RealmEvent rl : realmEventList) {
-            Log.d("getMyEvents", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
-            long gg  =  rl.getCreationTime() *(long)1000;
-            Log.d("getMyEvents", "getCreationTime ="+(DateUtil.dateToFormatString(gg, DateUtil.DATE_FORMAT_Y_M_D_H_M)));
-        }
         handleList(realmEventList);
     }
 
@@ -145,7 +135,6 @@ public class StatisticsFragment extends GenericFragment {
 
 
     private void selectedItem(DayStatistics dayStatistics){
-        Log.d("ItemClicker", "dayStatistics.getDate() = " + dayStatistics.getDate());
         mActivityBridge.getFragmentLauncher().launchDetailStatisticsFragment(dayStatistics.getDate());
     }
 

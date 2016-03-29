@@ -24,7 +24,7 @@ public final class NetManagerFacade implements NetBridge {
     private final UsersManager usersManager;
 
     public NetManagerFacade(Context context, SharedHelper sharedHelper, DbBridge dbBridge) {
-        initBackendLess(context, dbBridge);
+        initBackendLess(context);
 
         authManager = new AuthManager(sharedHelper, dbBridge);
         eventManager = new EventManager(dbBridge);
@@ -32,13 +32,11 @@ public final class NetManagerFacade implements NetBridge {
         usersManager = new UsersManager(dbBridge);
     }
 
-    private void initBackendLess(Context context, DbBridge dbBridge) {
+    private void initBackendLess(Context context) {
         Resources res = context.getResources();
         Log.d("init", "APP_ID = " + res.getString(R.string.BACKENDLESS_APP_ID));
         Log.d("init", "KEY = " + res.getString(R.string.BACKENDLESS_KEY));
         Backendless.initApp(context, res.getString(R.string.BACKENDLESS_APP_ID), res.getString(R.string.BACKENDLESS_KEY), "v1");
-
-        Log.d("init", "getMe = " + dbBridge.getMe());
     }
 
     @Override

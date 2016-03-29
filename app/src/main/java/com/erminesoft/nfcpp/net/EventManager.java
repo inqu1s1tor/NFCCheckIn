@@ -36,7 +36,6 @@ final class EventManager {
         Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event) {
-                Log.d("save", "handleResponse");
                 setPermissionGrantForAllRoles(event, callback);
             }
 
@@ -54,7 +53,6 @@ final class EventManager {
             @Override
             public void handleResponse(Event event1) {
                 RealmEvent realmEvent = EventConverter.clearEventToRealmEvent(event);
-                Log.d("handleResponse", "*getCreationTime" + realmEvent.getCreationTime());
                 dbBridge.saveEvent(realmEvent);
                 mainCallBack.onSuccess();
             }
@@ -69,7 +67,6 @@ final class EventManager {
 
     void getAllEventsByUserId(String ownerId, final MainCallBack mainCallBack) {
         String whereClause = "ownerId = '" + ownerId + "'";
-        Log.d("getAllEvents", "*whereClause=" + whereClause);
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
         query.setPageSize(PAGE_SIZE);
@@ -78,7 +75,6 @@ final class EventManager {
             @Override
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
                 List<Event> eventList = eventBackendlessCollection.getData();
-                Log.d("getAllEvents", "*eventList.size()=" + eventList.size());
                 List<RealmEvent> realmEvents = new ArrayList<RealmEvent>(eventList.size());
                 for (Event ev : eventList) {
                     realmEvents.add(EventConverter.clearEventToRealmEvent(ev));
@@ -97,7 +93,6 @@ final class EventManager {
     void getTodayEventsByUserId(String ownerId, long curTime, final MainCallBack callback) {
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_M_D_Y).format(curTime);
         String whereClause = "ownerId = '" + ownerId + "'  and  created > '" + curStringDate + "'";
-        Log.d("getTodayEvents", "*whereClause="+whereClause);
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
         query.setPageSize(PAGE_SIZE);
@@ -165,7 +160,6 @@ final class EventManager {
             realmEvent.setCreated(event.getCreated());
             realmEvent.setIsSent(true);
             realmEvent.setOwnerId(event.getOwnerId());
-            Log.d("", "getCreationTime=" + realmEvent.getCreationTime() + "");
             return realmEvent;
         }
     }
