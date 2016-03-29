@@ -8,7 +8,7 @@ import java.util.List;
 
 public final class SortUtil {
 
-    public static long sortEventsOnTodayAndReturnTotalWorkingTime(List<RealmEvent> allEventsList, List<EventsToday> todayEventsList) {
+    public static long sortEventsOnTodayAndReturnTotalWorkingTime(List<RealmEvent> allEventsList, List<EventsToday> todayEventsList, boolean takeLastEntry) {
 
         long entryLong = 0;
         long exitLong = 0;
@@ -35,10 +35,15 @@ public final class SortUtil {
                     eventsToday = new EventsToday();
                     eventsToday.setEntry(DateUtil.dateToFormatString(entryLong, DateUtil.DATE_FORMAT_H_M));
                     eventsToday.setExit(" --:-- ");
-                    eventsToday.setTotal_hours(DateUtil.getDifferenceTime(curDate.getTime() - entryLong));
                     eventsToday.setSelector(allEventsList.get(i - 1).getIsSent());
+
+                    if (takeLastEntry) {
+                        eventsToday.setTotal_hours(DateUtil.getDifferenceTime(curDate.getTime() - entryLong));
+                        diffInMs = diffInMs + (curDate.getTime() - entryLong);
+                    } else {
+                        eventsToday.setTotal_hours("00:00");
+                    }
                     todayEventsList.add(eventsToday);
-                    diffInMs = diffInMs + (curDate.getTime() - entryLong);
                 }
             }
         }
