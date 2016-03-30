@@ -47,12 +47,12 @@ public class FragmentLauncher {
 
     public void launchSignInfragment() {
         GenericFragment signInFragmnet = new SignInFragment();
-        launch(signInFragmnet, null);
+        launch(signInFragmnet, SignInFragment.class.getCanonicalName());
     }
 
     public void launchSignUpFragment() {
         GenericFragment signUpFragment = new SignUpFragment();
-        launch(signUpFragment, null);
+        launch(signUpFragment, SignInFragment.class.getCanonicalName());
     }
 
     public void launchMainFragment() {
