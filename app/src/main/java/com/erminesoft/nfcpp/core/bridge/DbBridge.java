@@ -1,5 +1,6 @@
 package com.erminesoft.nfcpp.core.bridge;
 
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.User;
 import java.util.List;
@@ -39,6 +40,11 @@ public interface DbBridge {
     RealmEvent getLastEventByCardId(String idCard);
 
     List<RealmEvent> getEventsByIdPerMonth(String ownerId, String date);
+
+
+    void saveCard(List<RealmCard> realmCards);
+
+    void saveCard(RealmCard realmCard);
 
     void clearAllData();
 

@@ -89,6 +89,8 @@ public class FragmentMain extends GenericFragment {
         view.findViewById(R.id.logout).setOnClickListener(listener);
 
         loadEventsFromBackendless();
+
+        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallback());
     }
 
     private void initAdapter() {
