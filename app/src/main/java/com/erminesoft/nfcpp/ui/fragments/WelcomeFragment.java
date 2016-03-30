@@ -57,11 +57,6 @@ public class WelcomeFragment extends GenericFragment {
     }
 
 
-    private final class NetCallback extends SimpleMainCallBack {
-
-    }
-
-
     private final class Clicker implements View.OnClickListener {
         @Override
         public void onClick(View v) {

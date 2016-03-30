@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -27,6 +30,7 @@ public class AdminFragment extends GenericFragment {
     private ListView adminList;
     private Observer observer;
     private AdminAdapter adminAdapter;
+    private Menu menu;
 
 
     @Nullable
@@ -54,8 +58,16 @@ public class AdminFragment extends GenericFragment {
         view.findViewById(R.id.logoutAdmin).setOnClickListener(listener);
 
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
+//        onCreateOptionsMenu (menu);
 
     }
+
+   /* public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.admin_setting_menu, menu);
+        return true;
+    }*/
+
 
     private void logout() {
         mActivityBridge.getUApplication().getDbBridge().clearAllData();
@@ -104,6 +116,7 @@ public class AdminFragment extends GenericFragment {
             getUsersFromDb();
         }
     }
+
 
     private final class ItemClicker implements AdapterView.OnItemClickListener {
 

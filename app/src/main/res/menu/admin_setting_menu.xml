@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_add_new_place"
+        android:title="@string/item_menu_admin_titlee"
+        android:showAsAction="ifRoom" />
+
+</menu>

@@ -20,5 +20,6 @@
     <string name="login_hint_sign_up">Login</string>
     <string name="password_hint_sign_up">Password</string>
     <string name="sign_up_buutton_text">Sign up</string>
+    <string name="item_menu_admin_titlee">Add new place</string>
 
 </resources>

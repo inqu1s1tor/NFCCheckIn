@@ -41,5 +41,4 @@ public interface DbBridge {
     List<RealmEvent> getEventsByIdPerMonth(String ownerId, String date);
 
     void clearAllData();
-
 }
