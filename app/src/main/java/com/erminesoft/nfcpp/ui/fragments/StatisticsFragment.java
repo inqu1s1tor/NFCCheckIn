@@ -74,8 +74,10 @@ public class StatisticsFragment extends GenericFragment {
         }
 
         if (objectUserId != null){
+            Log.d("SF", "!getEventsAdminMode");
             getEventsAdminMode();
         } else {
+            Log.d("SF", "!getMyEvents");
             getMyEvents();
         }
 

@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class UsersManager {
 
+    private int PAGE_SIZE = 100;
+
     private final DbBridge dbBridge;
 
     UsersManager(DbBridge dbBridge) {
@@ -32,6 +34,7 @@ public class UsersManager {
         String whereClause = "name LIKE '%" + searchName + "%'";
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
+        query.setPageSize(PAGE_SIZE);
 
         Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
             @Override

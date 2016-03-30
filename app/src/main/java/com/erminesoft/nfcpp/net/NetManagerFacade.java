@@ -86,5 +86,10 @@ public final class NetManagerFacade implements NetBridge {
         usersManager.getAllUsers(callback, searchName);
     }
 
+    @Override
+    public void userLogout() {
+        authManager.userLogout();
+    }
+
 
 }
