@@ -22,7 +22,6 @@ public final class DbManager extends Observable implements DbBridge {
     private final RealmConfiguration configuration;
     private final UserHelper userHelper;
     private final EventHelper eventHelper;
-    private BackendlessUser me;
 
     public DbManager(Context context, SharedHelper sharedHelper) {
         this.sharedHelper = sharedHelper;
@@ -124,6 +123,12 @@ public final class DbManager extends Observable implements DbBridge {
     @Override
     public List<RealmEvent> getEventsByIdPerMonth(String userId, String date) {
         return eventHelper.getMonthEventsByUserId(initRealm(), date, userId);
+    }
+
+    @Override
+    public void clearAllData(){
+        userHelper.clearUser(initRealm());
+        eventHelper.clearAllEvents(initRealm());
     }
 
 }

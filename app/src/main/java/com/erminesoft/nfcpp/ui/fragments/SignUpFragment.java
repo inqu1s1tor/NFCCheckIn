@@ -117,6 +117,12 @@ public class SignUpFragment extends GenericFragment {
             hideProgressDialog();
             mActivityBridge.getFragmentLauncher().launchMainFragment();
         }
+
+        @Override
+        public void onError(String error) {
+            hideProgressDialog();
+            showShortToast(error);
+        }
     }
 
     private final class DbObserver implements Observer {

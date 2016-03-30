@@ -7,6 +7,7 @@
     <string name="Hello">Hello</string>
     <string name="LoginUser">Login</string>
     <string name="registerUser">Register</string>
+    <string name="logout">Logout</string>
     <string name="statistics">my statistics</string>
     <string name="today_events">Events today</string>
     <string name="total_today">Hours today</string>

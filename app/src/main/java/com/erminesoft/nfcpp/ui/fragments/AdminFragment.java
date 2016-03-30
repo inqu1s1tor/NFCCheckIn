@@ -47,11 +47,21 @@ public class AdminFragment extends GenericFragment {
         adminAdapter = new AdminAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
         adminList.setAdapter(adminAdapter);
 
-        AdapterView.OnItemClickListener listener = new ItemClicker();
-        adminList.setOnItemClickListener(listener);
+        AdapterView.OnItemClickListener itemClicker = new ItemClicker();
+        adminList.setOnItemClickListener(itemClicker);
+
+        View.OnClickListener listener = new Clicker();
+        view.findViewById(R.id.logoutAdmin).setOnClickListener(listener);
 
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
 
+    }
+
+    private void logout() {
+        mActivityBridge.getUApplication().getDbBridge().clearAllData();
+        mActivityBridge.getUApplication().getSharedHelper().sharedHelperClear();
+        mActivityBridge.getUApplication().getNetBridge().userLogout();
+        mActivityBridge.getFragmentLauncher().launchWelcomeFragment();
     }
 
     @Override
@@ -101,6 +111,20 @@ public class AdminFragment extends GenericFragment {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             User user = (User) parent.getItemAtPosition(position);
             selectedItem(user);
+        }
+    }
+
+    private final class Clicker implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+
+                case R.id.logoutAdmin:
+                    logout();
+                    break;
+            }
+
         }
     }
 }

@@ -23,4 +23,6 @@ public interface NetBridge {
     void getAllEvents(final MainCallBack mainCallBack);
 
     void getAllUsers(final MainCallBack callback, String searchName);
+
+    void userLogout();
 }

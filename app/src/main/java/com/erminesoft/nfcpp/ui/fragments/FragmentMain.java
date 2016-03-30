@@ -72,6 +72,7 @@ public class FragmentMain extends GenericFragment {
         todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
         listViewEvents = (ListView) view.findViewById(R.id.list_events);
 
+
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
         currentTimeTv.setText(curStringDate);
@@ -85,6 +86,7 @@ public class FragmentMain extends GenericFragment {
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
+        view.findViewById(R.id.logout).setOnClickListener(listener);
 
         loadEventsFromBackendless();
     }
@@ -128,9 +130,9 @@ public class FragmentMain extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-//        for (RealmEvent rl : realmEventList) {
-//            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
-//        }
+        for (RealmEvent rl : realmEventList) {
+            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
+        }
         loadTodayEventsList(realmEventList);
 
     }
@@ -139,6 +141,7 @@ public class FragmentMain extends GenericFragment {
         long lastSyncDate = mActivityBridge.getUApplication().getSharedHelper().getLastSyncDate();
         String myId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
         long curTime = System.currentTimeMillis();
+        Log.d("FromBackend", "!lastSyncDate=" + lastSyncDate);
         if (lastSyncDate == 0) {
             mActivityBridge.getUApplication().getNetBridge().getAllEventsByUserId(myId, new NetCallback());
         } else {
@@ -183,13 +186,21 @@ public class FragmentMain extends GenericFragment {
         mActivityBridge.getUApplication().getDbBridge().saveEvent(realmEventList);
     }
 
-    private void sendLog(String Category){
+    private void sendLog(String Category) {
         String myName = mActivityBridge.getUApplication().getDbBridge().getMe().getName();
 
         mTracker.send(new HitBuilders.EventBuilder()
                 .setCategory(Category)
                 .setAction(myName)
                 .build());
+    }
+
+    private void logout() {
+        Log.d("logout", "logout");
+        mActivityBridge.getUApplication().getDbBridge().clearAllData();
+        mActivityBridge.getUApplication().getSharedHelper().sharedHelperClear();
+        mActivityBridge.getUApplication().getNetBridge().userLogout();
+        mActivityBridge.getFragmentLauncher().launchWelcomeFragment();
     }
 
     @Override
@@ -216,10 +227,15 @@ public class FragmentMain extends GenericFragment {
                 case R.id.transferToStatisticsButton:
                     mActivityBridge.getFragmentLauncher().launchStatisticsFragment(null);
                     break;
+
+                case R.id.logout:
+                    logout();
+                    break;
             }
 
         }
     }
+
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private final class NfcCallback implements NfcAdapter.ReaderCallback {

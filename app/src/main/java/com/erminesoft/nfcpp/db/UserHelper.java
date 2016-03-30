@@ -29,4 +29,10 @@ final class UserHelper {
     User getUserByStringParam(Realm realm,String param, String value){
         return realm.where(User.class).equalTo(param, value).findFirst();
     }
+
+    void clearUser(Realm realm){
+        realm.beginTransaction();
+        realm.where(User.class).findAll().clear();
+        realm.commitTransaction();
+    }
 }

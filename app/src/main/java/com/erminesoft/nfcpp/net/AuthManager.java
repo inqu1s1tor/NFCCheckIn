@@ -110,4 +110,19 @@ final class AuthManager {
             }
         });
     }
+
+    void userLogout(){
+        Backendless.UserService.logout(new AsyncCallback<Void>() {
+            @Override
+            public void handleResponse(Void response) {
+                Log.d("userLogout", "handleResponse");
+                dbBridge.clearAllData();
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Log.d("userLogout", "fault = " + fault.toString());
+            }
+        });
+    }
 }

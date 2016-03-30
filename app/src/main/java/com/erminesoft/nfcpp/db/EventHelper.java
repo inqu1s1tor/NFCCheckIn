@@ -86,4 +86,10 @@ final class EventHelper {
         }
         return null;
     }
+
+    void clearAllEvents(Realm realm) {
+        realm.beginTransaction();
+        realm.where(RealmEvent.class).findAll().clear();
+        realm.commitTransaction();
+    }
 }
