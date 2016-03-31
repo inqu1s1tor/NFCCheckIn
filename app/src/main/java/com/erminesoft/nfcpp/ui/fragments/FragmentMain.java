@@ -10,6 +10,9 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -78,12 +81,13 @@ public class FragmentMain extends GenericFragment {
             return;
         }
 
+        setHasOptionsMenu(true);
+
         initAdapter();
         getEventsFromDb();
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
-        view.findViewById(R.id.logout).setOnClickListener(listener);
 
         loadDataFromBackendless();
 
@@ -262,6 +266,29 @@ public class FragmentMain extends GenericFragment {
         }
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.user_setting_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.user_setting_menu_action_sync:
+                if (SystemUtils.isNetworkConnected(getActivity())) {
+                    SyncService.start(getActivity());
+                }
+                break;
+
+            case R.id.user_setting_menu_action_log_out:
+                logout();
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private final class NetCallback extends SimpleMainCallBack {
         @Override
         public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
@@ -276,10 +303,6 @@ public class FragmentMain extends GenericFragment {
             switch (v.getId()) {
                 case R.id.transferToStatisticsButton:
                     mActivityBridge.getFragmentLauncher().launchStatisticsFragment(null);
-                    break;
-
-                case R.id.logout:
-                    logout();
                     break;
             }
 

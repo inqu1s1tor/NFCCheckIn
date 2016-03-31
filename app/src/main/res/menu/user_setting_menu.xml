@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/user_setting_menu_action_sync"
+        android:title="Sync" />
+
+
+    <item
+        android:id="@+id/user_setting_menu_action_log_out"
+        android:title="@string/log__out_title_item" />
+
+</menu>
