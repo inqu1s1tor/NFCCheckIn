@@ -4,22 +4,20 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class AdminAdapter extends BaseAdapter {
+public class AdminUsersAdapter extends BaseAdapter {
 
     private final LayoutInflater mLayoutInflater;
     private List<User> users;
 
-    public AdminAdapter(Context context, List<User> users) {
+    public AdminUsersAdapter(Context context, List<User> users) {
         this.users = users;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -46,7 +44,7 @@ public class AdminAdapter extends BaseAdapter {
 
         if (convertView == null) {
             holder = new Holder();
-            convertView = mLayoutInflater.inflate(R.layout.item_admin_list, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.item_admin_list_adapter_users, parent, false);
             holder.firstNameTv = (TextView) convertView.findViewById(R.id.firstNameAdminModeTv);
             holder.lastNameTv = (TextView) convertView.findViewById(R.id.lastNameAdminModeTv);
             convertView.setTag(holder);

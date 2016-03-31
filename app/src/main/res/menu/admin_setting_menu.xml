@@ -1,8 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/action_add_new_place"
-        android:title="@string/item_menu_admin_titlee"
+        android:id="@+id/action_sync"
+        android:title="Sync"
+        android:showAsAction="ifRoom" />
+
+
+    <item
+        android:id="@+id/action_log_out"
+        android:title="@string/log__out_title_item"
         android:showAsAction="ifRoom" />
 
 </menu>
