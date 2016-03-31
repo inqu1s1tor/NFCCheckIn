@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,12 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.User;
+import com.erminesoft.nfcpp.ui.adapters.AdminCardsAdapter;
 import com.erminesoft.nfcpp.ui.adapters.AdminUsersAdapter;
 
 import java.util.List;
@@ -28,10 +31,12 @@ public class AdminFragment extends GenericFragment {
 
     private ListView adminList;
     private Observer observer;
-    private AdminUsersAdapter adminAdapter;
+    private AdminUsersAdapter adminUsersAdapter;
+    private AdminCardsAdapter adminCardsAdapter;
     private Menu menu;
     private RadioGroup radioGroup;
     private TabState state;
+    private FloatingActionButton addCardBtn;
 
 
 
@@ -55,12 +60,15 @@ public class AdminFragment extends GenericFragment {
         adminList.setEmptyView(view.findViewById(R.id.empty_list_item_admin));
 
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
-
-
+        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
 
         AdapterView.OnItemClickListener itemClicker = new ItemClicker();
         adminList.setOnItemClickListener(itemClicker);
         View.OnClickListener listener = new Clicker();
+        addCardBtn = (FloatingActionButton)view.findViewById(R.id.add_card_float_button);
+        addCardBtn.setOnClickListener(listener);
+        addCardBtn.setVisibility(View.INVISIBLE);
+
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
         setHasOptionsMenu(true);
 
@@ -72,8 +80,13 @@ public class AdminFragment extends GenericFragment {
     }
 
     private void initUsersAdapter() {
-        adminAdapter = new AdminUsersAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
-        adminList.setAdapter(adminAdapter);
+        adminUsersAdapter = new AdminUsersAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
+        adminList.setAdapter(adminUsersAdapter);
+    }
+
+    private void initCardsAdapter() {
+        adminCardsAdapter = new AdminCardsAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllCards());
+        adminList.setAdapter(adminCardsAdapter);
     }
 
 
@@ -103,7 +116,7 @@ public class AdminFragment extends GenericFragment {
     private void getUsersFromDb() {
         List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
         if(users.size()<= 0) {
-            adminAdapter.swapDataList(users);
+            adminUsersAdapter.swapDataList(users);
         }
     }
 
@@ -156,6 +169,8 @@ public class AdminFragment extends GenericFragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.add_card_float_button:
+                    mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment();
             }
 
         }
@@ -168,11 +183,14 @@ public class AdminFragment extends GenericFragment {
             switch (checkedId) {
                 case R.id.cards_radio_button:
                     state = TabState.USERS;
-                    initUsersAdapter();
+                    initCardsAdapter();
+                    addCardBtn.setVisibility(View.VISIBLE);
                     break;
 
                 case R.id.users_name_radio_button:
                     state = TabState.CARDS;
+                    initUsersAdapter();
+                    addCardBtn.setVisibility(View.INVISIBLE);
                     break;
             }
         }

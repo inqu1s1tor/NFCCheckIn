@@ -25,7 +25,6 @@ public interface NetBridge {
 
     void getAllUsers(final MainCallBack callback, String searchName);
 
-
     void addNewCard(RealmCard realmCard, final MainCallBack callback);
 
     void getAllCard(final MainCallBack callBack);

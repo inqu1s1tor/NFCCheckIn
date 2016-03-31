@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.RealmCard;
-import com.erminesoft.nfcpp.model.User;
 
 import java.util.List;
 
