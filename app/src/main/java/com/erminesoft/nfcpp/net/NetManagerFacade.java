@@ -11,6 +11,7 @@ import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
 
 
@@ -19,6 +20,7 @@ public final class NetManagerFacade implements NetBridge {
     private final AuthManager authManager;
 
     private final EventManager eventManager;
+    private final CardManager cardManager;
     private final BoltsEventManager boltsEventManager;
 
     private final UsersManager usersManager;
@@ -28,6 +30,7 @@ public final class NetManagerFacade implements NetBridge {
 
         authManager = new AuthManager(sharedHelper, dbBridge);
         eventManager = new EventManager(dbBridge);
+        cardManager = new CardManager(dbBridge);
         boltsEventManager = new BoltsEventManager(dbBridge);
         usersManager = new UsersManager(dbBridge);
     }
@@ -84,6 +87,16 @@ public final class NetManagerFacade implements NetBridge {
     @Override
     public void getAllUsers(MainCallBack callback, String searchName) {
         usersManager.getAllUsers(callback, searchName);
+    }
+
+    @Override
+    public void addNewCard(RealmCard realmCard, MainCallBack callback) {
+        cardManager.addNewCard(realmCard, callback);
+    }
+
+    @Override
+    public void getAllCard(MainCallBack callBack) {
+        cardManager.getAllCard(callBack);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.User;
 
@@ -22,12 +23,14 @@ public final class DbManager extends Observable implements DbBridge {
     private final RealmConfiguration configuration;
     private final UserHelper userHelper;
     private final EventHelper eventHelper;
+    private final CardHelper cardHelper;
 
     public DbManager(Context context, SharedHelper sharedHelper) {
         this.sharedHelper = sharedHelper;
         configuration = new RealmConfiguration.Builder(context).build();
         userHelper = new UserHelper();
         eventHelper = new EventHelper();
+        cardHelper = new CardHelper();
     }
 
     private Realm initRealm() {
@@ -124,6 +127,24 @@ public final class DbManager extends Observable implements DbBridge {
     public List<RealmEvent> getEventsByIdPerMonth(String userId, String date) {
         return eventHelper.getMonthEventsByUserId(initRealm(), date, userId);
     }
+
+    @Override
+    public void saveCard(List<RealmCard> realmCards) {
+        cardHelper.saveCard(initRealm(), realmCards);
+//        notifyObserversProcedure();
+    }
+
+    @Override
+    public void saveCard(RealmCard realmCard) {
+        cardHelper.saveCard(initRealm(), realmCard);
+//        notifyObserversProcedure();
+    }
+
+    @Override
+    public List<RealmCard> getAllCards() {
+        return cardHelper.getAllCards(initRealm());
+    }
+
 
     @Override
     public void clearAllData(){

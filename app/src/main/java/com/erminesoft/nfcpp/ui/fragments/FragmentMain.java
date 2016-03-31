@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.net.SyncService;
@@ -50,7 +51,6 @@ public class FragmentMain extends GenericFragment {
     private List<EventsToday> eventsTodayList;
     private Observer observer;
     private Tracker mTracker;
-    private String cardIdDoor;
 
     @Nullable
     @Override
@@ -66,12 +66,9 @@ public class FragmentMain extends GenericFragment {
         NfcApplication application = (NfcApplication) mActivityBridge.getUApplication();
         mTracker = application.getDefaultTracker();
 
-        cardIdDoor = getActivity().getResources().getString(R.string.CARD_ID);
-
         currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
         todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
         listViewEvents = (ListView) view.findViewById(R.id.list_events);
-
 
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
@@ -88,7 +85,8 @@ public class FragmentMain extends GenericFragment {
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
         view.findViewById(R.id.logout).setOnClickListener(listener);
 
-        loadEventsFromBackendless();
+        loadDataFromBackendless();
+
     }
 
     private void initAdapter() {
@@ -110,13 +108,13 @@ public class FragmentMain extends GenericFragment {
         return true;
     }
 
-    private void loadTodayEventsList(List<RealmEvent> realmEventList) {
+    private void loadTodayEventsList(List<RealmEvent> realmEventList, List<RealmCard> realmCardList) {
         if (realmEventList.size() <= 0) {
             return;
         }
 
         eventsTodayList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsTodayList, true);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, realmCardList, eventsTodayList, true);
         todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsTodayList);
 
@@ -130,18 +128,23 @@ public class FragmentMain extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-        for (RealmEvent rl : realmEventList) {
-            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
-        }
-        loadTodayEventsList(realmEventList);
+        List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
+//        for (RealmEvent rl : realmEventList) {
+//            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId());
+//        }
+//        for (RealmCard rc : realmCardList) {
+//            Log.d("getEventsFromDb", "rc.getIdCard()=" + rc.getIdCard() + "     getNameCard=" + rc.getNameCard());
+//        }
 
+        loadTodayEventsList(realmEventList, realmCardList);
     }
 
-    private void loadEventsFromBackendless() {
+    private void loadDataFromBackendless() {
+        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallback());
+
         long lastSyncDate = mActivityBridge.getUApplication().getSharedHelper().getLastSyncDate();
         String myId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
         long curTime = System.currentTimeMillis();
-        Log.d("FromBackend", "!lastSyncDate=" + lastSyncDate);
         if (lastSyncDate == 0) {
             mActivityBridge.getUApplication().getNetBridge().getAllEventsByUserId(myId, new NetCallback());
         } else {
@@ -171,7 +174,7 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void createNewEvent(String cardId) {
-        if (cardId.equals(cardIdDoor)) {
+        if (checkValidityEntryCard(cardId)) {
             RealmEvent realmEvent = new RealmEvent();
             realmEvent.setIdCard(cardId);
             realmEvent.setCreationTime((int) (System.currentTimeMillis() / 1000));
@@ -180,6 +183,39 @@ public class FragmentMain extends GenericFragment {
 
             sendLog("createNewEvent");
         }
+    }
+
+    private boolean checkValidityEntryCard(String cardId) {
+        long curTime = System.currentTimeMillis();
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
+        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
+
+        if (realmEventList.size() <= 0){
+            return true;
+        }
+
+        if (realmEventList.size() % 2 == 0) {
+            return true;
+        }
+
+        int lastEvent = realmEventList.size() - 1;
+        if (realmEventList.get(lastEvent).getIdCard().equals(cardId)) {
+            return true;
+        }
+
+        String message = getActivity().getString(R.string.message_invalid_card_to_exit);
+        showShortToastInsideThread(message);
+        return false;
+    }
+
+    private void showShortToastInsideThread(final String message){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showShortToast(message);
+            }
+        });
+
     }
 
     private void checkUpdateDataFromBackendless(List<RealmEvent> realmEventList) {

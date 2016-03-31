@@ -10,6 +10,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.EventsToday;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
@@ -19,9 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Evgen on 24.03.2016.
- */
+
 public class DetailStatisticsFragment extends GenericFragment {
 
     private final static String DATE_ID = "date_id";
@@ -72,16 +71,17 @@ public class DetailStatisticsFragment extends GenericFragment {
 
     private void getEventsFromDb(String dateString) {
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
-        loadTodayEventsList(realmEventList);
+        List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
+        loadTodayEventsList(realmEventList, realmCardList);
     }
 
-    private void loadTodayEventsList(List<RealmEvent> realmEventList) {
+    private void loadTodayEventsList(List<RealmEvent> realmEventList, List<RealmCard> realmCardList) {
         if (realmEventList.size() <= 0) {
             return;
         }
 
         eventsList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, eventsList, false);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, realmCardList,  eventsList, false);
         totalTime.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsList);
     }

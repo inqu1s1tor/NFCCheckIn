@@ -15,6 +15,7 @@
 
     <TextView
         android:id="@+id/currentTime"
+        android:textColor="@android:color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -61,7 +62,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="5dp"
         android:text="@string/today_events" />
 
 

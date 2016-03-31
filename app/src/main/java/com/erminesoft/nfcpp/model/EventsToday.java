@@ -5,6 +5,7 @@ package com.erminesoft.nfcpp.model;
  */
 public class EventsToday {
 
+    private String nameCard;
     private String entry;
     private String exit;
     private String total_hours;
@@ -14,11 +15,12 @@ public class EventsToday {
 
     }
 
-    public EventsToday(String entry, String exit, String total_hours, boolean selector){
-        this.entry = entry;
-        this.exit = exit;
-        this.total_hours = total_hours;
-        this.selector = selector;
+    public String getNameCard() {
+        return nameCard;
+    }
+
+    public void setNameCard(String nameCard) {
+        this.nameCard = nameCard;
     }
 
     public String getEntry() {

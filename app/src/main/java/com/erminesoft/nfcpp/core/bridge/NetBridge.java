@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.core.bridge;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
 
 public interface NetBridge {
@@ -23,6 +24,11 @@ public interface NetBridge {
     void getAllEvents(final MainCallBack mainCallBack);
 
     void getAllUsers(final MainCallBack callback, String searchName);
+
+
+    void addNewCard(RealmCard realmCard, final MainCallBack callback);
+
+    void getAllCard(final MainCallBack callBack);
 
     void userLogout();
 }
