@@ -102,7 +102,9 @@ public class AdminFragment extends GenericFragment {
 
     private void getUsersFromDb() {
         List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
-        adminAdapter.swapDataList(users);
+        if(users.size()<= 0) {
+            adminAdapter.swapDataList(users);
+        }
     }
 
     private void selectedItem(User user) {

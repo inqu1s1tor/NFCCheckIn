@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.User;
 
 import java.util.List;
@@ -17,31 +18,31 @@ import java.util.List;
  */
 public class AdminCardsAdapter extends BaseAdapter {
     private final LayoutInflater mLayoutInflater;
-    private List<RealmCard> cards;
+    private List<RealmCard> realmCards;
 
-    public AdminCardsAdapter(Context context, List<RealmCard> cards) {
-        this.cards = cards;
+    public AdminCardsAdapter(Context context, List<RealmCard> realmCards) {
+        this.realmCards = realmCards;
         mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return cards.size();
+        return realmCards.size();
     }
 
     @Override
-    public User getItem(int position) {
-        return cards.get(position);
+    public RealmCard getItem(int position) {
+        return realmCards.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return getItem(position).getObjectId().hashCode();
+        return getItem(position).hashCode();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Card card = getItem(position);
+        RealmCard realmCard = getItem(position);
         Holder holder;
 
         if (convertView == null) {
@@ -55,9 +56,9 @@ public class AdminCardsAdapter extends BaseAdapter {
             holder = (Holder) convertView.getTag();
         }
 
-        holder.idCard.setText(card.getLastName());
-        holder.cardName.setText(card.getFirstName());
-        holder.cardDescription.setText(card.get);
+        holder.idCard.setText(realmCard.getIdCard());
+        holder.cardName.setText(realmCard.getNameCard());
+        holder.cardDescription.setText(realmCard.getDescriptionCard());
 
         return convertView;
     }
@@ -68,8 +69,8 @@ public class AdminCardsAdapter extends BaseAdapter {
         TextView cardDescription;
     }
 
-    public void swapDataList(List<RealmCard> cards) {
-        this.cards = cards;
+    public void swapDataList(List<RealmCard> realmCards) {
+        this.realmCards = realmCards;
         notifyDataSetChanged();
     }
 }
