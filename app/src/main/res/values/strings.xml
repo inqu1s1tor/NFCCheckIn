@@ -19,8 +19,22 @@
     <string name="login_hint_sign_up">Login</string>
     <string name="password_hint_sign_up">Password</string>
     <string name="sign_up_buutton_text">Sign up</string>
+    <string name="item_menu_admin_titlee">Add new place</string>
+    <string name="input_new_place_hint">Input new place</string>
+    <string name="input_description">Input description</string>
+    <string name="bring_card_hint">Bring a card up to a smartphone</string>
+    <string name="id_card_text">ID card</string>
+    <string name="description_text">description</string>
+    <string name="log__out_title_item">Log out</string>
+    <string name="user_name_list_column_tv">User name</string>
+    <string name="user_total_time_list_column">Total time</string>
+    <string name="enter_card_name">Enter card name</string>
+    <string name="enter_description">Enter description</string>
+    <string name="users_rb">Users</string>
+    <string name="cards_rb">Cards</string>
 
     <string name="message_invalid_card_to_exit">Invalid card to exit</string>
+    <string name="message_unknown_card">Unknown card</string>
 
 
 </resources>
