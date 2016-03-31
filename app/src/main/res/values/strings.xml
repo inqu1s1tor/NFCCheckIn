@@ -2,14 +2,13 @@
     <string name="app_name">Nfcpp</string>
     <string name="BACKENDLESS_APP_ID">3FF1FA73-3C64-9161-FF7A-A21612B74C00</string>
     <string name="BACKENDLESS_KEY">17EA9154-5CF8-4658-FF9C-B6EB16377D00</string>
-    <string name="CARD_ID">7CD09F21</string>
 
     <string name="Hello">Hello</string>
     <string name="LoginUser">Login</string>
     <string name="registerUser">Register</string>
     <string name="logout">Logout</string>
     <string name="statistics">my statistics</string>
-    <string name="today_events">Events today</string>
+    <string name="today_events">Events today:</string>
     <string name="total_today">Hours today</string>
     <string name="empty_admin_list">Empty List</string>
     <string name="sign_in_login_hint">Login</string>
@@ -20,5 +19,8 @@
     <string name="login_hint_sign_up">Login</string>
     <string name="password_hint_sign_up">Password</string>
     <string name="sign_up_buutton_text">Sign up</string>
+
+    <string name="message_invalid_card_to_exit">Invalid card to exit</string>
+
 
 </resources>

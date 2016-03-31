@@ -40,6 +40,7 @@ public class EventAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new Holder();
             convertView = mLayoutInflater.inflate(R.layout.item_event_list, parent, false);
+            holder.nameTextView = (TextView) convertView.findViewById(R.id.ad_event_name);
             holder.entryTextView = (TextView) convertView.findViewById(R.id.ad_event_list_entry);
             holder.exitTextView = (TextView) convertView.findViewById(R.id.ad_event_list_exit);
             holder.totalHoursTextView = (TextView) convertView.findViewById(R.id.ad_event_list_total_hours);
@@ -50,12 +51,14 @@ public class EventAdapter extends BaseAdapter {
         }
 
         if (eventsToday != null) {
+            holder.nameTextView.setText(eventsToday.getNameCard());
             holder.entryTextView.setText(eventsToday.getEntry());
             holder.exitTextView.setText(eventsToday.getExit());
             holder.totalHoursTextView.setText("(" + eventsToday.getTotal_hours() + ")");
 
             holder.selectorTextView.setTextColor(eventsToday.isSelector() ? greenColor : redColor);
         } else {
+            holder.nameTextView.setText("No data");
             holder.entryTextView.setText("--:--");
             holder.exitTextView.setText("--:--");
         }
@@ -84,6 +87,7 @@ public class EventAdapter extends BaseAdapter {
     }
 
     private static final class Holder {
+        TextView nameTextView;
         TextView entryTextView;
         TextView exitTextView;
         TextView totalHoursTextView;

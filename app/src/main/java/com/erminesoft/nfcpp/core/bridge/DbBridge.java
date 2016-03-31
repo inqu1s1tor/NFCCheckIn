@@ -46,6 +46,8 @@ public interface DbBridge {
 
     void saveCard(RealmCard realmCard);
 
+    public List<RealmCard> getAllCards();
+
     void clearAllData();
 
 }

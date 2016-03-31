@@ -140,6 +140,11 @@ public final class DbManager extends Observable implements DbBridge {
 //        notifyObserversProcedure();
     }
 
+    @Override
+    public List<RealmCard> getAllCards() {
+        return cardHelper.getAllCards(initRealm());
+    }
+
 
     @Override
     public void clearAllData(){

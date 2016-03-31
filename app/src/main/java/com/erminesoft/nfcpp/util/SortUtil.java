@@ -1,5 +1,6 @@
 package com.erminesoft.nfcpp.util;
 
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.model.EventsToday;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public final class SortUtil {
 
-    public static long sortEventsOnTodayAndReturnTotalWorkingTime(List<RealmEvent> allEventsList, List<EventsToday> todayEventsList, boolean takeLastEntry) {
+    public static long sortEventsOnTodayAndReturnTotalWorkingTime(List<RealmEvent> allEventsList, List<RealmCard> realmCardList, List<EventsToday> todayEventsList, boolean takeLastEntry) {
 
         long entryLong = 0;
         long exitLong = 0;
@@ -21,6 +22,7 @@ public final class SortUtil {
                 diffInMs = diffInMs + (exitLong - entryLong);
 
                 eventsToday = new EventsToday();
+                eventsToday.setNameCard(getCardNameById(allEventsList.get(i - 1).getIdCard(), realmCardList));
                 eventsToday.setEntry(DateUtil.dateToFormatString(entryLong, DateUtil.DATE_FORMAT_H_M));
                 eventsToday.setExit(DateUtil.dateToFormatString(exitLong, DateUtil.DATE_FORMAT_H_M));
                 eventsToday.setTotal_hours(DateUtil.getDifferenceTime(exitLong - entryLong));
@@ -33,6 +35,7 @@ public final class SortUtil {
                     Date curDate = new Date(System.currentTimeMillis());
 
                     eventsToday = new EventsToday();
+                    eventsToday.setNameCard(getCardNameById(allEventsList.get(i - 1).getIdCard(), realmCardList));
                     eventsToday.setEntry(DateUtil.dateToFormatString(entryLong, DateUtil.DATE_FORMAT_H_M));
                     eventsToday.setExit(" --:-- ");
                     eventsToday.setSelector(allEventsList.get(i - 1).getIsSent());
@@ -49,6 +52,17 @@ public final class SortUtil {
         }
 
         return diffInMs;
+    }
+
+    private static String getCardNameById(String cardId, List<RealmCard> realmCardList){
+        String nameCard = "";
+        for (RealmCard rc : realmCardList){
+            if (rc.getIdCard().equals(cardId)){
+                nameCard = rc.getNameCard();
+            }
+        }
+
+        return nameCard;
     }
 
 

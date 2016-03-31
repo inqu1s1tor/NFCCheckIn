@@ -21,4 +21,8 @@ final class CardHelper {
         realm.close();
     }
 
+    List<RealmCard> getAllCards(Realm realm) {
+        return realm.where(RealmCard.class).findAll();
+    }
+
 }
