@@ -149,7 +149,7 @@ public class FragmentMain extends GenericFragment {
         long lastSyncDate = mActivityBridge.getUApplication().getSharedHelper().getLastSyncDate();
         String myId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
         long curTime = System.currentTimeMillis();
-        if (lastSyncDate == 0) {
+        if (lastSyncDate == (long) 0) {
             mActivityBridge.getUApplication().getNetBridge().getAllEventsByUserId(myId, new NetCallback());
         } else {
             mActivityBridge.getUApplication().getNetBridge().getTodayEventsByUserId(myId, lastSyncDate, new NetCallback());
@@ -274,7 +274,7 @@ public class FragmentMain extends GenericFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.user_setting_menu_action_sync:
                 if (SystemUtils.isNetworkConnected(getActivity())) {
                     SyncService.start(getActivity());

@@ -3,9 +3,10 @@
     <string name="BACKENDLESS_APP_ID">3FF1FA73-3C64-9161-FF7A-A21612B74C00</string>
     <string name="BACKENDLESS_KEY">17EA9154-5CF8-4658-FF9C-B6EB16377D00</string>
 
-    <string name="Hello">Hello</string>
-    <string name="LoginUser">Login</string>
-    <string name="registerUser">Register</string>
+    <string name="hello_nfc">NFC</string>
+    <string name="hello_check_in">Check-in</string>
+    <string name="login_user">Login</string>
+    <string name="register_user">Register</string>
     <string name="logout">Logout</string>
     <string name="statistics">my statistics</string>
     <string name="today_events">Events today:</string>

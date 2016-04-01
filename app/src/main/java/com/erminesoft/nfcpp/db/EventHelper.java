@@ -1,5 +1,7 @@
 package com.erminesoft.nfcpp.db;
 
+import android.util.Log;
+
 import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.util.DateUtil;
 

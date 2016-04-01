@@ -9,17 +9,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/Hello"
-        android:id="@+id/text_view_wellcome" />
+        android:text="@string/hello_nfc" />
 
     <TextView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/hello_check_in" />
+
+    <Button
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/LoginUser"
+        android:text="@string/login_user"
         android:textSize="20dp"
-        android:visibility="invisible"
         android:id="@+id/text_view_login" />
 
     <TextView
@@ -27,9 +32,9 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/registerUser"
+        android:text="@string/register_user"
         android:textSize="20dp"
-        android:visibility="invisible"
+
 
         android:id="@+id/text_view_registry" />
 </LinearLayout>

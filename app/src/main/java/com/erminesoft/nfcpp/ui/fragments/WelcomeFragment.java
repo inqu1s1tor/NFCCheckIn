@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
@@ -19,7 +20,7 @@ import com.erminesoft.nfcpp.model.User;
  */
 public class WelcomeFragment extends GenericFragment {
 
-    private TextView loginUserTv;
+    private Button loginUserTv;
     private TextView registerUserTv;
 
     @Nullable
@@ -32,7 +33,7 @@ public class WelcomeFragment extends GenericFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        loginUserTv = (TextView) view.findViewById(R.id.text_view_login);
+        loginUserTv = (Button) view.findViewById(R.id.text_view_login);
         registerUserTv = (TextView) view.findViewById(R.id.text_view_registry);
 
         View.OnClickListener listener = new Clicker();
