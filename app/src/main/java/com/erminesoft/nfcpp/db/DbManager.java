@@ -131,13 +131,13 @@ public final class DbManager extends Observable implements DbBridge {
     @Override
     public void saveCard(List<RealmCard> realmCards) {
         cardHelper.saveCard(initRealm(), realmCards);
-//        notifyObserversProcedure();
+        notifyObserversProcedure();
     }
 
     @Override
     public void saveCard(RealmCard realmCard) {
         cardHelper.saveCard(initRealm(), realmCard);
-//        notifyObserversProcedure();
+        notifyObserversProcedure();
     }
 
     @Override

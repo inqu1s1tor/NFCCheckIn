@@ -25,14 +25,14 @@ import java.util.List;
 /**
  * Created by Aleks on 31.03.2016.
  */
-public class CreateNewCardFragment extends GenericFragment {
+public class CreateAndEditCardFragment extends GenericFragment {
 
     private static final String CARD_ID = "card_id";
 
     private EditText nameEt;
     private EditText descriptionEt;
     private NfcAdapter nfcAdapter;
-    private RealmCard card;
+    private RealmCard realmCard;
     private EditText cardId;
 
 
@@ -71,37 +71,43 @@ public class CreateNewCardFragment extends GenericFragment {
     private void saveNewCard() {
 
         if (validationFields()) {
-            mActivityBridge.getUApplication().getNetBridge().addNewCard(card, new NetCallBack());
+            mActivityBridge.getUApplication().getNetBridge().addNewCard(realmCard, new NetCallBack());
         }
 
-        card.setNameCard(nameEt.getText().toString());
-        card.setDescriptionCard(descriptionEt.getText().toString());
-        card.setIdCard(cardId.getText().toString());
+        realmCard.setNameCard(nameEt.getText().toString());
+        realmCard.setDescriptionCard(descriptionEt.getText().toString());
+        realmCard.setIdCard(cardId.getText().toString());
     }
 
     private void extractExistCard() {
         Bundle bundle = getArguments();
         if(bundle == null) {
-            card = new RealmCard();
+            realmCard = new RealmCard();
         } else {
             String cardId = bundle.getString(CARD_ID);
-            card = mActivityBridge.getUApplication().getDbBridge().getCardById(cardId);
-            extractModeltoView(card);
+            if (cardId.isEmpty()) {
+                realmCard = new RealmCard();
+            } else {
+                realmCard = mActivityBridge.getUApplication().getDbBridge().getCardById(cardId);
+                extractModeltoView(realmCard);
+            }
         }
     }
 
     private void extractModeltoView(RealmCard realmCard){
-
+        cardId.setText(realmCard.getIdCard());
+        descriptionEt.setText(realmCard.getDescriptionCard());
+        nameEt.setText(realmCard.getNameCard());
     }
 
     private boolean validationFields() {
-        if (TextUtils.isEmpty(card.getIdCard())) {
+        if (TextUtils.isEmpty(realmCard.getIdCard())) {
             String message = getActivity().getResources().getString(R.string.message_admin_no_added_card);
             showShortToast(message);
             return false;
         }
 
-        if (mActivityBridge.getUApplication().getDbBridge().containCardById(card.getIdCard())) {
+        if (mActivityBridge.getUApplication().getDbBridge().containCardById(realmCard.getIdCard())) {
             String message = getActivity().getResources().getString(R.string.message_admin_card_already);
             showShortToast(message);
             return false;
@@ -143,7 +149,7 @@ public class CreateNewCardFragment extends GenericFragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    card.setIdCard(cardIdFromTag);
+                    realmCard.setIdCard(cardIdFromTag);
                     cardId.setText(cardIdFromTag);
                 }
             });

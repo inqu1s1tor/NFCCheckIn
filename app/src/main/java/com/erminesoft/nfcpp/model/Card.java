@@ -4,6 +4,7 @@ package com.erminesoft.nfcpp.model;
 public class Card {
 
     private String idCard;
+    private String objectId;
     private String nameCard;
     private String descriptionCard;
 
@@ -29,5 +30,13 @@ public class Card {
 
     public void setDescriptionCard(String descriptionCard) {
         this.descriptionCard = descriptionCard;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

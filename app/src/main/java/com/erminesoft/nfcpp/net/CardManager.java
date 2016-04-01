@@ -71,6 +71,7 @@ final class CardManager {
             Log.d("realmCardToClear", "realmCard.getIdCard() = " + realmCard.getIdCard());
             Card clearCard = new Card();
             clearCard.setIdCard(realmCard.getIdCard());
+            clearCard.setObjectId(realmCard.getObjectId());
             clearCard.setDescriptionCard(realmCard.getDescriptionCard());
             clearCard.setNameCard(realmCard.getNameCard());
             return clearCard;
@@ -79,6 +80,7 @@ final class CardManager {
         static RealmCard clearCardToRealmCard(Card card) {
             Log.d("clearCardToRealm", "card.getIdCard() = " + card.getIdCard());
             RealmCard realmCard = new RealmCard();
+            realmCard.setObjectId(card.getObjectId());
             realmCard.setIdCard(card.getIdCard());
             realmCard.setDescriptionCard(card.getDescriptionCard());
             realmCard.setNameCard(card.getNameCard());
