@@ -26,6 +26,9 @@ import java.util.List;
  * Created by Aleks on 31.03.2016.
  */
 public class CreateNewCardFragment extends GenericFragment {
+
+    private static final String CARD_ID = "card_id";
+
     private EditText nameEt;
     private EditText descriptionEt;
     private NfcAdapter nfcAdapter;
@@ -33,10 +36,10 @@ public class CreateNewCardFragment extends GenericFragment {
     private EditText cardId;
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        card = new RealmCard();
+    public static Bundle buildArgs(String cardId){
+        Bundle bundle = new Bundle();
+        bundle.putString(CARD_ID, cardId);
+        return bundle;
     }
 
     @Nullable
@@ -62,6 +65,7 @@ public class CreateNewCardFragment extends GenericFragment {
         }
 
         initNFC();
+        extractExistCard();
     }
 
     private void saveNewCard() {
@@ -73,6 +77,21 @@ public class CreateNewCardFragment extends GenericFragment {
         card.setNameCard(nameEt.getText().toString());
         card.setDescriptionCard(descriptionEt.getText().toString());
         card.setIdCard(cardId.getText().toString());
+    }
+
+    private void extractExistCard() {
+        Bundle bundle = getArguments();
+        if(bundle == null) {
+            card = new RealmCard();
+        } else {
+            String cardId = bundle.getString(CARD_ID);
+            card = mActivityBridge.getUApplication().getDbBridge().getCardById(cardId);
+            extractModeltoView(card);
+        }
+    }
+
+    private void extractModeltoView(RealmCard realmCard){
+
     }
 
     private boolean validationFields() {

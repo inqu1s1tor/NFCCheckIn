@@ -146,6 +146,11 @@ public final class DbManager extends Observable implements DbBridge {
     }
 
     @Override
+    public RealmCard getCardById(String cardId) {
+        return cardHelper.getCardById(initRealm(), cardId);
+    }
+
+    @Override
     public boolean containCardById(String cardId) {
         return cardHelper.getCardById(initRealm(), cardId) != null;
     }
