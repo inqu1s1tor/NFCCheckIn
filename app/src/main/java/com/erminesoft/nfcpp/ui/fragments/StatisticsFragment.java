@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
@@ -21,6 +23,7 @@ import com.erminesoft.nfcpp.ui.adapters.StatisticsAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,9 +38,12 @@ import java.util.List;
 public class StatisticsFragment extends GenericFragment {
 
     private ListView statisticsListView;
+    private TextView statDate;
     private List<DayStatistics> dayList;
+    private List<RealmEvent> realmEventList;
     private StatisticsAdapter statisticsAdapter;
     private String objectUserId = null;
+    private String curDateMonth = null;
 
     private final static String OBJECT_ID = "object_id";
 
@@ -60,45 +66,42 @@ public class StatisticsFragment extends GenericFragment {
         super.onViewCreated(view, savedInstanceState);
 
         statisticsListView = (ListView) view.findViewById(R.id.statisticsList);
+        statDate = (TextView) view.findViewById(R.id.stat_textview_date);
 
         dayList = new ArrayList<>();
         statisticsAdapter = new StatisticsAdapter(getActivity(), dayList);
         statisticsListView.setAdapter(statisticsAdapter);
         statisticsListView.setOnItemClickListener(new ItemClicker());
 
-
+        View.OnClickListener listener = new Clicker();
+        view.findViewById(R.id.stat_button_month_down).setOnClickListener(listener);
+        view.findViewById(R.id.stat_button_month_up).setOnClickListener(listener);
 
         Bundle bundle = getArguments();
-        if(bundle != null) {
+        if (bundle != null) {
             objectUserId = (String) bundle.getSerializable(OBJECT_ID);
         }
 
-        if (objectUserId != null){
-            Log.d("SF", "!getEventsAdminMode");
-            getEventsAdminMode();
+        getEvents();
+    }
+
+
+    private void getEvents() {
+        if (curDateMonth == null) {
+            long curTime = System.currentTimeMillis();
+            curDateMonth = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M).format(curTime);
+        }
+        statDate.setText(curDateMonth);
+        if (objectUserId != null) {
+            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByIdPerMonth(objectUserId, curDateMonth);
+            handleList(realmEventList);
         } else {
-            Log.d("SF", "!getMyEvents");
-            getMyEvents();
+            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curDateMonth);
+            handleList(realmEventList);
         }
 
+
     }
-
-
-    private void getMyEvents() {
-        long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
-        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curStringDate);
-        handleList(realmEventList);
-    }
-
-    private void getEventsAdminMode() {
-        long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
-        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge()
-                .getEventsByIdPerMonth(objectUserId, curStringDate);
-        handleList(realmEventList);
-    }
-
 
     private void handleList(List<RealmEvent> realmEventList) {
         String dayNumber = "";
@@ -136,17 +139,42 @@ public class StatisticsFragment extends GenericFragment {
     }
 
 
-    private void selectedItem(DayStatistics dayStatistics){
+    private void selectedItem(DayStatistics dayStatistics) {
         mActivityBridge.getFragmentLauncher().launchDetailStatisticsFragment(dayStatistics.getDate());
     }
 
+    private void getDateMonthSelected(boolean isPrevious) {
+        try {
+            dayList.clear();
+            curDateMonth = DateUtil.getDateMonthSelected(curDateMonth, isPrevious);
+            statDate.setText(curDateMonth);
+            getEvents();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
-    private final class ItemClicker implements AdapterView.OnItemClickListener{
-
+    private final class ItemClicker implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             DayStatistics dayStatistics = (DayStatistics) parent.getItemAtPosition(position);
             selectedItem(dayStatistics);
+        }
+    }
+
+    private final class Clicker implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.stat_button_month_down:
+                    getDateMonthSelected(true);
+                    break;
+
+                case R.id.stat_button_month_up:
+                    getDateMonthSelected(false);
+                    break;
+            }
         }
     }
 
