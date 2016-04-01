@@ -189,19 +189,13 @@ public class FragmentMain extends GenericFragment {
         }
     }
 
+
     private boolean checkValidityEntryCard(String cardId) {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
-        List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
 
-        boolean isIdFromBase = false;
-        for (RealmCard rc : realmCardList) {
-            if (rc.getIdCard().equals(cardId)) {
-                isIdFromBase = true;
-            }
-        }
-        if (!isIdFromBase) {
+        if (!mActivityBridge.getUApplication().getDbBridge().containCardById(cardId)) {
             String message = getActivity().getString(R.string.message_unknown_card);
             showShortToastInsideThread(message);
             return false;
