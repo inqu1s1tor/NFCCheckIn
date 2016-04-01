@@ -30,6 +30,7 @@ public class CreateNewCardFragment extends GenericFragment {
     private EditText descriptionEt;
     private NfcAdapter nfcAdapter;
     private RealmCard card;
+    private EditText cardId;
 
 
     @Override
@@ -50,10 +51,11 @@ public class CreateNewCardFragment extends GenericFragment {
 
         nameEt = (EditText) view.findViewById(R.id.place_name_et);
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
-        //  cardId = (TextView) view.findViewById(R.id.showIdcard);
+        cardId = (EditText) view.findViewById(R.id.showIdcard);
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.save_new_place_button).setOnClickListener(listener);
+        view.findViewById(R.id.button_cancel_card_edit).setOnClickListener(listener);
 
         if (!initNFC()) {
             return;
@@ -70,7 +72,7 @@ public class CreateNewCardFragment extends GenericFragment {
 
         card.setNameCard(nameEt.getText().toString());
         card.setDescriptionCard(descriptionEt.getText().toString());
-        //  card.setIdCard();
+        card.setIdCard(cardId.getText().toString());
     }
 
     private boolean validationFields() {
@@ -117,12 +119,13 @@ public class CreateNewCardFragment extends GenericFragment {
 
         @Override
         public void onTagDiscovered(Tag tag) {
-            card.setIdCard(NfcUtil.byteArrayToHexString(tag.getId()));
+            final String cardIdFromTag = NfcUtil.byteArrayToHexString(tag.getId());
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //cardId.setText(idCard);
+                    card.setIdCard(cardIdFromTag);
+                    cardId.setText(cardIdFromTag);
                 }
             });
 
@@ -149,6 +152,8 @@ public class CreateNewCardFragment extends GenericFragment {
                 case R.id.save_new_place_button:
                     saveNewCard();
                     break;
+                case R.id.button_cancel_card_edit:
+                    getActivity().onBackPressed();
             }
 
         }
