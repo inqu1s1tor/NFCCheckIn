@@ -80,6 +80,14 @@ public class SignInFragment extends GenericFragment {
         mActivityBridge.getUApplication().getNetBridge().loginUser(name, password, new NetCallBack());
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+        observer = null;
+    }
+
+
     private void checkMode(User user) {
         if (user.getUserRoles().contains("Admins")) { // TODO
             mActivityBridge.getFragmentLauncher().launchAdminFragment();
@@ -88,12 +96,6 @@ public class SignInFragment extends GenericFragment {
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-        observer = null;
-    }
 
     private final class NetCallBack extends SimpleMainCallBack {
         @Override
