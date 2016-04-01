@@ -57,7 +57,7 @@ final class EventHelper {
 
         try {
             startTime = DateUtil.getStartOfMonth(date);
-            endTime = DateUtil.getEndOfDayInMillis(date);
+            endTime = DateUtil.getEndOfMonthInMillis(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -70,7 +70,7 @@ final class EventHelper {
 
         try {
             startTime = DateUtil.getStartOfMonth(date);
-            endTime = DateUtil.getEndOfDayInMillis(date);
+            endTime = DateUtil.getEndOfMonthInMillis(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
