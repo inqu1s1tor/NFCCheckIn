@@ -10,12 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.User;
 import com.erminesoft.nfcpp.ui.adapters.AdminCardsAdapter;
 import com.erminesoft.nfcpp.ui.adapters.AdminUsersAdapter;
@@ -63,6 +63,7 @@ public class AdminFragment extends GenericFragment {
         mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
 
         AdapterView.OnItemClickListener itemClicker = new ItemClicker();
+        initUsersAdapter();
         adminList.setOnItemClickListener(itemClicker);
         View.OnClickListener listener = new Clicker();
         addCardBtn = (FloatingActionButton)view.findViewById(R.id.add_card_float_button);
@@ -120,8 +121,12 @@ public class AdminFragment extends GenericFragment {
         }
     }
 
-    private void selectedItem(User user) {
+    private void selectedItemUser(User user) {
         mActivityBridge.getFragmentLauncher().launchStatisticsFragment(user.getObjectId());
+    }
+
+    private void selectedItemCard(RealmCard realmCard) {
+        mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment();
     }
 
     private final class NetCallBack extends SimpleMainCallBack {
@@ -145,8 +150,14 @@ public class AdminFragment extends GenericFragment {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            User user = (User) parent.getItemAtPosition(position);
-            selectedItem(user);
+            if (state == TabState.USERS) {
+                User user = (User) parent.getItemAtPosition(position);
+                selectedItemUser(user);
+            }else {
+                RealmCard realmCard = (RealmCard)parent.getItemAtPosition(position);
+                selectedItemCard(realmCard);
+            }
+
         }
     }
 
@@ -182,13 +193,13 @@ public class AdminFragment extends GenericFragment {
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             switch (checkedId) {
                 case R.id.cards_radio_button:
-                    state = TabState.USERS;
+                    state = TabState.CARDS;
                     initCardsAdapter();
                     addCardBtn.setVisibility(View.VISIBLE);
                     break;
 
                 case R.id.users_name_radio_button:
-                    state = TabState.CARDS;
+                    state = TabState.USERS;
                     initUsersAdapter();
                     addCardBtn.setVisibility(View.INVISIBLE);
                     break;

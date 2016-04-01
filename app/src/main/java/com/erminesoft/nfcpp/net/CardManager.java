@@ -30,6 +30,7 @@ public class CardManager {
             public void handleResponse(Card response) {
                 Log.d("addNewCard", "response = " + response.getNameCard());
                  // TODO  permision
+                callback.onSuccess();
             }
 
             @Override

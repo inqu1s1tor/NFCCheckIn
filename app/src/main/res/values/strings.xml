@@ -34,6 +34,8 @@
     <string name="cards_rb">Cards</string>
 
     <string name="message_invalid_card_to_exit">Invalid card to exit</string>
+    <string name="message_admin_no_added_card">Scan new card</string>
+    <string name="message_admin_card_already">This card is already there</string>
 
 
 </resources>
