@@ -29,9 +29,14 @@ public class CreateNewCardFragment extends GenericFragment {
     private EditText nameEt;
     private EditText descriptionEt;
     private NfcAdapter nfcAdapter;
-    private TextView cardId;
-    private String idCard;
+    private RealmCard card;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        card = new RealmCard();
+    }
 
     @Nullable
     @Override
@@ -45,7 +50,7 @@ public class CreateNewCardFragment extends GenericFragment {
 
         nameEt = (EditText) view.findViewById(R.id.place_name_et);
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
-        cardId = (TextView) view.findViewById(R.id.showIdcard);
+        //  cardId = (TextView) view.findViewById(R.id.showIdcard);
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.save_new_place_button).setOnClickListener(listener);
@@ -57,42 +62,28 @@ public class CreateNewCardFragment extends GenericFragment {
         initNFC();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    private RealmCard setNewCard() {
-        RealmCard newRealmCard = new RealmCard();
-        newRealmCard.setNameCard(nameEt.getText().toString());
-        newRealmCard.setDescriptionCard(descriptionEt.getText().toString());
-        newRealmCard.setIdCard(idCard);
-
-        return newRealmCard;
-    }
-
     private void saveNewCard() {
+
         if (validationFields()) {
-            mActivityBridge.getUApplication().getNetBridge().addNewCard(setNewCard(), new NetCallBack());
+            mActivityBridge.getUApplication().getNetBridge().addNewCard(card, new NetCallBack());
         }
+
+        card.setNameCard(nameEt.getText().toString());
+        card.setDescriptionCard(descriptionEt.getText().toString());
+        //  card.setIdCard();
     }
 
     private boolean validationFields() {
-        if (idCard == null) {
+        if (TextUtils.isEmpty(card.getIdCard())) {
             String message = getActivity().getResources().getString(R.string.message_admin_no_added_card);
             showShortToast(message);
             return false;
         }
 
-        List<RealmCard> cardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
-        Log.d("validationFields", "cardList.size()=" + cardList.size());
-        for (RealmCard rc : cardList) {
-            if (rc.getIdCard().equals(idCard)) {
-                String message = getActivity().getResources().getString(R.string.message_admin_card_already);
-                showShortToast(message);
-                return false;
-            }
+        if (mActivityBridge.getUApplication().getDbBridge().containCardById(card.getIdCard())) {
+            String message = getActivity().getResources().getString(R.string.message_admin_card_already);
+            showShortToast(message);
+            return false;
         }
 
         if (TextUtils.isEmpty(nameEt.getText().toString())) {
@@ -126,12 +117,12 @@ public class CreateNewCardFragment extends GenericFragment {
 
         @Override
         public void onTagDiscovered(Tag tag) {
-            idCard = NfcUtil.byteArrayToHexString(tag.getId());
+            card.setIdCard(NfcUtil.byteArrayToHexString(tag.getId()));
 
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    cardId.setText(idCard);
+                    //cardId.setText(idCard);
                 }
             });
 

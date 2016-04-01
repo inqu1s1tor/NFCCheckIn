@@ -39,7 +39,6 @@ public class AdminFragment extends GenericFragment {
     private FloatingActionButton addCardBtn;
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,14 +65,14 @@ public class AdminFragment extends GenericFragment {
         initUsersAdapter();
         adminList.setOnItemClickListener(itemClicker);
         View.OnClickListener listener = new Clicker();
-        addCardBtn = (FloatingActionButton)view.findViewById(R.id.add_card_float_button);
+        addCardBtn = (FloatingActionButton) view.findViewById(R.id.add_card_float_button);
         addCardBtn.setOnClickListener(listener);
         addCardBtn.setVisibility(View.INVISIBLE);
 
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
         setHasOptionsMenu(true);
 
-        radioGroup = (RadioGroup)view.findViewById(R.id.admin_list_radio_group);
+        radioGroup = (RadioGroup) view.findViewById(R.id.admin_list_radio_group);
         radioGroup.setOnCheckedChangeListener(new RadioListener());
 
         radioGroup.check(R.id.users_name_radio_button);
@@ -101,7 +100,10 @@ public class AdminFragment extends GenericFragment {
     @Override
     public void onStart() {
         super.onStart();
-        observer = new DbObserver();
+
+        if (observer == null) {
+            observer = new DbObserver();
+        }
         mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
     }
 
@@ -116,7 +118,7 @@ public class AdminFragment extends GenericFragment {
 
     private void getUsersFromDb() {
         List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
-        if(users.size()<= 0) {
+        if (users.size() <= 0) {
             adminUsersAdapter.swapDataList(users);
         }
     }
@@ -153,8 +155,8 @@ public class AdminFragment extends GenericFragment {
             if (state == TabState.USERS) {
                 User user = (User) parent.getItemAtPosition(position);
                 selectedItemUser(user);
-            }else {
-                RealmCard realmCard = (RealmCard)parent.getItemAtPosition(position);
+            } else {
+                RealmCard realmCard = (RealmCard) parent.getItemAtPosition(position);
                 selectedItemCard(realmCard);
             }
 
@@ -163,7 +165,7 @@ public class AdminFragment extends GenericFragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_sync:
                 break;
 
@@ -182,6 +184,7 @@ public class AdminFragment extends GenericFragment {
             switch (v.getId()) {
                 case R.id.add_card_float_button:
                     mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment();
+                    break;
             }
 
         }

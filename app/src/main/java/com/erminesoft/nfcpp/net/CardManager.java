@@ -15,11 +15,11 @@ import com.erminesoft.nfcpp.model.RealmCard;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardManager {
+final class CardManager {
 
     private DbBridge dbBridge;
 
-    public CardManager(DbBridge dbBridge){
+    CardManager(DbBridge dbBridge){
         this.dbBridge = dbBridge;
     }
 
