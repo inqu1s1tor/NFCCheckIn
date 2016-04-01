@@ -5,13 +5,6 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <TextView
-        android:id="@+id/logout"
-        android:text="@string/logout"
-        android:layout_gravity="right"
-        android:textColor="@android:color/holo_blue_dark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/currentTime"

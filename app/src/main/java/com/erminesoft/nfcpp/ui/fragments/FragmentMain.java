@@ -10,6 +10,9 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -78,12 +81,13 @@ public class FragmentMain extends GenericFragment {
             return;
         }
 
+        setHasOptionsMenu(true);
+
         initAdapter();
         getEventsFromDb();
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
-        view.findViewById(R.id.logout).setOnClickListener(listener);
 
         loadDataFromBackendless();
 
@@ -145,7 +149,7 @@ public class FragmentMain extends GenericFragment {
         long lastSyncDate = mActivityBridge.getUApplication().getSharedHelper().getLastSyncDate();
         String myId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
         long curTime = System.currentTimeMillis();
-        if (lastSyncDate == 0) {
+        if (lastSyncDate == (long) 0) {
             mActivityBridge.getUApplication().getNetBridge().getAllEventsByUserId(myId, new NetCallback());
         } else {
             mActivityBridge.getUApplication().getNetBridge().getTodayEventsByUserId(myId, lastSyncDate, new NetCallback());
@@ -189,12 +193,26 @@ public class FragmentMain extends GenericFragment {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
+        List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
 
-        if (realmEventList.size() <= 0){
+        boolean isIdFromBase = false;
+        for (RealmCard rc : realmCardList) {
+            if (rc.getIdCard().equals(cardId)) {
+                isIdFromBase = true;
+            }
+        }
+        if (!isIdFromBase) {
+            String message = getActivity().getString(R.string.message_unknown_card);
+            showShortToastInsideThread(message);
+            return false;
+        }
+
+        if (realmEventList.size() <= 0) {
             return true;
         }
 
         if (realmEventList.size() % 2 == 0) {
+
             return true;
         }
 
@@ -208,7 +226,7 @@ public class FragmentMain extends GenericFragment {
         return false;
     }
 
-    private void showShortToastInsideThread(final String message){
+    private void showShortToastInsideThread(final String message) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -248,6 +266,29 @@ public class FragmentMain extends GenericFragment {
         }
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.user_setting_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.user_setting_menu_action_sync:
+                if (SystemUtils.isNetworkConnected(getActivity())) {
+                    SyncService.start(getActivity());
+                }
+                break;
+
+            case R.id.user_setting_menu_action_log_out:
+                logout();
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private final class NetCallback extends SimpleMainCallBack {
         @Override
         public void onSuccessGetEvents(List<RealmEvent> realmEventList) {
@@ -262,10 +303,6 @@ public class FragmentMain extends GenericFragment {
             switch (v.getId()) {
                 case R.id.transferToStatisticsButton:
                     mActivityBridge.getFragmentLauncher().launchStatisticsFragment(null);
-                    break;
-
-                case R.id.logout:
-                    logout();
                     break;
             }
 

@@ -46,11 +46,9 @@ final class CardManager {
         Backendless.Data.of(Card.class).find(new AsyncCallback<BackendlessCollection<Card>>() {
             @Override
             public void handleResponse(BackendlessCollection<Card> response) {
-                Log.d("getAllCard", "response");
                 List<Card> cards = response.getData();
                 List<RealmCard> realmCards = new ArrayList<RealmCard>(cards.size());
                 for (Card card : cards) {
-                    Log.d("getAllCard", "card.getNameCard() = "+card.getNameCard());
                     realmCards.add(CardConverter.clearCardToRealmCard(card));
                 }
                 dbBridge.saveCard(realmCards);
