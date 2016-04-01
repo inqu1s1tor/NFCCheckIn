@@ -27,18 +27,30 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:text="@string/scan_card_text_view"
+        android:layout_width="wrap_content"
+        android:textSize="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/showIdcard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
     <Button
         android:id="@+id/save_new_place_button"
-        android:text="SAVE"
-        android:layout_marginTop="30dp"
+        android:text="@string/button_save"
+        android:layout_marginTop="40dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
 
     <Button
         android:id="@+id/button_cancel_card_edit"
-        android:text="Cancel"
+        android:text="@string/cancel_create_card_btn"
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

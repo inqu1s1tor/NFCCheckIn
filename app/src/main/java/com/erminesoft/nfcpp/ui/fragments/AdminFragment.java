@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,10 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.User;
+import com.erminesoft.nfcpp.ui.adapters.AdminCardsAdapter;
 import com.erminesoft.nfcpp.ui.adapters.AdminUsersAdapter;
 
 import java.util.List;
@@ -28,11 +32,14 @@ public class AdminFragment extends GenericFragment {
 
     private ListView adminList;
     private Observer observer;
-    private AdminUsersAdapter adminAdapter;
+    private AdminUsersAdapter adminUsersAdapter;
+    private AdminCardsAdapter adminCardsAdapter;
     private Menu menu;
     private RadioGroup radioGroup;
     private TabState state;
-
+    private FloatingActionButton addCardBtn;
+    private TextView userNameColumn;
+    private TextView totalTimeColumn;
 
 
     @Nullable
@@ -53,27 +60,53 @@ public class AdminFragment extends GenericFragment {
 
         adminList = (ListView) view.findViewById(R.id.adminList);
         adminList.setEmptyView(view.findViewById(R.id.empty_list_item_admin));
+        userNameColumn = (TextView)view.findViewById(R.id.user_name_column_textView);
+        totalTimeColumn = (TextView)view.findViewById(R.id.total_time_column_textView);
+//        userNameColumn.setText("User name");
+//        totalTimeColumn.setText("Total time");
 
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
-
-
+        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
 
         AdapterView.OnItemClickListener itemClicker = new ItemClicker();
+        initUsersAdapter();
+
         adminList.setOnItemClickListener(itemClicker);
         View.OnClickListener listener = new Clicker();
+        addCardBtn = (FloatingActionButton) view.findViewById(R.id.add_card_float_button);
+        addCardBtn.setOnClickListener(listener);
+
+
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
         setHasOptionsMenu(true);
 
-        radioGroup = (RadioGroup)view.findViewById(R.id.admin_list_radio_group);
+        radioGroup = (RadioGroup) view.findViewById(R.id.admin_list_radio_group);
         radioGroup.setOnCheckedChangeListener(new RadioListener());
 
         radioGroup.check(R.id.users_name_radio_button);
 
     }
 
+    private void showVisibility() {
+        if (state == TabState.USERS) {
+            addCardBtn.setVisibility(View.GONE);
+            userNameColumn.setText(getActivity().getResources().getString(R.string.user_name_list_column_tv));
+            totalTimeColumn.setText(getActivity().getResources().getString(R.string.user_total_time_list_column));
+        }else {
+            userNameColumn.setText(R.string.card_column_id);
+            totalTimeColumn.setText(R.string.card_name_column);
+            addCardBtn.setVisibility(View.VISIBLE);
+            }
+    }
+
     private void initUsersAdapter() {
-        adminAdapter = new AdminUsersAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
-        adminList.setAdapter(adminAdapter);
+        adminUsersAdapter = new AdminUsersAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
+        adminList.setAdapter(adminUsersAdapter);
+    }
+
+    private void initCardsAdapter() {
+        adminCardsAdapter = new AdminCardsAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllCards());
+        adminList.setAdapter(adminCardsAdapter);
     }
 
 
@@ -87,7 +120,10 @@ public class AdminFragment extends GenericFragment {
     @Override
     public void onStart() {
         super.onStart();
-        observer = new DbObserver();
+
+        if (observer == null) {
+            observer = new DbObserver();
+        }
         mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
     }
 
@@ -102,13 +138,17 @@ public class AdminFragment extends GenericFragment {
 
     private void getUsersFromDb() {
         List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
-        if(users.size()<= 0) {
-            adminAdapter.swapDataList(users);
+        if (users.size() <= 0) {
+            adminUsersAdapter.swapDataList(users);
         }
     }
 
-    private void selectedItem(User user) {
+    private void selectedItemUser(User user) {
         mActivityBridge.getFragmentLauncher().launchStatisticsFragment(user.getObjectId());
+    }
+
+    private void selectedItemCard(RealmCard realmCard) {
+        mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment();
     }
 
     private final class NetCallBack extends SimpleMainCallBack {
@@ -132,14 +172,20 @@ public class AdminFragment extends GenericFragment {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            User user = (User) parent.getItemAtPosition(position);
-            selectedItem(user);
+            if (state == TabState.USERS) {
+                User user = (User) parent.getItemAtPosition(position);
+                selectedItemUser(user);
+            } else {
+                RealmCard realmCard = (RealmCard) parent.getItemAtPosition(position);
+                selectedItemCard(realmCard);
+            }
+
         }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_sync:
                 break;
 
@@ -156,6 +202,9 @@ public class AdminFragment extends GenericFragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                case R.id.add_card_float_button:
+                    mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment();
+                    break;
             }
 
         }
@@ -167,12 +216,15 @@ public class AdminFragment extends GenericFragment {
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             switch (checkedId) {
                 case R.id.cards_radio_button:
-                    state = TabState.USERS;
-                    initUsersAdapter();
+                    state = TabState.CARDS;
+                    showVisibility();
+                    initCardsAdapter();
                     break;
 
                 case R.id.users_name_radio_button:
-                    state = TabState.CARDS;
+                    state = TabState.USERS;
+                    showVisibility();
+                    initUsersAdapter();
                     break;
             }
         }

@@ -1,5 +1,6 @@
 package com.erminesoft.nfcpp.db;
 
+import com.erminesoft.nfcpp.model.Card;
 import com.erminesoft.nfcpp.model.RealmCard;
 import java.util.List;
 import io.realm.Realm;
@@ -23,6 +24,10 @@ final class CardHelper {
 
     List<RealmCard> getAllCards(Realm realm) {
         return realm.where(RealmCard.class).findAll();
+    }
+
+    RealmCard getCardById(Realm realm, String cardId){
+        return realm.where(RealmCard.class).equalTo("idCard", cardId).findFirst();
     }
 
 }

@@ -35,7 +35,14 @@
     <string name="cards_rb">Cards</string>
 
     <string name="message_invalid_card_to_exit">Invalid card to exit</string>
+    <string name="message_admin_no_added_card">Scan new card</string>
+    <string name="message_admin_card_already">This card is already there</string>
     <string name="message_unknown_card">Unknown card</string>
+    <string name="scan_card_text_view">Scan or input card</string>
+    <string name="cancel_create_card_btn">cancel_create_card_btn</string>
+    <string name="button_save">save_create_new_card_btn</string>
+    <string name="card_column_id">ID</string>
+    <string name="card_name_column">Card name</string>
 
 
 </resources>

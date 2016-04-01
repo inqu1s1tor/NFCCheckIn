@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <RadioGroup
             android:id="@+id/admin_list_radio_group"
@@ -31,49 +27,49 @@
 
         </RadioGroup>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
         <TextView
             android:text="@string/user_name_list_column_tv"
             android:textSize="20dp"
+            android:layout_marginTop="30dp"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:id="@+id/user_name_column_textView" />
 
         <TextView
+
             android:text="@string/user_total_time_list_column"
+            android:id="@+id/total_time_column_textView"
+            android:layout_marginTop="30dp"
             android:textSize="20dp"
             android:layout_weight="2"
+            android:gravity="right"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
-    </LinearLayout>
-
     <ListView
         android:id="@+id/adminList"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="20dp">
+        android:layout_below="@+id/user_name_column_textView">
     </ListView>
 
     <TextView
         android:id="@+id/empty_list_item_admin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="50dp"
         android:text="@string/empty_admin_list"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fragment_main_float_button_add"
+        android:id="@+id/add_card_float_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_gravity="bottom|end"
         android:src="@android:drawable/ic_menu_add" />
 
-</LinearLayout>
+</RelativeLayout>

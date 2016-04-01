@@ -46,7 +46,9 @@ public interface DbBridge {
 
     void saveCard(RealmCard realmCard);
 
-    public List<RealmCard> getAllCards();
+    List<RealmCard> getAllCards();
+
+    boolean containCardById(String cardId);
 
     void clearAllData();
 }
