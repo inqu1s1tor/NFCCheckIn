@@ -9,6 +9,7 @@ android {
             storeFile file("debug.keystore")
         }
     }
+
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
     defaultConfig {
@@ -20,8 +21,26 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+
+            minifyEnabled false
+            debuggable false
+
+            buildConfigField "String", "BACKENDLESS_APP_ID", "\"3FF1FA73-3C64-9161-FF7A-A21612B74C00\""
+            buildConfigField "String", "BACKENDLESS_KEY", "\"17EA9154-5CF8-4658-FF9C-B6EB16377D00\""
+        }
+
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+
+            minifyEnabled false
+            debuggable true
+
+            buildConfigField "String", "BACKENDLESS_APP_ID", "\"3FF1FA73-3C64-9161-FF7A-A21612B74C00\""
+            buildConfigField "String", "BACKENDLESS_KEY", "\"17EA9154-5CF8-4658-FF9C-B6EB16377D00\""
         }
     }
 }

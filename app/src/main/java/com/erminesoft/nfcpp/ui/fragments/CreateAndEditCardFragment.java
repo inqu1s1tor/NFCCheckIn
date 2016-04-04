@@ -36,10 +36,13 @@ public class CreateAndEditCardFragment extends GenericFragment {
     private EditText descriptionEt;
     private NfcAdapter nfcAdapter;
     private RealmCard realmCard;
-    private EditText cardId;
+    private EditText cardIdEt;
+
+    private String editCardId;
+    private String cardObjectId;
 
 
-    public static Bundle buildArgs(String cardId){
+    public static Bundle buildArgs(String cardId) {
         Bundle bundle = new Bundle();
         bundle.putString(CARD_ID, cardId);
         return bundle;
@@ -57,7 +60,7 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
         nameEt = (EditText) view.findViewById(R.id.place_name_et);
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
-        cardId = (EditText) view.findViewById(R.id.showIdcard);
+        cardIdEt = (EditText) view.findViewById(R.id.showIdcard);
 
         changeStateOfBackButton();
 
@@ -76,44 +79,54 @@ public class CreateAndEditCardFragment extends GenericFragment {
     private void saveNewCard() {
 
         if (validationFields()) {
+            realmCard = new RealmCard();
+
+            if (editCardId == null) {
+                realmCard.setNameCard(nameEt.getText().toString());
+                realmCard.setDescriptionCard(descriptionEt.getText().toString());
+                realmCard.setIdCard(cardIdEt.getText().toString());
+            } else {
+                realmCard.setNameCard(nameEt.getText().toString());
+                realmCard.setDescriptionCard(descriptionEt.getText().toString());
+                realmCard.setIdCard(cardIdEt.getText().toString());
+                realmCard.setObjectId(cardObjectId);
+            }
+
+            showProgressDialog();
             mActivityBridge.getUApplication().getNetBridge().addNewCard(realmCard, new NetCallBack());
+
         }
 
-        realmCard.setNameCard(nameEt.getText().toString());
-        realmCard.setDescriptionCard(descriptionEt.getText().toString());
-        realmCard.setIdCard(cardId.getText().toString());
     }
 
     private void extractExistCard() {
         Bundle bundle = getArguments();
-        if(bundle.isEmpty()) {
-            realmCard = new RealmCard();
-        } else {
-            String cardId = bundle.getString(CARD_ID);
-
-            if (cardId == null && cardId.isEmpty()) {
-                realmCard = new RealmCard();
-            } else {
-                realmCard = mActivityBridge.getUApplication().getDbBridge().getCardById(cardId);
-                extractModeltoView(realmCard);
+        if (!bundle.isEmpty()) {
+            editCardId = bundle.getString(CARD_ID);
+            if (editCardId != null && !editCardId.isEmpty()) {
+                RealmCard editRealmCard = mActivityBridge.getUApplication().getDbBridge().getCardById(editCardId);
+                extractModeltoView(editRealmCard);
             }
         }
     }
 
-    private void extractModeltoView(RealmCard realmCard){
-        cardId.setText(realmCard.getIdCard());
-        descriptionEt.setText(realmCard.getDescriptionCard());
-        nameEt.setText(realmCard.getNameCard());
+    private void extractModeltoView(RealmCard editRealmCard) {
+        cardIdEt.setText(editRealmCard.getIdCard());
+        descriptionEt.setText(editRealmCard.getDescriptionCard());
+        nameEt.setText(editRealmCard.getNameCard());
+        cardObjectId = editRealmCard.getObjectId();
     }
 
     private boolean validationFields() {
-        if (TextUtils.isEmpty(realmCard.getIdCard())) {
+        Log.d("validationFields", "editCardId=" + editCardId);
+
+        if (TextUtils.isEmpty(cardIdEt.getText().toString())) {
             String message = getActivity().getResources().getString(R.string.message_admin_no_added_card);
             showShortToast(message);
             return false;
         }
 
-        if (mActivityBridge.getUApplication().getDbBridge().containCardById(realmCard.getIdCard())) {
+        if (editCardId == null && mActivityBridge.getUApplication().getDbBridge().containCardById(cardIdEt.getText().toString())) {
             String message = getActivity().getResources().getString(R.string.message_admin_card_already);
             showShortToast(message);
             return false;
@@ -160,8 +173,7 @@ public class CreateAndEditCardFragment extends GenericFragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    realmCard.setIdCard(cardIdFromTag);
-                    cardId.setText(cardIdFromTag);
+                    cardIdEt.setText(cardIdFromTag);
                 }
             });
 
@@ -172,11 +184,13 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
         @Override
         public void onSuccess() {
+            hideProgressDialog();
             getActivity().onBackPressed();
         }
 
         @Override
         public void onError(String error) {
+            hideProgressDialog();
             showShortToast(error);
         }
     }

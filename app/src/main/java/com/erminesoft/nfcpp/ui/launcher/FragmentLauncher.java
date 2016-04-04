@@ -73,9 +73,9 @@ public class FragmentLauncher {
         launch(adminFragmnent, null);
     }
 
-    public void launchDetailStatisticsFragment(String date){
+    public void launchDetailStatisticsFragment(Bundle bundle){
         GenericFragment detailStatisticsFragment = new DetailStatisticsFragment();
-        detailStatisticsFragment.setArguments(DetailStatisticsFragment.buildArguments(date));
+        detailStatisticsFragment.setArguments(bundle);
         launch(detailStatisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
 

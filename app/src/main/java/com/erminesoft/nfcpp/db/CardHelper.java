@@ -30,4 +30,11 @@ final class CardHelper {
         return realm.where(RealmCard.class).equalTo("idCard", cardId).findFirst();
     }
 
+
+    void clearAllCards(Realm realm) {
+        realm.beginTransaction();
+        realm.where(RealmCard.class).findAll().clear();
+        realm.commitTransaction();
+    }
+
 }

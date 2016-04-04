@@ -129,6 +129,11 @@ public final class DbManager extends Observable implements DbBridge {
     }
 
     @Override
+    public List<RealmEvent> getEventsByDateAndUserId(String date, String userId) {
+        return eventHelper.getEventsByDateAndUserId(initRealm(), date, userId);
+    }
+
+    @Override
     public void saveCard(List<RealmCard> realmCards) {
         cardHelper.saveCard(initRealm(), realmCards);
         notifyObserversProcedure();
@@ -160,6 +165,7 @@ public final class DbManager extends Observable implements DbBridge {
     public void clearAllData(){
         userHelper.clearUser(initRealm());
         eventHelper.clearAllEvents(initRealm());
+        cardHelper.clearAllCards(initRealm());
     }
 
 }

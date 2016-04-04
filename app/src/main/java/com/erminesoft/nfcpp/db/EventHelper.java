@@ -80,6 +80,22 @@ final class EventHelper {
                 .findAllSorted("creationTime", Sort.ASCENDING);
     }
 
+    List<RealmEvent> getEventsByDateAndUserId(Realm realm, String date, String userId) {
+        int startTime = 0;
+        int endTime = (int) (System.currentTimeMillis() / 1000);
+
+        try {
+            startTime = DateUtil.getStartOfDay(date);
+            endTime = DateUtil.getEndOfDayInMillis(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return realm.where(RealmEvent.class)
+                .equalTo("ownerId", userId)
+                .between("creationTime", startTime, endTime)
+                .findAllSorted("creationTime", Sort.ASCENDING);
+    }
+
     RealmEvent getLastEventByCardId(Realm realm, String cardId) {
         RealmResults<RealmEvent> results = realm.where(RealmEvent.class).equalTo("idCard", cardId).findAllSorted("creationTime", Sort.DESCENDING);
 

@@ -1,8 +1,5 @@
 <resources>
     <string name="app_name">Nfcpp</string>
-    <string name="BACKENDLESS_APP_ID">3FF1FA73-3C64-9161-FF7A-A21612B74C00</string>
-    <string name="BACKENDLESS_KEY">17EA9154-5CF8-4658-FF9C-B6EB16377D00</string>
-
     <string name="hello_nfc">NFC</string>
     <string name="hello_check_in">Check-in</string>
     <string name="login_user">Login</string>
@@ -43,9 +40,16 @@
     <string name="button_save">save</string>
     <string name="card_column_id">ID</string>
     <string name="card_name_column">Card name</string>
+
     <string name="lost_data_dialog">All unsaved data will be lost. Proceed?</string>
     <string name="button_yes_unsaved_ialog">YES</string>
     <string name="button_no_unsaved_dialog">NO</string>
+
+    <string name="message_error_empty_login">Empty login</string>
+    <string name="message_error_empty_password">Empty password</string>
+    <string name="message_error_empty_firstname">Empty first name</string>
+    <string name="message_error_empty_lastname">Empty last name</string>
+
 
 
 </resources>

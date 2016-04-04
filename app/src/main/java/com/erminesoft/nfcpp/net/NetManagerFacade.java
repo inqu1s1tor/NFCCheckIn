@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.erminesoft.nfcpp.BuildConfig;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
@@ -36,10 +37,7 @@ public final class NetManagerFacade implements NetBridge {
     }
 
     private void initBackendLess(Context context) {
-        Resources res = context.getResources();
-        Log.d("init", "APP_ID = " + res.getString(R.string.BACKENDLESS_APP_ID));
-        Log.d("init", "KEY = " + res.getString(R.string.BACKENDLESS_KEY));
-        Backendless.initApp(context, res.getString(R.string.BACKENDLESS_APP_ID), res.getString(R.string.BACKENDLESS_KEY), "v1");
+        Backendless.initApp(context, BuildConfig.BACKENDLESS_APP_ID, BuildConfig.BACKENDLESS_KEY, "v1");
     }
 
     @Override

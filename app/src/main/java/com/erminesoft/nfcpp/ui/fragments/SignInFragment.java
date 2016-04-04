@@ -23,6 +23,8 @@ public class SignInFragment extends GenericFragment {
 
     private EditText signInLoginEt;
     private EditText signInPasswordEt;
+    private TextInputLayout tilFirstName;
+    private TextInputLayout tilPasswordUser;
     private Observer observer;
 
     @Override
@@ -52,6 +54,9 @@ public class SignInFragment extends GenericFragment {
         signInLoginEt = (EditText) view.findViewById(R.id.signInloginUserET);
         signInPasswordEt = (EditText) view.findViewById(R.id.signInPasswordUserET);
 
+        tilFirstName = (TextInputLayout) view.findViewById(R.id.firstNameWrap);
+        tilPasswordUser = (TextInputLayout) view.findViewById(R.id.signInPasswordUserWrap);
+
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.signInButton).setOnClickListener(listener);
 
@@ -65,6 +70,7 @@ public class SignInFragment extends GenericFragment {
         mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
     }
 
+
     private void buttonSignInPressed() {
         String name = signInLoginEt.getText().toString();
         String password = signInPasswordEt.getText().toString();
@@ -72,19 +78,32 @@ public class SignInFragment extends GenericFragment {
         String error;
 
         if (TextUtils.isEmpty(name)) {
-            error = "Empty login";
-            ((TextInputLayout) getView().findViewById(R.id.firstNameWrap)).setError(error);
+            error = getActivity().getResources().getString(R.string.message_error_empty_login);
+            tilFirstName.setError(error);
             return;
+        } else {
+            tilFirstName.setErrorEnabled(false);
         }
 
         if (TextUtils.isEmpty(password)) {
-            error = "Empty password";
-            ((TextInputLayout) getView().findViewById(R.id.signInPasswordUserWrap)).setError(error);
+            error = getActivity().getResources().getString(R.string.message_error_empty_password);
+            tilPasswordUser.setError(error);
             return;
+        } else {
+            tilPasswordUser.setErrorEnabled(false);
         }
 
         showProgressDialog();
         mActivityBridge.getUApplication().getNetBridge().loginUser(name, password, new NetCallBack());
+    }
+
+    private final class NetCallBack extends SimpleMainCallBack {
+        @Override
+        public void onError(String error) {
+            hideProgressDialog();
+            showShortToast(error);
+            tilPasswordUser.setError(error);
+        }
     }
 
     private void checkMode(User user) {
@@ -102,13 +121,6 @@ public class SignInFragment extends GenericFragment {
         observer = null;
     }
 
-    private final class NetCallBack extends SimpleMainCallBack {
-        @Override
-        public void onError(String error) {
-            hideProgressDialog();
-            showShortToast(error);
-        }
-    }
 
     private final class DbObserver implements Observer {
 

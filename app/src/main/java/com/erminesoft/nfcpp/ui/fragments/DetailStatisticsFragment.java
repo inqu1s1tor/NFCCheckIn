@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.model.RealmCard;
@@ -24,17 +25,19 @@ import java.util.List;
 public class DetailStatisticsFragment extends GenericFragment {
 
     private final static String DATE_ID = "date_id";
+    private final static String USER_ID = "user_id";
     private TextView dateTv;
     private TextView totalTime;
     private ListView eventsListView;
     private List<EventsToday> eventsList;
     private EventAdapter eventAdapter;
     private String date;
+    private String userId;
 
-
-    public static Bundle buildArguments(String date) {
+    public static Bundle buildArguments(String date, String userId) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(DATE_ID, date);
+        bundle.putSerializable(USER_ID, userId);
         return bundle;
     }
 
@@ -57,22 +60,27 @@ public class DetailStatisticsFragment extends GenericFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             date = (String) bundle.getSerializable(DATE_ID);
+            userId = (String) bundle.getSerializable(USER_ID);
         }
 
         dateTv.setText(date);
-
         initAdapter();
         getEventsFromDb(date);
     }
 
-    private void initAdapter(){
+    private void initAdapter() {
         eventsList = new ArrayList<>();
         eventAdapter = new EventAdapter(getActivity(), eventsList);
         eventsListView.setAdapter(eventAdapter);
     }
 
     private void getEventsFromDb(String dateString) {
-        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
+        List<RealmEvent> realmEventList;
+        if (userId == null) {
+            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
+        } else {
+            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);
+        }
         List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
         loadTodayEventsList(realmEventList, realmCardList);
     }
@@ -83,7 +91,7 @@ public class DetailStatisticsFragment extends GenericFragment {
         }
 
         eventsList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, realmCardList,  eventsList, false);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, realmCardList, eventsList, false);
         totalTime.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsList);
     }

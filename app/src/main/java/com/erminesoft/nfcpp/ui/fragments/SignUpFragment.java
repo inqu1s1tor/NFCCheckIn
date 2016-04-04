@@ -29,6 +29,12 @@ public class SignUpFragment extends GenericFragment {
     private EditText signUpLoginEt;
     private EditText signUpPasswordEt;
 
+    private TextInputLayout tilFirstName;
+    private TextInputLayout tilLastName;
+    private TextInputLayout tilLoginUser;
+    private TextInputLayout tilPasswordUser;
+
+
     private Observer observer;
 
     @Nullable
@@ -47,6 +53,12 @@ public class SignUpFragment extends GenericFragment {
         lastNameEt = (EditText)view.findViewById(R.id.lastNameET);
         signUpLoginEt = (EditText)view.findViewById(R.id.signUploginUserET);
         signUpPasswordEt = (EditText)view.findViewById(R.id.signUpPasswordUserET);
+
+        tilFirstName = (TextInputLayout) view.findViewById(R.id.firstNameWrap);
+        tilLastName = (TextInputLayout) view.findViewById(R.id.lastNameWrap);
+        tilLoginUser = (TextInputLayout) view.findViewById(R.id.signUploginUserWrap);
+        tilPasswordUser = (TextInputLayout) view.findViewById(R.id.signUpPasswordUserWrap);
+
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.SignUpButton).setOnClickListener(listener);
@@ -75,28 +87,37 @@ public class SignUpFragment extends GenericFragment {
         String error;
 
         if(TextUtils.isEmpty(putFirstName)) {
-             error  = "Empty first name";
-            ((TextInputLayout) getView().findViewById(R.id.firstNameWrap)).setError(error);
+             error  = getActivity().getResources().getString(R.string.message_error_empty_firstname);
+            tilFirstName.setError(error);
             return;
+        } else {
+            tilFirstName.setErrorEnabled(false);
         }
 
         if (TextUtils.isEmpty(putLastName)) {
-            error = "Empty last name";
-            ((TextInputLayout) getView().findViewById(R.id.lastNameWrap)).setError(error);
+            error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
+            tilLastName.setError(error);
             return;
+        } else {
+            tilLastName.setErrorEnabled(false);
         }
 
         if (TextUtils.isEmpty(putSignUpLoginEt)) {
-            error = "Empty login";
-            ((TextInputLayout) getView().findViewById(R.id.signUploginUserWrap)).setError(error);
+            error = getActivity().getResources().getString(R.string.message_error_empty_login);
+            tilLoginUser.setError(error);
             return;
+        } else {
+            tilLoginUser.setErrorEnabled(false);
         }
 
         if(TextUtils.isEmpty(putSignUpPasswordEt)) {
-            error =  "Empty password";
-            ((TextInputLayout) getView().findViewById(R.id.signUpPasswordUserWrap)).setError(error);
+            error =  getActivity().getResources().getString(R.string.message_error_empty_password);
+            tilPasswordUser.setError(error);
             return;
+        } else {
+            tilPasswordUser.setErrorEnabled(false);
         }
+
         showProgressDialog();
         NetBridge netBridge = mActivityBridge.getUApplication().getNetBridge();
         netBridge.registryUser(buildUser(putFirstName, putLastName, putSignUpLoginEt, putSignUpPasswordEt),
