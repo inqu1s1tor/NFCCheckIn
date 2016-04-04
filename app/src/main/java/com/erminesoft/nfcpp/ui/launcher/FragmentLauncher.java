@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.ui.launcher;
 
 
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -78,9 +79,9 @@ public class FragmentLauncher {
         launch(detailStatisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
 
-    public void launchCreatePlaceFragment (String cardId) {
+    public void launchCreatePlaceFragment (Bundle bundle) {
         GenericFragment createPlaceFragment = new CreateAndEditCardFragment();
-        createPlaceFragment.setArguments(CreateAndEditCardFragment.buildArgs(cardId));
+        createPlaceFragment.setArguments(bundle);
         launch(createPlaceFragment, CreateAndEditCardFragment.class.getCanonicalName());
     }
 }
