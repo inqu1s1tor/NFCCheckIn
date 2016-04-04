@@ -18,6 +18,9 @@ import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Card;
 import com.erminesoft.nfcpp.model.RealmCard;
+import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
+import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
+import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
 import com.erminesoft.nfcpp.util.NfcUtil;
 
 import java.util.List;
@@ -170,6 +173,14 @@ public class CreateAndEditCardFragment extends GenericFragment {
         }
     }
 
+    private final class DialogListener implements GenericDialog.DialogListener {
+
+        @Override
+        public void onOkPressed() {
+            getActivity().onBackPressed();
+        }
+    }
+
     private final class Clicker implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -178,7 +189,9 @@ public class CreateAndEditCardFragment extends GenericFragment {
                     saveNewCard();
                     break;
                 case R.id.button_cancel_card_edit:
-                    getActivity().onBackPressed();
+                    Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.lost_data_dialog));
+                    DialogLauncher.launchUnsavedDataDialog(getActivity(), new DialogListener(), bundle);
+//                    getActivity().onBackPressed();
             }
 
         }

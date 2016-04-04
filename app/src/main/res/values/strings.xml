@@ -43,6 +43,9 @@
     <string name="button_save">save</string>
     <string name="card_column_id">ID</string>
     <string name="card_name_column">Card name</string>
+    <string name="lost_data_dialog">All unsaved data will be lost. Proceed?</string>
+    <string name="button_yes_unsaved_ialog">YES</string>
+    <string name="button_no_unsaved_dialog">NO</string>
 
 
 </resources>
