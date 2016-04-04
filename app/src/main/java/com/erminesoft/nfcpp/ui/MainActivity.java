@@ -25,10 +25,6 @@ public class MainActivity extends AppCompatActivity implements ActivityBridge {
         fragmentLauncher.launchWelcomeFragment();
     }
 
-    private void currentTime() {
-        long hog = System.currentTimeMillis();
-    }
-
     @Override
     public void switchBackButtonVisibility(boolean isVisible) {
         getSupportActionBar().setDisplayHomeAsUpEnabled(isVisible);
@@ -50,4 +46,3 @@ public class MainActivity extends AppCompatActivity implements ActivityBridge {
         return true;
     }
 }
-

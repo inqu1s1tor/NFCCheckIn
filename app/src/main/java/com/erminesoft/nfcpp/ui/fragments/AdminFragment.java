@@ -57,6 +57,7 @@ public class AdminFragment extends GenericFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        changeStateOfBackButton();
 
         adminList = (ListView) view.findViewById(R.id.adminList);
         adminList.setEmptyView(view.findViewById(R.id.empty_list_item_admin));
@@ -149,7 +150,7 @@ public class AdminFragment extends GenericFragment {
 
     @Override
     protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(isVisible());
+        mActivityBridge.switchBackButtonVisibility(true);
     }
 
     private final class NetCallBack extends SimpleMainCallBack {
