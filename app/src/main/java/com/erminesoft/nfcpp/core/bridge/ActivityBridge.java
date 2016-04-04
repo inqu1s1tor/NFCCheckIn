@@ -7,6 +7,8 @@ public interface ActivityBridge {
 
     void switchBackButtonVisibility(boolean isVisible);
 
+    void onBackPressed();
+
     NfcApplication getUApplication();
 
     FragmentLauncher getFragmentLauncher();

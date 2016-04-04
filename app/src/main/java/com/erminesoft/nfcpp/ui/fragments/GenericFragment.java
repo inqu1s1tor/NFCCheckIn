@@ -4,6 +4,7 @@ package com.erminesoft.nfcpp.ui.fragments;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.View;
 import android.widget.Toast;
 
 import com.erminesoft.nfcpp.core.bridge.ActivityBridge;
@@ -46,4 +47,6 @@ public abstract class GenericFragment extends Fragment {
         }
         progressDialog = null;
     }
+
+
 }

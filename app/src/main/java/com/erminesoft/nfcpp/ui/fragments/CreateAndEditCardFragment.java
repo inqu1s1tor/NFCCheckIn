@@ -161,6 +161,7 @@ public class CreateAndEditCardFragment extends GenericFragment {
     @Override
     protected void changeStateOfBackButton() {
         mActivityBridge.switchBackButtonVisibility(true);
+        mActivityBridge.onBackPressed();
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
