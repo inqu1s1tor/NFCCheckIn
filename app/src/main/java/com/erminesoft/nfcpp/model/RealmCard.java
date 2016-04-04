@@ -8,6 +8,7 @@ public class RealmCard extends RealmObject {
 
     @PrimaryKey
     private String idCard;
+    private String objectId;
     private String nameCard;
     private String descriptionCard;
 
@@ -33,5 +34,13 @@ public class RealmCard extends RealmObject {
 
     public void setDescriptionCard(String descriptionCard) {
         this.descriptionCard = descriptionCard;
+    }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 }

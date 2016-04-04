@@ -18,6 +18,9 @@ import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Card;
 import com.erminesoft.nfcpp.model.RealmCard;
+import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
+import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
+import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
 import com.erminesoft.nfcpp.util.NfcUtil;
 
 import java.util.List;
@@ -25,18 +28,24 @@ import java.util.List;
 /**
  * Created by Aleks on 31.03.2016.
  */
-public class CreateNewCardFragment extends GenericFragment {
+public class CreateAndEditCardFragment extends GenericFragment {
+
+    private static final String CARD_ID = "card_id";
+
     private EditText nameEt;
     private EditText descriptionEt;
     private NfcAdapter nfcAdapter;
-    private RealmCard card;
-    private EditText cardId;
+    private RealmCard realmCard;
+    private EditText cardIdEt;
+
+    private String editCardId;
+    private String cardObjectId;
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        card = new RealmCard();
+    public static Bundle buildArgs(String cardId) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CARD_ID, cardId);
+        return bundle;
     }
 
     @Nullable
@@ -51,7 +60,9 @@ public class CreateNewCardFragment extends GenericFragment {
 
         nameEt = (EditText) view.findViewById(R.id.place_name_et);
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
-        cardId = (EditText) view.findViewById(R.id.showIdcard);
+        cardIdEt = (EditText) view.findViewById(R.id.showIdcard);
+
+        changeStateOfBackButton();
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.save_new_place_button).setOnClickListener(listener);
@@ -62,27 +73,60 @@ public class CreateNewCardFragment extends GenericFragment {
         }
 
         initNFC();
+        extractExistCard();
     }
 
     private void saveNewCard() {
 
         if (validationFields()) {
-            mActivityBridge.getUApplication().getNetBridge().addNewCard(card, new NetCallBack());
+            realmCard = new RealmCard();
+
+            if (editCardId == null) {
+                realmCard.setNameCard(nameEt.getText().toString());
+                realmCard.setDescriptionCard(descriptionEt.getText().toString());
+                realmCard.setIdCard(cardIdEt.getText().toString());
+            } else {
+                realmCard.setNameCard(nameEt.getText().toString());
+                realmCard.setDescriptionCard(descriptionEt.getText().toString());
+                realmCard.setIdCard(cardIdEt.getText().toString());
+                realmCard.setObjectId(cardObjectId);
+            }
+
+            showProgressDialog();
+            mActivityBridge.getUApplication().getNetBridge().addNewCard(realmCard, new NetCallBack());
+
         }
 
-        card.setNameCard(nameEt.getText().toString());
-        card.setDescriptionCard(descriptionEt.getText().toString());
-        card.setIdCard(cardId.getText().toString());
+    }
+
+    private void extractExistCard() {
+        Bundle bundle = getArguments();
+        if (!bundle.isEmpty()) {
+            editCardId = bundle.getString(CARD_ID);
+            if (editCardId != null && !editCardId.isEmpty()) {
+                RealmCard editRealmCard = mActivityBridge.getUApplication().getDbBridge().getCardById(editCardId);
+                extractModeltoView(editRealmCard);
+            }
+        }
+    }
+
+    private void extractModeltoView(RealmCard editRealmCard) {
+        cardIdEt.setText(editRealmCard.getIdCard());
+        descriptionEt.setText(editRealmCard.getDescriptionCard());
+        nameEt.setText(editRealmCard.getNameCard());
+        cardObjectId = editRealmCard.getObjectId();
     }
 
     private boolean validationFields() {
-        if (TextUtils.isEmpty(card.getIdCard())) {
+        Log.d("validationFields", "editCardId=" + editCardId);
+
+        if (TextUtils.isEmpty(cardIdEt.getText().toString())) {
             String message = getActivity().getResources().getString(R.string.message_admin_no_added_card);
             showShortToast(message);
             return false;
         }
 
-        if (mActivityBridge.getUApplication().getDbBridge().containCardById(card.getIdCard())) {
+        if (editCardId == null && mActivityBridge.getUApplication().getDbBridge().containCardById(cardIdEt.getText().toString())) {
             String message = getActivity().getResources().getString(R.string.message_admin_card_already);
             showShortToast(message);
             return false;
@@ -114,6 +158,11 @@ public class CreateNewCardFragment extends GenericFragment {
         return true;
     }
 
+    @Override
+    protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(true);
+    }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private final class NfcCallback implements NfcAdapter.ReaderCallback {
 
@@ -124,8 +173,7 @@ public class CreateNewCardFragment extends GenericFragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    card.setIdCard(cardIdFromTag);
-                    cardId.setText(cardIdFromTag);
+                    cardIdEt.setText(cardIdFromTag);
                 }
             });
 
@@ -136,12 +184,22 @@ public class CreateNewCardFragment extends GenericFragment {
 
         @Override
         public void onSuccess() {
+            hideProgressDialog();
             getActivity().onBackPressed();
         }
 
         @Override
         public void onError(String error) {
+            hideProgressDialog();
             showShortToast(error);
+        }
+    }
+
+    private final class DialogListener implements GenericDialog.DialogListener {
+
+        @Override
+        public void onOkPressed() {
+            getActivity().onBackPressed();
         }
     }
 
@@ -153,7 +211,8 @@ public class CreateNewCardFragment extends GenericFragment {
                     saveNewCard();
                     break;
                 case R.id.button_cancel_card_edit:
-                    getActivity().onBackPressed();
+                    Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.lost_data_dialog));
+                    DialogLauncher.launchUnsavedDataDialog(getActivity(), new DialogListener(), bundle);
             }
 
         }

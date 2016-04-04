@@ -50,6 +50,8 @@ public interface DbBridge {
 
     List<RealmCard> getAllCards();
 
+    RealmCard getCardById(String cardId);
+
     boolean containCardById(String cardId);
 
     void clearAllData();

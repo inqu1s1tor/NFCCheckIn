@@ -47,6 +47,8 @@ public class SignUpFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         firstNameEt = (EditText)view.findViewById(R.id.firstNameET);
         lastNameEt = (EditText)view.findViewById(R.id.lastNameET);
         signUpLoginEt = (EditText)view.findViewById(R.id.signUploginUserET);
@@ -129,6 +131,11 @@ public class SignUpFragment extends GenericFragment {
         user.setProperty("firstName", firstName);
         user.setProperty("lastName", lastName);
         return user;
+    }
+
+    @Override
+    protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(true);
     }
 
 

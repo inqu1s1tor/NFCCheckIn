@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.model.RealmCard;
@@ -50,6 +51,8 @@ public class DetailStatisticsFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         dateTv = (TextView) view.findViewById(R.id.afdsDate);
         totalTime = (TextView) view.findViewById(R.id.afdsTotalTime);
         eventsListView = (ListView) view.findViewById(R.id.afdsList);
@@ -61,22 +64,23 @@ public class DetailStatisticsFragment extends GenericFragment {
         }
 
         dateTv.setText(date);
-
         initAdapter();
         getEventsFromDb(date);
     }
 
-    private void initAdapter(){
+    private void initAdapter() {
         eventsList = new ArrayList<>();
         eventAdapter = new EventAdapter(getActivity(), eventsList);
         eventsListView.setAdapter(eventAdapter);
     }
 
     private void getEventsFromDb(String dateString) {
-        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);         // getEventsByDate   getMonthEventsByUserId
-//        for (RealmEvent rl : realmEventList) {
-//            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId() + "   getOwnerId=" + rl.getOwnerId());
-//        }
+        List<RealmEvent> realmEventList;
+        if (userId == null) {
+            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
+        } else {
+            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);
+        }
         List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
         loadTodayEventsList(realmEventList, realmCardList);
     }
@@ -87,8 +91,14 @@ public class DetailStatisticsFragment extends GenericFragment {
         }
 
         eventsList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, realmCardList,  eventsList, false);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, realmCardList, eventsList, false);
         totalTime.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsList);
+    }
+
+    @Override
+    protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(true);
+
     }
 }

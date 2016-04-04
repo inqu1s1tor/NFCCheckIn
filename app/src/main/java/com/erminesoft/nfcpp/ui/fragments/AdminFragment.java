@@ -58,24 +58,19 @@ public class AdminFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         adminList = (ListView) view.findViewById(R.id.adminList);
         adminList.setEmptyView(view.findViewById(R.id.empty_list_item_admin));
         userNameColumn = (TextView)view.findViewById(R.id.user_name_column_textView);
         totalTimeColumn = (TextView)view.findViewById(R.id.total_time_column_textView);
-//        userNameColumn.setText("User name");
-//        totalTimeColumn.setText("Total time");
 
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
         mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
 
-        AdapterView.OnItemClickListener itemClicker = new ItemClicker();
-        initUsersAdapter();
-
-        adminList.setOnItemClickListener(itemClicker);
         View.OnClickListener listener = new Clicker();
         addCardBtn = (FloatingActionButton) view.findViewById(R.id.add_card_float_button);
         addCardBtn.setOnClickListener(listener);
-
 
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
         setHasOptionsMenu(true);
@@ -85,6 +80,8 @@ public class AdminFragment extends GenericFragment {
 
         radioGroup.check(R.id.users_name_radio_button);
 
+        AdapterView.OnItemClickListener itemClicker = new ItemClicker();
+        adminList.setOnItemClickListener(itemClicker);
     }
 
     private void showVisibility() {
@@ -148,12 +145,19 @@ public class AdminFragment extends GenericFragment {
     }
 
     private void selectedItemCard(RealmCard realmCard) {
-        mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment();
+        Bundle bundle = CreateAndEditCardFragment.buildArgs(realmCard.getIdCard());
+        mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(bundle);
+    }
+
+    @Override
+    protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(false);
     }
 
     private final class NetCallBack extends SimpleMainCallBack {
         @Override
         public void onError(String error) {
+            hideProgressDialog();
             showShortToast(error);
         }
 
@@ -163,7 +167,11 @@ public class AdminFragment extends GenericFragment {
 
         @Override
         public void update(Observable observable, Object data) {
-            getUsersFromDb();
+            if(state == TabState.CARDS) {
+                initCardsAdapter();
+            } else {
+                initUsersAdapter();
+            }
         }
     }
 
@@ -203,7 +211,7 @@ public class AdminFragment extends GenericFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.add_card_float_button:
-                    mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment();
+                    mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(Bundle.EMPTY);
                     break;
             }
 

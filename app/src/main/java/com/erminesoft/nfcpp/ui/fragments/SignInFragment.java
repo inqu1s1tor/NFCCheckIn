@@ -4,19 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
-import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.User;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -36,7 +31,11 @@ public class SignInFragment extends GenericFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
 
+    @Override
+    protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(true);
 
     }
 
@@ -50,6 +49,8 @@ public class SignInFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         signInLoginEt = (EditText) view.findViewById(R.id.signInloginUserET);
         signInPasswordEt = (EditText) view.findViewById(R.id.signInPasswordUserET);
 
@@ -60,7 +61,6 @@ public class SignInFragment extends GenericFragment {
         view.findViewById(R.id.signInButton).setOnClickListener(listener);
 
 
-
     }
 
     @Override
@@ -68,13 +68,6 @@ public class SignInFragment extends GenericFragment {
         super.onStart();
         observer = new DbObserver();
         mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-        observer = null;
     }
 
 
@@ -120,6 +113,14 @@ public class SignInFragment extends GenericFragment {
             mActivityBridge.getFragmentLauncher().launchMainFragment();
         }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+        observer = null;
+    }
+
 
     private final class DbObserver implements Observer {
 

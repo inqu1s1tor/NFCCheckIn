@@ -33,6 +33,8 @@ public class WelcomeFragment extends GenericFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         loginUserTv = (Button) view.findViewById(R.id.text_view_login);
         registerUserTv = (TextView) view.findViewById(R.id.text_view_registry);
 
@@ -55,6 +57,11 @@ public class WelcomeFragment extends GenericFragment {
                 mActivityBridge.getFragmentLauncher().launchMainFragment();
             }
         }
+    }
+
+    @Override
+    protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(false);
     }
 
 
