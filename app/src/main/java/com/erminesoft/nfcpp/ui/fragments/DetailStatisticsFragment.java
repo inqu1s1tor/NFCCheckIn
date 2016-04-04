@@ -24,17 +24,19 @@ import java.util.List;
 public class DetailStatisticsFragment extends GenericFragment {
 
     private final static String DATE_ID = "date_id";
+    private final static String USER_ID = "user_id";
     private TextView dateTv;
     private TextView totalTime;
     private ListView eventsListView;
     private List<EventsToday> eventsList;
     private EventAdapter eventAdapter;
     private String date;
+    private String userId;
 
-
-    public static Bundle buildArguments(String date) {
+    public static Bundle buildArguments(String date, String userId) {
         Bundle bundle = new Bundle();
         bundle.putSerializable(DATE_ID, date);
+        bundle.putSerializable(USER_ID, userId);
         return bundle;
     }
 
@@ -55,6 +57,7 @@ public class DetailStatisticsFragment extends GenericFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             date = (String) bundle.getSerializable(DATE_ID);
+            userId = (String) bundle.getSerializable(USER_ID);
         }
 
         dateTv.setText(date);
@@ -70,7 +73,10 @@ public class DetailStatisticsFragment extends GenericFragment {
     }
 
     private void getEventsFromDb(String dateString) {
-        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
+        List<RealmEvent> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);         // getEventsByDate   getMonthEventsByUserId
+//        for (RealmEvent rl : realmEventList) {
+//            Log.d("getEventsFromDb", "rl.getIsSent()=" + rl.getIsSent() + "     getCreationTime=" + rl.getCreationTime() + "   getObjectId=" + rl.getObjectId() + "   getOwnerId=" + rl.getOwnerId());
+//        }
         List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
         loadTodayEventsList(realmEventList, realmCardList);
     }

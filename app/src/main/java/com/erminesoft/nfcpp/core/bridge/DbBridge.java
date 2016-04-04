@@ -41,6 +41,8 @@ public interface DbBridge {
 
     List<RealmEvent> getEventsByIdPerMonth(String ownerId, String date);
 
+    List<RealmEvent> getEventsByDateAndUserId(String date, String userId);
+
 
     void saveCard(List<RealmCard> realmCards);
 

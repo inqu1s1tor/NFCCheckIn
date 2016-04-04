@@ -140,7 +140,8 @@ public class StatisticsFragment extends GenericFragment {
 
 
     private void selectedItem(DayStatistics dayStatistics) {
-        mActivityBridge.getFragmentLauncher().launchDetailStatisticsFragment(dayStatistics.getDate());
+        Bundle bundle = DetailStatisticsFragment.buildArguments(dayStatistics.getDate(), objectUserId);
+        mActivityBridge.getFragmentLauncher().launchDetailStatisticsFragment(bundle);
     }
 
     private void getDateMonthSelected(boolean isPrevious) {

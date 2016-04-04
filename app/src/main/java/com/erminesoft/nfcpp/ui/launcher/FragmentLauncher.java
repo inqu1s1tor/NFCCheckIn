@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.ui.launcher;
 
 
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
@@ -72,9 +73,9 @@ public class FragmentLauncher {
         launch(adminFragmnent, null);
     }
 
-    public void launchDetailStatisticsFragment(String date){
+    public void launchDetailStatisticsFragment(Bundle bundle){
         GenericFragment detailStatisticsFragment = new DetailStatisticsFragment();
-        detailStatisticsFragment.setArguments(DetailStatisticsFragment.buildArguments(date));
+        detailStatisticsFragment.setArguments(bundle);
         launch(detailStatisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
 
