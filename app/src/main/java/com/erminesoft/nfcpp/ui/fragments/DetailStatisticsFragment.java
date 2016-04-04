@@ -48,6 +48,8 @@ public class DetailStatisticsFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         dateTv = (TextView) view.findViewById(R.id.afdsDate);
         totalTime = (TextView) view.findViewById(R.id.afdsTotalTime);
         eventsListView = (ListView) view.findViewById(R.id.afdsList);
@@ -88,6 +90,7 @@ public class DetailStatisticsFragment extends GenericFragment {
 
     @Override
     protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(true);
 
     }
 }

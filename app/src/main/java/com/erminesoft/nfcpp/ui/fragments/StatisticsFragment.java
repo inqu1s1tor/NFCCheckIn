@@ -65,6 +65,8 @@ public class StatisticsFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         statisticsListView = (ListView) view.findViewById(R.id.statisticsList);
         statDate = (TextView) view.findViewById(R.id.stat_textview_date);
 
@@ -156,7 +158,7 @@ public class StatisticsFragment extends GenericFragment {
 
     @Override
     protected void changeStateOfBackButton() {
-
+        mActivityBridge.switchBackButtonVisibility(true);
     }
 
     private final class ItemClicker implements AdapterView.OnItemClickListener {

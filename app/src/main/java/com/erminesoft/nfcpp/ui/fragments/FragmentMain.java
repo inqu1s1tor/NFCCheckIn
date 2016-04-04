@@ -66,6 +66,8 @@ public class FragmentMain extends GenericFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        changeStateOfBackButton();
+
         NfcApplication application = (NfcApplication) mActivityBridge.getUApplication();
         mTracker = application.getDefaultTracker();
 
@@ -285,7 +287,7 @@ public class FragmentMain extends GenericFragment {
 
     @Override
     protected void changeStateOfBackButton() {
-
+        mActivityBridge.switchBackButtonVisibility(false);
     }
 
     private final class NetCallback extends SimpleMainCallBack {

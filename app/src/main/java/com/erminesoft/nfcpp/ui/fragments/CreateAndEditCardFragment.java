@@ -59,6 +59,8 @@ public class CreateAndEditCardFragment extends GenericFragment {
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
         cardId = (EditText) view.findViewById(R.id.showIdcard);
 
+        changeStateOfBackButton();
+
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.save_new_place_button).setOnClickListener(listener);
         view.findViewById(R.id.button_cancel_card_edit).setOnClickListener(listener);
@@ -145,6 +147,7 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
     @Override
     protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(true);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

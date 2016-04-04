@@ -33,6 +33,7 @@ public class SignInFragment extends GenericFragment {
 
     @Override
     protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(true);
 
     }
 
@@ -45,6 +46,8 @@ public class SignInFragment extends GenericFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        changeStateOfBackButton();
 
         signInLoginEt = (EditText) view.findViewById(R.id.signInloginUserET);
         signInPasswordEt = (EditText) view.findViewById(R.id.signInPasswordUserET);
