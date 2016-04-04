@@ -79,9 +79,9 @@ public class FragmentLauncher {
         launch(detailStatisticsFragment,StatisticsFragment.class.getCanonicalName());
     }
 
-    public void launchCreatePlaceFragment (Bundle bundle) {
-        GenericFragment createPlaceFragment = new CreateAndEditCardFragment();
-        createPlaceFragment.setArguments(bundle);
-        launch(createPlaceFragment, CreateAndEditCardFragment.class.getCanonicalName());
+    public void launchCreateAndEditCardFragment(Bundle bundle) {
+        GenericFragment createAndEditCardFragment = new CreateAndEditCardFragment();
+        createAndEditCardFragment.setArguments(bundle);
+        launch(createAndEditCardFragment, CreateAndEditCardFragment.class.getCanonicalName());
     }
 }

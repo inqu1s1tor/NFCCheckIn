@@ -57,6 +57,11 @@ public class WelcomeFragment extends GenericFragment {
         }
     }
 
+    @Override
+    protected void changeStateOfBackButton() {
+
+    }
+
 
     private final class Clicker implements View.OnClickListener {
         @Override

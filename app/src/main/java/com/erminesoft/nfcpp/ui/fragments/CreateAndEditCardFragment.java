@@ -84,11 +84,12 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
     private void extractExistCard() {
         Bundle bundle = getArguments();
-        if(bundle == null) {
+        if(bundle.isEmpty()) {
             realmCard = new RealmCard();
         } else {
             String cardId = bundle.getString(CARD_ID);
-            if (cardId.isEmpty()) {
+
+            if (cardId == null && cardId.isEmpty()) {
                 realmCard = new RealmCard();
             } else {
                 realmCard = mActivityBridge.getUApplication().getDbBridge().getCardById(cardId);
@@ -142,6 +143,10 @@ public class CreateAndEditCardFragment extends GenericFragment {
         return true;
     }
 
+    @Override
+    protected void changeStateOfBackButton() {
+    }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private final class NfcCallback implements NfcAdapter.ReaderCallback {
 
@@ -191,7 +196,6 @@ public class CreateAndEditCardFragment extends GenericFragment {
                 case R.id.button_cancel_card_edit:
                     Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.lost_data_dialog));
                     DialogLauncher.launchUnsavedDataDialog(getActivity(), new DialogListener(), bundle);
-//                    getActivity().onBackPressed();
             }
 
         }

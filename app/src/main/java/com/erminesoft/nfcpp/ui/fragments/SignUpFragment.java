@@ -110,6 +110,11 @@ public class SignUpFragment extends GenericFragment {
         return user;
     }
 
+    @Override
+    protected void changeStateOfBackButton() {
+
+    }
+
 
     private final class NetCallBack extends SimpleMainCallBack {
         @Override

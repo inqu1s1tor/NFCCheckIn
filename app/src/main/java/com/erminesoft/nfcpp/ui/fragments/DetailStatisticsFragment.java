@@ -85,4 +85,9 @@ public class DetailStatisticsFragment extends GenericFragment {
         totalTime.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsList);
     }
+
+    @Override
+    protected void changeStateOfBackButton() {
+
+    }
 }

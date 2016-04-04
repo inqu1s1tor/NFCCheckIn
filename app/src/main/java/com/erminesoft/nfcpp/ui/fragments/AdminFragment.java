@@ -144,7 +144,12 @@ public class AdminFragment extends GenericFragment {
 
     private void selectedItemCard(RealmCard realmCard) {
         Bundle bundle = CreateAndEditCardFragment.buildArgs(realmCard.getIdCard());
-        mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment(bundle);
+        mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(bundle);
+    }
+
+    @Override
+    protected void changeStateOfBackButton() {
+        mActivityBridge.switchBackButtonVisibility(isVisible());
     }
 
     private final class NetCallBack extends SimpleMainCallBack {
@@ -204,7 +209,7 @@ public class AdminFragment extends GenericFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.add_card_float_button:
-                    mActivityBridge.getFragmentLauncher().launchCreatePlaceFragment(Bundle.EMPTY);
+                    mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(Bundle.EMPTY);
                     break;
             }
 

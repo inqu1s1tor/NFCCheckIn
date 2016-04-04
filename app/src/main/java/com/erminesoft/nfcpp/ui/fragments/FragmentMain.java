@@ -283,6 +283,11 @@ public class FragmentMain extends GenericFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void changeStateOfBackButton() {
+
+    }
+
     private final class NetCallback extends SimpleMainCallBack {
         @Override
         public void onSuccessGetEvents(List<RealmEvent> realmEventList) {

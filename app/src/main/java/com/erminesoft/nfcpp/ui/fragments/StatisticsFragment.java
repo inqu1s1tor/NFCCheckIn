@@ -154,6 +154,11 @@ public class StatisticsFragment extends GenericFragment {
         }
     }
 
+    @Override
+    protected void changeStateOfBackButton() {
+
+    }
+
     private final class ItemClicker implements AdapterView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

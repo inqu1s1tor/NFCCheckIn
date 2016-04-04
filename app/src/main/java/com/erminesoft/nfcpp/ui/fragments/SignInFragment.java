@@ -29,6 +29,10 @@ public class SignInFragment extends GenericFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    protected void changeStateOfBackButton() {
 
     }
 
