@@ -8,9 +8,6 @@ import android.widget.Toast;
 
 import com.erminesoft.nfcpp.core.bridge.ActivityBridge;
 
-/**
- * Created by Aleks on 09.03.2016.
- */
 public abstract class GenericFragment extends Fragment {
 
     protected ActivityBridge mActivityBridge;
@@ -20,7 +17,7 @@ public abstract class GenericFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActivityBridge = (ActivityBridge)getActivity();
+        mActivityBridge = (ActivityBridge) getActivity();
     }
 
     protected void showShortToast(int resId) {
@@ -39,6 +36,8 @@ public abstract class GenericFragment extends Fragment {
 
         progressDialog.show();
     }
+
+    protected abstract void changeStateOfBackButton();
 
     protected void hideProgressDialog() {
 
