@@ -70,6 +70,7 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
         initNFC();
         extractExistCard();
+        
     }
 
     @Override
@@ -77,6 +78,8 @@ public class CreateAndEditCardFragment extends GenericFragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Log.e("CEF", "home pressed");
+                Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.lost_data_dialog));
+                DialogLauncher.launchUnsavedDataDialog(getActivity(),new DialogListener(),bundle);
                 return true;
         }
 
