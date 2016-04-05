@@ -55,6 +55,8 @@ public class FragmentMain extends GenericFragment {
     private Observer observer;
     private Tracker mTracker;
 
+    private String myObjectId;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,6 +85,7 @@ public class FragmentMain extends GenericFragment {
 
         setHasOptionsMenu(true);
 
+        myObjectId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
         initAdapter();
         getEventsFromDb();
 
@@ -177,6 +180,7 @@ public class FragmentMain extends GenericFragment {
             event.setIdCard(cardId);
             event.setCreationTime((int) (System.currentTimeMillis() / 1000));
             event.setIsSent(false);
+            event.setOwnerId(myObjectId);
             Log.e("MF", "event = " + event.toString());
             mActivityBridge.getUApplication().getDbBridge().saveEvent(event);
 

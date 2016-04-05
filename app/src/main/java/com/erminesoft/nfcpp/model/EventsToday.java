@@ -9,6 +9,7 @@ public class EventsToday {
     private String entry;
     private String exit;
     private String total_hours;
+    private String totalTodayTime;
     private boolean selector;
 
     public EventsToday(){
@@ -53,5 +54,13 @@ public class EventsToday {
 
     public void setSelector(boolean selector) {
         this.selector = selector;
+    }
+
+    public String getTotalTodayTime() {
+        return totalTodayTime;
+    }
+
+    public void setTotalTodayTime(String totalTodayTime) {
+        this.totalTodayTime = totalTodayTime;
     }
 }

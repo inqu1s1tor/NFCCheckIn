@@ -47,6 +47,8 @@ public class AdminUsersAdapter extends BaseAdapter {
             convertView = mLayoutInflater.inflate(R.layout.item_admin_list_adapter_users, parent, false);
             holder.firstNameTv = (TextView) convertView.findViewById(R.id.firstNameAdminModeTv);
             holder.lastNameTv = (TextView) convertView.findViewById(R.id.lastNameAdminModeTv);
+            holder.todayWorkingTimeTv = (TextView) convertView.findViewById(R.id.today_working_time);
+
             convertView.setTag(holder);
         } else {
             holder = (Holder) convertView.getTag();
@@ -54,6 +56,7 @@ public class AdminUsersAdapter extends BaseAdapter {
 
         holder.lastNameTv.setText(user.getLastName());
         holder.firstNameTv.setText(user.getFirstName());
+        holder.todayWorkingTimeTv.setText(user.getUserTotalTimeToday());
 
         return convertView;
     }
@@ -61,6 +64,7 @@ public class AdminUsersAdapter extends BaseAdapter {
     private static final class Holder {
         TextView firstNameTv;
         TextView lastNameTv;
+        TextView todayWorkingTimeTv;
     }
 
     public void swapDataList(List<User> users) {

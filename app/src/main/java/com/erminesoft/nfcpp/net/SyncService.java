@@ -59,16 +59,12 @@ public final class SyncService extends IntentService {
             isWork = false;
             return;
         }
+        event.setIsSent(true);
         event = netBridge.addNewEvent(event);
         if(event != null){
             sendEvent();
         }
     }
 
-//    private final class NetCallback extends SimpleMainCallBack {
-//        @Override
-//        public void onSuccess() {
-//            sendEvent();
-//        }
-//    }
+
 }

@@ -120,7 +120,7 @@ final class EventHelper {
     Event getLastEventByCardId(String cardId) throws IllegalArgumentException {
         Event event = null;
         try {
-            event = new Select().from(Event.class).where("card_id", cardId).orderBy("creation_time DESC").executeSingle();
+            event = new Select().from(Event.class).where("card_id = ?", cardId).orderBy("creation_time DESC").executeSingle();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
