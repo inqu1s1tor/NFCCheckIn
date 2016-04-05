@@ -19,7 +19,7 @@ final class EventHelper {
     List<Event> getUnsentEvents() {
         List<Event> events;
         try {
-            events = new Select().from(Event.class).where("is_sent", false).execute();
+            events = new Select().from(Event.class).where("is_sent = ?", false).execute();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             events = new ArrayList<>();

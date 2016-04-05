@@ -1,5 +1,6 @@
 package com.erminesoft.nfcpp.db;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.erminesoft.nfcpp.model.User;
@@ -13,8 +14,15 @@ final class UserHelper {
     }
 
     void saveUser(List<User> users) {
-        for (User user : users) {
-            user.save();
+        ActiveAndroid.beginTransaction();
+        try {
+            for (User user : users) {
+                user.save();
+            }
+
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+            ActiveAndroid.endTransaction();
         }
     }
 
