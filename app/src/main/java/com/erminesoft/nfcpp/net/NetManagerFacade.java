@@ -1,19 +1,16 @@
 package com.erminesoft.nfcpp.net;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.BuildConfig;
-import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
-import com.erminesoft.nfcpp.model.RealmCard;
-import com.erminesoft.nfcpp.model.RealmEvent;
+import com.erminesoft.nfcpp.model.Card;
+import com.erminesoft.nfcpp.model.Event;
 
 
 public final class NetManagerFacade implements NetBridge {
@@ -56,13 +53,13 @@ public final class NetManagerFacade implements NetBridge {
     }
 
     @Override
-    public void addNewEvent(RealmEvent realmEvent, MainCallBack callback) {
-        eventManager.addNewEvent(realmEvent, callback);
+    public void addNewEvent(Event event, MainCallBack callback) {
+        eventManager.addNewEvent(event, callback);
     }
 
     @Override
-    public RealmEvent addNewEvent(RealmEvent realmEvent) {
-        return boltsEventManager.addNewEvent(realmEvent);
+    public Event addNewEvent(Event event) {
+        return boltsEventManager.addNewEvent(event);
     }
 
 
@@ -88,8 +85,8 @@ public final class NetManagerFacade implements NetBridge {
     }
 
     @Override
-    public void addNewCard(RealmCard realmCard, MainCallBack callback) {
-        cardManager.addNewCard(realmCard, callback);
+    public void addNewCard(Card card, MainCallBack callback) {
+        cardManager.addNewCard(card, callback);
     }
 
     @Override

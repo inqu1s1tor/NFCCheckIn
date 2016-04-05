@@ -10,15 +10,9 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
 import com.erminesoft.nfcpp.model.Event;
-import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.util.DateUtil;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import io.realm.annotations.PrimaryKey;
 
 final class EventManager {
 
@@ -30,10 +24,9 @@ final class EventManager {
         this.dbBridge = dbBridge;
     }
 
-    void addNewEvent(RealmEvent realmEvent, final MainCallBack callback) {
+    void addNewEvent(Event realmEvent, final MainCallBack callback) {
         String myId = dbBridge.getMe().getObjectId();
-        Event event = EventConverter.realmEventToClearEvent(myId, realmEvent);
-        Backendless.Persistence.save(event, new AsyncCallback<Event>() {
+        Backendless.Persistence.save(realmEvent, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event) {
                 setPermissionGrantForAllRoles(event, callback);
@@ -52,8 +45,7 @@ final class EventManager {
         Backendless.Data.Permissions.FIND.grantForAllRoles(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event1) {
-                RealmEvent realmEvent = EventConverter.clearEventToRealmEvent(event);
-                dbBridge.saveEvent(realmEvent);
+                dbBridge.saveEvent(event1);
                 mainCallBack.onSuccess();
             }
 
@@ -74,12 +66,7 @@ final class EventManager {
         Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
             @Override
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
-                List<Event> eventList = eventBackendlessCollection.getData();
-                List<RealmEvent> realmEvents = new ArrayList<RealmEvent>(eventList.size());
-                for (Event ev : eventList) {
-                    realmEvents.add(EventConverter.clearEventToRealmEvent(ev));
-                }
-                mainCallBack.onSuccessGetEvents(realmEvents);
+                mainCallBack.onSuccessGetEvents(eventBackendlessCollection.getData());
             }
 
             @Override
@@ -100,12 +87,7 @@ final class EventManager {
         Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
             @Override
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
-                List<Event> eventList = eventBackendlessCollection.getData();
-                List<RealmEvent> realmEvents = new ArrayList<RealmEvent>(eventList.size());
-                for (Event ev : eventList) {
-                    realmEvents.add(EventConverter.clearEventToRealmEvent(ev));
-                }
-                callback.onSuccessGetEvents(realmEvents);
+                callback.onSuccessGetEvents(eventBackendlessCollection.getData());
             }
 
             @Override
@@ -124,13 +106,7 @@ final class EventManager {
         Backendless.Data.of(Event.class).find(query, new AsyncCallback<BackendlessCollection<Event>>() {
             @Override
             public void handleResponse(BackendlessCollection<Event> eventBackendlessCollection) {
-                List<Event> eventList = eventBackendlessCollection.getData();
-                List<RealmEvent> realmEvents = new ArrayList<RealmEvent>(eventList.size());
-                for (Event ev : eventList) {
-                    realmEvents.add(EventConverter.clearEventToRealmEvent(ev));
-                }
-                dbBridge.saveEvent(realmEvents);
-//                mainCallBack.onSuccessGetEvents(realmEvents);
+                dbBridge.saveEvent(eventBackendlessCollection.getData());
             }
 
             @Override
@@ -138,29 +114,5 @@ final class EventManager {
                 mainCallBack.onError(backendlessFault.getMessage());
             }
         });
-    }
-
-
-    static final class EventConverter {
-
-        static Event realmEventToClearEvent(String ownerId, RealmEvent realmRealmEvent) {
-            Event clearEvent = new Event();
-            clearEvent.setCreationTime((double) realmRealmEvent.getCreationTime());
-            clearEvent.setIdCard(realmRealmEvent.getIdCard());
-            clearEvent.setIsSent(true);
-            clearEvent.setOwnerId(ownerId);
-            return clearEvent;
-        }
-
-        static RealmEvent clearEventToRealmEvent(Event event) {
-            RealmEvent realmEvent = new RealmEvent();
-            realmEvent.setObjectId(event.getObjectId());
-            realmEvent.setCreationTime(event.getCreationTime().intValue());
-            realmEvent.setIdCard(event.getIdCard());
-            realmEvent.setCreated(event.getCreated());
-            realmEvent.setIsSent(true);
-            realmEvent.setOwnerId(event.getOwnerId());
-            return realmEvent;
-        }
     }
 }

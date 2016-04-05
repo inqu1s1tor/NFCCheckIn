@@ -3,6 +3,7 @@ package com.erminesoft.nfcpp.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,11 +17,17 @@ import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.RealmCard;
+import com.erminesoft.nfcpp.model.Card;
+import com.erminesoft.nfcpp.model.Event;
+import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.model.User;
 import com.erminesoft.nfcpp.ui.adapters.AdminCardsAdapter;
 import com.erminesoft.nfcpp.ui.adapters.AdminUsersAdapter;
+import com.erminesoft.nfcpp.util.DateUtil;
+import com.erminesoft.nfcpp.util.SortUtil;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -104,8 +111,22 @@ public class AdminFragment extends GenericFragment {
     }
 
     private void initUsersAdapter() {
-        adminUsersAdapter = new AdminUsersAdapter(getActivity(), mActivityBridge.getUApplication().getDbBridge().getAllUsers());
+        List<User> userList = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
+        for (User user : userList) {
+            user.setUserTotalTimeToday(getUserTodayTime(user.getObjectId()));
+        }
+        adminUsersAdapter = new AdminUsersAdapter(getActivity(), userList);
         adminList.setAdapter(adminUsersAdapter);
+    }
+
+    private String getUserTodayTime(String userId) {
+        long curTime = System.currentTimeMillis();
+        String dateString = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
+        List<Event> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);
+        List<EventsToday> eventsList = new ArrayList<>();
+        long todayTime = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, null, eventsList, true);
+        String usertotalTime = DateUtil.getDifferenceTime(todayTime);
+        return usertotalTime;
     }
 
     private void initCardsAdapter() {
@@ -131,8 +152,8 @@ public class AdminFragment extends GenericFragment {
         mActivityBridge.getFragmentLauncher().launchStatisticsFragment(user.getObjectId());
     }
 
-    private void selectedItemCard(RealmCard realmCard) {
-        Bundle bundle = CreateAndEditCardFragment.buildArgs(realmCard.getIdCard());
+    private void selectedItemCard(Card card) {
+        Bundle bundle = CreateAndEditCardFragment.buildArgs(card.getIdCard());
         mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(bundle);
     }
 
@@ -197,8 +218,8 @@ public class AdminFragment extends GenericFragment {
                 User user = (User) parent.getItemAtPosition(position);
                 selectedItemUser(user);
             } else {
-                RealmCard realmCard = (RealmCard) parent.getItemAtPosition(position);
-                selectedItemCard(realmCard);
+                Card card = (Card) parent.getItemAtPosition(position);
+                selectedItemCard(card);
             }
 
         }

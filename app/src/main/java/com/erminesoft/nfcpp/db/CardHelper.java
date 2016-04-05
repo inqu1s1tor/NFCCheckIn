@@ -1,40 +1,52 @@
 package com.erminesoft.nfcpp.db;
 
+import android.util.Log;
+
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.erminesoft.nfcpp.model.Card;
-import com.erminesoft.nfcpp.model.RealmCard;
+
 import java.util.List;
-import io.realm.Realm;
 
 
 final class CardHelper {
 
-    void saveCard(Realm realm, List<RealmCard> realmCards) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(realmCards);
-        realm.commitTransaction();
-        realm.close();
+    void saveCard(List<Card> cards) {
+        Log.e("CH", "begin card transaction = "+cards.size());
+        ActiveAndroid.beginTransaction();
+        try {
+
+            for (Card card : cards) {
+                card.save();
+                Log.e("CH", "card save = "+card.getIdCard());
+            }
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+            ActiveAndroid.endTransaction();
+            Log.e("CH", "close card transaction");
+        }
     }
 
-    void saveCard(Realm realm, RealmCard realmCard) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(realmCard);
-        realm.commitTransaction();
-        realm.close();
+    void saveCard(Card card) {
+        card.save();
     }
 
-    List<RealmCard> getAllCards(Realm realm) {
-        return realm.where(RealmCard.class).findAll();
+    List<Card> getAllCards() {
+        return new Select().from(Card.class).execute();
     }
 
-    RealmCard getCardById(Realm realm, String cardId){
-        return realm.where(RealmCard.class).equalTo("idCard", cardId).findFirst();
+    Card getCardById(String cardId) {
+        Card card = null;
+        try {
+            card = new Select().from(Card.class).where("card_id = ?", cardId).executeSingle();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return card;
     }
 
-
-    void clearAllCards(Realm realm) {
-        realm.beginTransaction();
-        realm.where(RealmCard.class).findAll().clear();
-        realm.commitTransaction();
+    void clearAllCards() {
+        new Delete().from(Card.class).execute();
     }
-
 }

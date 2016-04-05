@@ -2,7 +2,9 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,7 +13,7 @@ import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.model.DayStatistics;
-import com.erminesoft.nfcpp.model.RealmEvent;
+import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.ui.adapters.StatisticsAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
@@ -31,7 +33,7 @@ public class StatisticsFragment extends GenericFragment {
     private ListView statisticsListView;
     private TextView statDate;
     private List<DayStatistics> dayList;
-    private List<RealmEvent> realmEventList;
+    private List<Event> eventList;
     private StatisticsAdapter statisticsAdapter;
     private String objectUserId = null;
     private String curDateMonth = null;
@@ -81,28 +83,28 @@ public class StatisticsFragment extends GenericFragment {
         }
         statDate.setText(curDateMonth);
         if (objectUserId != null) {
-            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByIdPerMonth(objectUserId, curDateMonth);
-            handleList(realmEventList);
+            eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByIdPerMonth(objectUserId, curDateMonth);
+            handleList(eventList);
         } else {
-            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curDateMonth);
-            handleList(realmEventList);
+            eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curDateMonth);
+            handleList(eventList);
         }
 
 
     }
 
-    private void handleList(List<RealmEvent> realmEventList) {
+    private void handleList(List<Event> eventList) {
         String dayNumber = "";
         DayStatistics dayStatistics = null;
         List<Long> creationTimeList = new ArrayList<>();
 
-        for (int i = 0; i < realmEventList.size(); i++) {
-            long creationTime = realmEventList.get(i).getCreationTime();
+        for (int i = 0; i < eventList.size(); i++) {
+            long creationTime = eventList.get(i).getCreationTime();
             String curDay = DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_D);
 
             if (dayNumber.equals(curDay)) {
                 creationTimeList.add(creationTime);
-                if (i == realmEventList.size() - 1) {
+                if (i == eventList.size() - 1) {
                     long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
                     dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
                     dayList.add(dayStatistics);
@@ -171,5 +173,6 @@ public class StatisticsFragment extends GenericFragment {
             }
         }
     }
+
 
 }

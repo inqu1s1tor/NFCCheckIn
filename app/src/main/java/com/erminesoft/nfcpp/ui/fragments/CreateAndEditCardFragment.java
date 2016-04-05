@@ -9,13 +9,14 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.RealmCard;
+import com.erminesoft.nfcpp.model.Card;
 import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
 import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
 import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
@@ -28,7 +29,7 @@ public class CreateAndEditCardFragment extends GenericFragment {
     private EditText nameEt;
     private EditText descriptionEt;
     private NfcAdapter nfcAdapter;
-    private RealmCard realmCard;
+    private Card card;
     private EditText cardIdEt;
 
     private String editCardId;
@@ -51,6 +52,8 @@ public class CreateAndEditCardFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         nameEt = (EditText) view.findViewById(R.id.place_name_et);
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
         cardIdEt = (EditText) view.findViewById(R.id.showIdcard);
@@ -70,6 +73,17 @@ public class CreateAndEditCardFragment extends GenericFragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Log.e("CEF", "home pressed");
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected boolean isBackButtonVisible() {
         return true;
     }
@@ -77,21 +91,21 @@ public class CreateAndEditCardFragment extends GenericFragment {
     private void saveNewCard() {
 
         if (validationFields()) {
-            realmCard = new RealmCard();
+            card = new Card();
 
             if (editCardId == null) {
-                realmCard.setNameCard(nameEt.getText().toString());
-                realmCard.setDescriptionCard(descriptionEt.getText().toString());
-                realmCard.setIdCard(cardIdEt.getText().toString());
+                card.setNameCard(nameEt.getText().toString());
+                card.setDescriptionCard(descriptionEt.getText().toString());
+                card.setIdCard(cardIdEt.getText().toString());
             } else {
-                realmCard.setNameCard(nameEt.getText().toString());
-                realmCard.setDescriptionCard(descriptionEt.getText().toString());
-                realmCard.setIdCard(cardIdEt.getText().toString());
-                realmCard.setObjectId(cardObjectId);
+                card.setNameCard(nameEt.getText().toString());
+                card.setDescriptionCard(descriptionEt.getText().toString());
+                card.setIdCard(cardIdEt.getText().toString());
+                card.setObjectId(cardObjectId);
             }
 
             showProgressDialog();
-            mActivityBridge.getUApplication().getNetBridge().addNewCard(realmCard, new NetCallBack());
+            mActivityBridge.getUApplication().getNetBridge().addNewCard(card, new NetCallBack());
 
         }
 
@@ -102,17 +116,17 @@ public class CreateAndEditCardFragment extends GenericFragment {
         if (!bundle.isEmpty()) {
             editCardId = bundle.getString(CARD_ID);
             if (editCardId != null && !editCardId.isEmpty()) {
-                RealmCard editRealmCard = mActivityBridge.getUApplication().getDbBridge().getCardById(editCardId);
-                extractModeltoView(editRealmCard);
+                Card editCard = mActivityBridge.getUApplication().getDbBridge().getCardById(editCardId);
+                extractModeltoView(editCard);
             }
         }
     }
 
-    private void extractModeltoView(RealmCard editRealmCard) {
-        cardIdEt.setText(editRealmCard.getIdCard());
-        descriptionEt.setText(editRealmCard.getDescriptionCard());
-        nameEt.setText(editRealmCard.getNameCard());
-        cardObjectId = editRealmCard.getObjectId();
+    private void extractModeltoView(Card editCard) {
+        cardIdEt.setText(editCard.getIdCard());
+        descriptionEt.setText(editCard.getDescriptionCard());
+        nameEt.setText(editCard.getNameCard());
+        cardObjectId = editCard.getObjectId();
     }
 
     private boolean validationFields() {

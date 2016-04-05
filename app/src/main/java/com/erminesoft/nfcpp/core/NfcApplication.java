@@ -1,7 +1,8 @@
 package com.erminesoft.nfcpp.core;
 
-import android.app.Application;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.app.Application;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
@@ -22,6 +23,8 @@ public final class NfcApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ActiveAndroid.initialize(this);
 
         sharedHelper = new SharedHelper(this);
         dbBridge = new DbManager(this, sharedHelper);

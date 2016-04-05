@@ -1,11 +1,23 @@
 package com.erminesoft.nfcpp.model;
 
 
-public class Card {
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
+@Table(name = "CARD")
+public class Card extends Model {
+
+    @Column(name = "card_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private String idCard;
+
+    @Column(name = "object_id")
     private String objectId;
+
+    @Column(name = "card_name")
     private String nameCard;
+
+    @Column(name = "card_description")
     private String descriptionCard;
 
     public String getIdCard() {

@@ -1,8 +1,6 @@
 package com.erminesoft.nfcpp.core.callback;
 
-import android.app.usage.UsageEvents;
-
-import com.erminesoft.nfcpp.model.RealmEvent;
+import com.erminesoft.nfcpp.model.Event;
 
 import java.util.List;
 
@@ -15,8 +13,8 @@ public interface MainCallBack {
 
     void onError(String error);
 
-    void onSuccessGetEvents(List<RealmEvent> realmEventList);
+    void onSuccessGetEvents(List<Event> eventList);
 
-    void onSuccessGetEvent(RealmEvent realmEvent);
+    void onSuccessGetEvent(Event event);
 
 }

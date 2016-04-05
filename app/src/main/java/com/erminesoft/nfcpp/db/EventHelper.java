@@ -1,43 +1,50 @@
 package com.erminesoft.nfcpp.db;
 
-import android.util.Log;
-
-import com.erminesoft.nfcpp.model.RealmEvent;
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
+import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.util.DateUtil;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
-import io.realm.Sort;
 
 final class EventHelper {
 
-    List<RealmEvent> getAllEvents(Realm realm) {
-        return realm.where(RealmEvent.class).findAll();
+    List<Event> getAllEvents() {
+        return new Select().from(Event.class).execute();
     }
 
-    List<RealmEvent> getUnsentEvents(Realm realm) {
-        return realm.where(RealmEvent.class).equalTo("isSent", false).findAll();
-//        return realm.where(RealmEvent.class).findAll();
+    List<Event> getUnsentEvents() {
+        List<Event> events;
+        try {
+            events = new Select().from(Event.class).where("is_sent = ?", false).execute();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            events = new ArrayList<>();
+        }
+        return events;
     }
 
-    void saveEvent(Realm realm, List<RealmEvent> realmEvents) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(realmEvents);
-        realm.commitTransaction();
-        realm.close();
+    void saveEvent(List<Event> events) {
+        ActiveAndroid.beginTransaction();
+        try {
+            for (Event event : events) {
+                event.save();
+            }
+
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+            ActiveAndroid.endTransaction();
+        }
     }
 
-    void saveEvent(Realm realm, RealmEvent realmEvent) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(realmEvent);
-        realm.commitTransaction();
-        realm.close();
+    void saveEvent(Event event) {
+        event.save();
     }
 
-    List<RealmEvent> getEventsByDate(Realm realm, String date) {
+    List<Event> getEventsByDate(String date) {
         int startTime = 0;
         int endTime = (int) (System.currentTimeMillis() / 1000);
 
@@ -48,10 +55,14 @@ final class EventHelper {
             e.printStackTrace();
         }
 
-        return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAllSorted("creationTime", Sort.ASCENDING);
+        return new Select().from(Event.class)
+                .where("creation_time > ?", startTime)
+                .and("creation_time < ? ", endTime)
+                .orderBy("creation_time ASC")
+                .execute();
     }
 
-    List<RealmEvent> getEventsByMonth(Realm realm, String date) {
+    List<Event> getEventsByMonth(String date) {
         int startTime = 0;
         int endTime = (int) (System.currentTimeMillis() / 1000);
 
@@ -61,10 +72,15 @@ final class EventHelper {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return realm.where(RealmEvent.class).between("creationTime", startTime, endTime).findAllSorted("creationTime", Sort.ASCENDING);
+
+        return new Select().from(Event.class)
+                .where("creation_time > ?", startTime)
+                .and("creation_time < ? ", endTime)
+                .orderBy("creation_time ASC")
+                .execute();
     }
 
-    List<RealmEvent> getMonthEventsByUserId(Realm realm, String date, String userId) {
+    List<Event> getMonthEventsByUserId(String date, String userId) {
         int startTime = 0;
         int endTime = (int) (System.currentTimeMillis() / 1000);
 
@@ -74,13 +90,16 @@ final class EventHelper {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return realm.where(RealmEvent.class)
-                .equalTo("ownerId", userId)
-                .between("creationTime", startTime, endTime)
-                .findAllSorted("creationTime", Sort.ASCENDING);
+
+        return new Select().from(Event.class)
+                .where("creation_time > ?", startTime)
+                .and("creation_time < ?", endTime)
+                .and("owner_id = ?", userId)
+                .orderBy("creation_time ASC")
+                .execute();
     }
 
-    List<RealmEvent> getEventsByDateAndUserId(Realm realm, String date, String userId) {
+    List<Event> getEventsByDateAndUserId(String date, String userId) {
         int startTime = 0;
         int endTime = (int) (System.currentTimeMillis() / 1000);
 
@@ -90,24 +109,26 @@ final class EventHelper {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return realm.where(RealmEvent.class)
-                .equalTo("ownerId", userId)
-                .between("creationTime", startTime, endTime)
-                .findAllSorted("creationTime", Sort.ASCENDING);
+        return new Select().from(Event.class)
+                .where("creation_time > ?", startTime)
+                .and("creation_time < ?", endTime)
+                .and("owner_id = ?", userId)
+                .orderBy("creation_time ASC")
+                .execute();
     }
 
-    RealmEvent getLastEventByCardId(Realm realm, String cardId) {
-        RealmResults<RealmEvent> results = realm.where(RealmEvent.class).equalTo("idCard", cardId).findAllSorted("creationTime", Sort.DESCENDING);
-
-        if (results != null && !results.isEmpty()) {
-            return results.first();
+    Event getLastEventByCardId(String cardId) throws IllegalArgumentException {
+        Event event = null;
+        try {
+            event = new Select().from(Event.class).where("card_id = ?", cardId).orderBy("creation_time DESC").executeSingle();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         }
-        return null;
+        return event;
     }
 
-    void clearAllEvents(Realm realm) {
-        realm.beginTransaction();
-        realm.where(RealmEvent.class).findAll().clear();
-        realm.commitTransaction();
+    void clearAllEvents() {
+        new Delete().from(Event.class).execute();
+
     }
 }

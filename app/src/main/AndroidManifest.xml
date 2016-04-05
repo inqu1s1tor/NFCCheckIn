@@ -25,7 +25,8 @@
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -51,6 +52,9 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
+        <meta-data android:name="AA_DB_NAME" android:value="nfc.db" />
+        <meta-data android:name="AA_DB_VERSION" android:value="5" />
 
     </application>
     <uses-permission android:name="android.permission.NFC"/>

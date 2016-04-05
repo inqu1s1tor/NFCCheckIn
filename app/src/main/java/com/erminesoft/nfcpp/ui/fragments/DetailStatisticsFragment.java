@@ -9,9 +9,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
+import com.erminesoft.nfcpp.model.Card;
+import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.EventsToday;
-import com.erminesoft.nfcpp.model.RealmCard;
-import com.erminesoft.nfcpp.model.RealmEvent;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
@@ -71,23 +71,23 @@ public class DetailStatisticsFragment extends GenericFragment {
     }
 
     private void getEventsFromDb(String dateString) {
-        List<RealmEvent> realmEventList;
+        List<Event> eventList;
         if (userId == null) {
-            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
+            eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(dateString);
         } else {
-            realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);
+            eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);
         }
-        List<RealmCard> realmCardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
-        loadTodayEventsList(realmEventList, realmCardList);
+        List<Card> cardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
+        loadTodayEventsList(eventList, cardList);
     }
 
-    private void loadTodayEventsList(List<RealmEvent> realmEventList, List<RealmCard> realmCardList) {
-        if (realmEventList.size() <= 0) {
+    private void loadTodayEventsList(List<Event> eventList, List<Card> cardList) {
+        if (eventList.size() <= 0) {
             return;
         }
 
         eventsList.clear();
-        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, realmCardList, eventsList, false);
+        long diffInMs = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(eventList, cardList, eventsList, false);
         totalTime.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsList);
     }
