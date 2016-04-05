@@ -21,9 +21,9 @@ import android.widget.TextView;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.model.RealmEvent;
-import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.net.SyncService;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
 import com.erminesoft.nfcpp.util.CardFilterUtil;
@@ -66,9 +66,7 @@ public class FragmentMain extends GenericFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        changeStateOfBackButton();
-
-        NfcApplication application = (NfcApplication) mActivityBridge.getUApplication();
+        NfcApplication application = mActivityBridge.getUApplication();
         mTracker = application.getDefaultTracker();
 
         currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
@@ -93,6 +91,13 @@ public class FragmentMain extends GenericFragment {
 
         loadDataFromBackendless();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        observer = new DbObserver();
+        mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
     }
 
     private void initAdapter() {
@@ -129,7 +134,6 @@ public class FragmentMain extends GenericFragment {
         }
     }
 
-
     private void getEventsFromDb() {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
@@ -157,13 +161,6 @@ public class FragmentMain extends GenericFragment {
             mActivityBridge.getUApplication().getNetBridge().getTodayEventsByUserId(myId, lastSyncDate, new NetCallback());
         }
         mActivityBridge.getUApplication().getSharedHelper().setLastSyncDate(curTime);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        observer = new DbObserver();
-        mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
     }
 
     private void doubleCheckInFilter(String cardId) {
@@ -254,16 +251,6 @@ public class FragmentMain extends GenericFragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        if (observer != null) {
-            mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-            observer = null;
-        }
-    }
-
-
-    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.user_setting_menu, menu);
     }
@@ -286,8 +273,17 @@ public class FragmentMain extends GenericFragment {
     }
 
     @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(false);
+    protected boolean isBackButtonVisible() {
+        return false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (observer != null) {
+            mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+            observer = null;
+        }
     }
 
     private final class NetCallback extends SimpleMainCallBack {

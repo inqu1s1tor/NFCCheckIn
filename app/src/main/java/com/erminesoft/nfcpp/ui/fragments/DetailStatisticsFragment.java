@@ -2,7 +2,6 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +48,6 @@ public class DetailStatisticsFragment extends GenericFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        changeStateOfBackButton();
 
         dateTv = (TextView) view.findViewById(R.id.afdsDate);
         totalTime = (TextView) view.findViewById(R.id.afdsTotalTime);
@@ -97,8 +93,7 @@ public class DetailStatisticsFragment extends GenericFragment {
     }
 
     @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(true);
-
+    protected boolean isBackButtonVisible() {
+        return true;
     }
 }

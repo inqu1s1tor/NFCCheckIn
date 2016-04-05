@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
@@ -47,12 +46,10 @@ public class SignUpFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        changeStateOfBackButton();
-
-        firstNameEt = (EditText)view.findViewById(R.id.firstNameET);
-        lastNameEt = (EditText)view.findViewById(R.id.lastNameET);
-        signUpLoginEt = (EditText)view.findViewById(R.id.signUploginUserET);
-        signUpPasswordEt = (EditText)view.findViewById(R.id.signUpPasswordUserET);
+        firstNameEt = (EditText) view.findViewById(R.id.firstNameET);
+        lastNameEt = (EditText) view.findViewById(R.id.lastNameET);
+        signUpLoginEt = (EditText) view.findViewById(R.id.signUploginUserET);
+        signUpPasswordEt = (EditText) view.findViewById(R.id.signUpPasswordUserET);
 
         tilFirstName = (TextInputLayout) view.findViewById(R.id.firstNameWrap);
         tilLastName = (TextInputLayout) view.findViewById(R.id.lastNameWrap);
@@ -71,13 +68,6 @@ public class SignUpFragment extends GenericFragment {
         mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-        observer = null;
-    }
-
     private void buttonSignUpPressed() {
         String putFirstName = firstNameEt.getText().toString();
         String putLastName = lastNameEt.getText().toString();
@@ -86,8 +76,8 @@ public class SignUpFragment extends GenericFragment {
 
         String error;
 
-        if(TextUtils.isEmpty(putFirstName)) {
-             error  = getActivity().getResources().getString(R.string.message_error_empty_firstname);
+        if (TextUtils.isEmpty(putFirstName)) {
+            error = getActivity().getResources().getString(R.string.message_error_empty_firstname);
             tilFirstName.setError(error);
             return;
         } else {
@@ -110,8 +100,8 @@ public class SignUpFragment extends GenericFragment {
             tilLoginUser.setErrorEnabled(false);
         }
 
-        if(TextUtils.isEmpty(putSignUpPasswordEt)) {
-            error =  getActivity().getResources().getString(R.string.message_error_empty_password);
+        if (TextUtils.isEmpty(putSignUpPasswordEt)) {
+            error = getActivity().getResources().getString(R.string.message_error_empty_password);
             tilPasswordUser.setError(error);
             return;
         } else {
@@ -134,10 +124,16 @@ public class SignUpFragment extends GenericFragment {
     }
 
     @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(true);
+    protected boolean isBackButtonVisible() {
+        return true;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+        observer = null;
+    }
 
     private final class NetCallBack extends SimpleMainCallBack {
         @Override
@@ -167,7 +163,7 @@ public class SignUpFragment extends GenericFragment {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
+            switch (v.getId()) {
                 case R.id.SignUpButton:
                     buttonSignUpPressed();
             }

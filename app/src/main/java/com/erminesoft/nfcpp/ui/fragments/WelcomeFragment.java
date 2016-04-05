@@ -2,8 +2,6 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
-import com.erminesoft.nfcpp.core.SharedHelper;
-import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.User;
 
 /**
@@ -32,8 +28,6 @@ public class WelcomeFragment extends GenericFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        changeStateOfBackButton();
 
         loginUserTv = (Button) view.findViewById(R.id.text_view_login);
         registerUserTv = (TextView) view.findViewById(R.id.text_view_registry);
@@ -60,8 +54,8 @@ public class WelcomeFragment extends GenericFragment {
     }
 
     @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(false);
+    protected boolean isBackButtonVisible() {
+        return false;
     }
 
 

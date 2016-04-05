@@ -2,23 +2,16 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
-import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.Day;
 import com.erminesoft.nfcpp.model.DayStatistics;
-import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.model.RealmEvent;
-import com.erminesoft.nfcpp.ui.adapters.DayAdapter;
 import com.erminesoft.nfcpp.ui.adapters.StatisticsAdapter;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
@@ -26,9 +19,6 @@ import com.erminesoft.nfcpp.util.SortUtil;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 
@@ -37,6 +27,7 @@ import java.util.List;
  */
 public class StatisticsFragment extends GenericFragment {
 
+    private final static String OBJECT_ID = "object_id";
     private ListView statisticsListView;
     private TextView statDate;
     private List<DayStatistics> dayList;
@@ -44,9 +35,6 @@ public class StatisticsFragment extends GenericFragment {
     private StatisticsAdapter statisticsAdapter;
     private String objectUserId = null;
     private String curDateMonth = null;
-
-    private final static String OBJECT_ID = "object_id";
-
 
     public static Bundle buildArguments(String objectId) {
         Bundle bundle = new Bundle();
@@ -64,8 +52,6 @@ public class StatisticsFragment extends GenericFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        changeStateOfBackButton();
 
         statisticsListView = (ListView) view.findViewById(R.id.statisticsList);
         statDate = (TextView) view.findViewById(R.id.stat_textview_date);
@@ -158,8 +144,8 @@ public class StatisticsFragment extends GenericFragment {
     }
 
     @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(true);
+    protected boolean isBackButtonVisible() {
+        return true;
     }
 
     private final class ItemClicker implements AdapterView.OnItemClickListener {
