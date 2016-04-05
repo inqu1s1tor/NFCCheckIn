@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.bridge.ActivityBridge;
+import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
 import com.erminesoft.nfcpp.ui.launcher.FragmentLauncher;
 
 
@@ -44,5 +45,10 @@ public class MainActivity extends AppCompatActivity implements ActivityBridge {
     public boolean onSupportNavigateUp() {
         getSupportFragmentManager().popBackStack();
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+            super.onBackPressed();
     }
 }

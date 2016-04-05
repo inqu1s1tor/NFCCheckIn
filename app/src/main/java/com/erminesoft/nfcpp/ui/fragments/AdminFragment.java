@@ -48,22 +48,14 @@ public class AdminFragment extends GenericFragment {
         return inflater.inflate(R.layout.fragment_admin, container, false);
     }
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.admin_setting_menu, menu);
-    }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        changeStateOfBackButton();
-
         adminList = (ListView) view.findViewById(R.id.adminList);
         adminList.setEmptyView(view.findViewById(R.id.empty_list_item_admin));
-        userNameColumn = (TextView)view.findViewById(R.id.user_name_column_textView);
-        totalTimeColumn = (TextView)view.findViewById(R.id.total_time_column_textView);
+        userNameColumn = (TextView) view.findViewById(R.id.user_name_column_textView);
+        totalTimeColumn = (TextView) view.findViewById(R.id.total_time_column_textView);
 
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
         mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
@@ -84,16 +76,31 @@ public class AdminFragment extends GenericFragment {
         adminList.setOnItemClickListener(itemClicker);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (observer == null) {
+            observer = new DbObserver();
+        }
+        mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.admin_setting_menu, menu);
+    }
+
     private void showVisibility() {
         if (state == TabState.USERS) {
             addCardBtn.setVisibility(View.GONE);
             userNameColumn.setText(getActivity().getResources().getString(R.string.user_name_list_column_tv));
             totalTimeColumn.setText(getActivity().getResources().getString(R.string.user_total_time_list_column));
-        }else {
+        } else {
             userNameColumn.setText(R.string.card_column_id);
             totalTimeColumn.setText(R.string.card_name_column);
             addCardBtn.setVisibility(View.VISIBLE);
-            }
+        }
     }
 
     private void initUsersAdapter() {
@@ -106,31 +113,11 @@ public class AdminFragment extends GenericFragment {
         adminList.setAdapter(adminCardsAdapter);
     }
 
-
     private void logout() {
         mActivityBridge.getUApplication().getDbBridge().clearAllData();
         mActivityBridge.getUApplication().getSharedHelper().sharedHelperClear();
         mActivityBridge.getUApplication().getNetBridge().userLogout();
         mActivityBridge.getFragmentLauncher().launchWelcomeFragment();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if (observer == null) {
-            observer = new DbObserver();
-        }
-        mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (observer != null) {
-            mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-            observer = null;
-        }
     }
 
     private void getUsersFromDb() {
@@ -150,8 +137,35 @@ public class AdminFragment extends GenericFragment {
     }
 
     @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(false);
+    protected boolean isBackButtonVisible() {
+        return false;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_sync:
+                break;
+
+            case R.id.action_log_out:
+                logout();
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (observer != null) {
+            mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+            observer = null;
+        }
+    }
+
+    private enum TabState {
+        USERS, CARDS
     }
 
     private final class NetCallBack extends SimpleMainCallBack {
@@ -167,14 +181,13 @@ public class AdminFragment extends GenericFragment {
 
         @Override
         public void update(Observable observable, Object data) {
-            if(state == TabState.CARDS) {
+            if (state == TabState.CARDS) {
                 initCardsAdapter();
             } else {
                 initUsersAdapter();
             }
         }
     }
-
 
     private final class ItemClicker implements AdapterView.OnItemClickListener {
 
@@ -189,20 +202,6 @@ public class AdminFragment extends GenericFragment {
             }
 
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_sync:
-                break;
-
-            case R.id.action_log_out:
-                logout();
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private final class Clicker implements View.OnClickListener {
@@ -236,9 +235,5 @@ public class AdminFragment extends GenericFragment {
                     break;
             }
         }
-    }
-
-    private enum TabState {
-        USERS, CARDS
     }
 }

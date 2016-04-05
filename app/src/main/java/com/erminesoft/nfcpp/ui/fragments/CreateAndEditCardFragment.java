@@ -12,22 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.Card;
 import com.erminesoft.nfcpp.model.RealmCard;
 import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
 import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
 import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
 import com.erminesoft.nfcpp.util.NfcUtil;
 
-import java.util.List;
-
-/**
- * Created by Aleks on 31.03.2016.
- */
 public class CreateAndEditCardFragment extends GenericFragment {
 
     private static final String CARD_ID = "card_id";
@@ -62,7 +55,7 @@ public class CreateAndEditCardFragment extends GenericFragment {
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
         cardIdEt = (EditText) view.findViewById(R.id.showIdcard);
 
-        changeStateOfBackButton();
+        isBackButtonVisible();
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.save_new_place_button).setOnClickListener(listener);
@@ -74,6 +67,11 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
         initNFC();
         extractExistCard();
+    }
+
+    @Override
+    protected boolean isBackButtonVisible() {
+        return true;
     }
 
     private void saveNewCard() {
@@ -156,11 +154,6 @@ public class CreateAndEditCardFragment extends GenericFragment {
         nfcAdapter.enableReaderMode(getActivity(), new NfcCallback(), NfcAdapter.FLAG_READER_NFC_A, Bundle.EMPTY);
 
         return true;
-    }
-
-    @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(true);
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)

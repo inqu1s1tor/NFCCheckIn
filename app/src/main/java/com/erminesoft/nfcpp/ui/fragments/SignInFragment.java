@@ -33,12 +33,6 @@ public class SignInFragment extends GenericFragment {
 
     }
 
-    @Override
-    protected void changeStateOfBackButton() {
-        mActivityBridge.switchBackButtonVisibility(true);
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,8 +42,6 @@ public class SignInFragment extends GenericFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        changeStateOfBackButton();
 
         signInLoginEt = (EditText) view.findViewById(R.id.signInloginUserET);
         signInPasswordEt = (EditText) view.findViewById(R.id.signInPasswordUserET);
@@ -70,6 +62,11 @@ public class SignInFragment extends GenericFragment {
         mActivityBridge.getUApplication().getDbBridge().addNewObserver(observer);
     }
 
+    @Override
+    protected boolean isBackButtonVisible() {
+        return true;
+
+    }
 
     private void buttonSignInPressed() {
         String name = signInLoginEt.getText().toString();
@@ -97,15 +94,6 @@ public class SignInFragment extends GenericFragment {
         mActivityBridge.getUApplication().getNetBridge().loginUser(name, password, new NetCallBack());
     }
 
-    private final class NetCallBack extends SimpleMainCallBack {
-        @Override
-        public void onError(String error) {
-            hideProgressDialog();
-            showShortToast(error);
-            tilPasswordUser.setError(error);
-        }
-    }
-
     private void checkMode(User user) {
         if (user.getUserRoles().contains("Admins")) { // TODO
             mActivityBridge.getFragmentLauncher().launchAdminFragment();
@@ -121,6 +109,14 @@ public class SignInFragment extends GenericFragment {
         observer = null;
     }
 
+    private final class NetCallBack extends SimpleMainCallBack {
+        @Override
+        public void onError(String error) {
+            hideProgressDialog();
+            showShortToast(error);
+            tilPasswordUser.setError(error);
+        }
+    }
 
     private final class DbObserver implements Observer {
 
