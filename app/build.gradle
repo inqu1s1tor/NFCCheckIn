@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'realm-android'
 apply plugin: 'com.google.gms.google-services'
 
 
@@ -52,4 +51,5 @@ dependencies {
     compile 'com.backendless:backendless:3.0.11'
     compile 'com.netflix.rxjava:rxjava-android:+'
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 }
