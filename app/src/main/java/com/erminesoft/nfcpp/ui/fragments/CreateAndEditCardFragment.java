@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -51,6 +52,8 @@ public class CreateAndEditCardFragment extends GenericFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         nameEt = (EditText) view.findViewById(R.id.place_name_et);
         descriptionEt = (EditText) view.findViewById(R.id.description_et);
         cardIdEt = (EditText) view.findViewById(R.id.showIdcard);
@@ -67,6 +70,17 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
         initNFC();
         extractExistCard();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Log.e("CEF", "home pressed");
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
