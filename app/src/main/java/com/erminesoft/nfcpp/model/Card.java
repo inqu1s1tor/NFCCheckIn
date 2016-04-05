@@ -8,7 +8,7 @@ import com.activeandroid.annotation.Table;
 @Table(name = "CARD")
 public class Card extends Model {
 
-    @Column(name = "card_id", unique = true, index = true)
+    @Column(name = "card_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private String idCard;
 
     @Column(name = "object_id")

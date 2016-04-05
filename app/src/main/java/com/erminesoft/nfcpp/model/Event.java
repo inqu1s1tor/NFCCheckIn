@@ -24,7 +24,7 @@ public class Event extends Model {
     @Column(name = "is_sent")
     private boolean isSent;
 
-    @Column(name = "creation_time", unique = true, index = true)
+    @Column(name = "creation_time", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private int creationTime;
 
     public String getObjectId() {

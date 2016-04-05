@@ -27,7 +27,7 @@ public class User extends Model {
     @Column(name = "user_roles")
     private String userRoles;
 
-    @Column(name = "email", unique = true, index = true)
+    @Column(name = "email", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private String email;
 
     public User() {

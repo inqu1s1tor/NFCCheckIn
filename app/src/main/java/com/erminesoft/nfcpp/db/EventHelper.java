@@ -1,5 +1,6 @@
 package com.erminesoft.nfcpp.db;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.erminesoft.nfcpp.model.Event;
@@ -27,8 +28,15 @@ final class EventHelper {
     }
 
     void saveEvent(List<Event> events) {
-        for (Event event : events) {
-            event.save();
+        ActiveAndroid.beginTransaction();
+        try {
+            for (Event event : events) {
+                event.save();
+            }
+
+            ActiveAndroid.setTransactionSuccessful();
+        } finally {
+            ActiveAndroid.endTransaction();
         }
     }
 
