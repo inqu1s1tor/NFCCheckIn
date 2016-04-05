@@ -1,38 +1,40 @@
 package com.erminesoft.nfcpp.db;
 
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
 import com.erminesoft.nfcpp.model.User;
 
 import java.util.List;
 
-import io.realm.Realm;
-
 final class UserHelper {
 
-    List<User> getAllUsers(Realm realm) {
-        return realm.where(User.class).findAll();
+    List<User> getAllUsers() {
+        return new Select().from(User.class).execute();
     }
 
-    void saveUser(Realm realm, List<User> users) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(users);
-        realm.commitTransaction();
-        realm.close();
+    void saveUser(List<User> users) {
+        ActiveAndroid.beginTransaction();
+        try {
+
+            for (User user : users) {
+                user.save();
+            }
+
+        } finally {
+            ActiveAndroid.endTransaction();
+        }
     }
 
-    void saveUser(Realm realm, User user) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(user);
-        realm.commitTransaction();
-        realm.close();
+    void saveUser(User user) {
+        user.save();
     }
 
-    User getUserByStringParam(Realm realm,String param, String value){
-        return realm.where(User.class).equalTo(param, value).findFirst();
+    User getUserByStringParam(String param, String value) {
+        return new Select().from(User.class).where(param + " = ?", value).executeSingle();
     }
 
-    void clearUser(Realm realm){
-        realm.beginTransaction();
-        realm.where(User.class).findAll().clear();
-        realm.commitTransaction();
+    void clearUser() {
+        new Delete().from(User.class).execute();
     }
 }

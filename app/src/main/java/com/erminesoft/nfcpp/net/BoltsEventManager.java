@@ -3,8 +3,6 @@ package com.erminesoft.nfcpp.net;
 import com.backendless.Backendless;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Event;
-import com.erminesoft.nfcpp.model.RealmEvent;
-import com.erminesoft.nfcpp.util.SystemUtils;
 
 public class BoltsEventManager {
 
@@ -14,16 +12,13 @@ public class BoltsEventManager {
         this.dbBridge = dbBridge;
     }
 
-    RealmEvent addNewEvent(RealmEvent realmEvent) {
-        String myId = dbBridge.getMe().getObjectId();
-        Event event = EventManager.EventConverter.realmEventToClearEvent(myId, realmEvent);
+    Event addNewEvent(Event event) {
         try {
             event = Backendless.Persistence.save(event);
             if (event != null) {
                 Backendless.Data.Permissions.FIND.grantForAllRoles(event);
-                RealmEvent updatedEvent = EventManager.EventConverter.clearEventToRealmEvent(event);
-                dbBridge.saveEvent(updatedEvent);
-                return updatedEvent;
+                dbBridge.saveEvent(event);
+                return event;
             } else {
                 return null;
             }

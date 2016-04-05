@@ -2,8 +2,8 @@ package com.erminesoft.nfcpp.core.bridge;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
-import com.erminesoft.nfcpp.model.RealmCard;
-import com.erminesoft.nfcpp.model.RealmEvent;
+import com.erminesoft.nfcpp.model.Card;
+import com.erminesoft.nfcpp.model.Event;
 
 public interface NetBridge {
 
@@ -13,9 +13,9 @@ public interface NetBridge {
 
     void registryUser(BackendlessUser user, MainCallBack mainCallBack);
 
-    void addNewEvent(RealmEvent realmEvent, final MainCallBack callback);
+    void addNewEvent(Event event, final MainCallBack callback);
 
-    RealmEvent addNewEvent(RealmEvent realmEvent);
+    Event addNewEvent(Event event);
 
     void getAllEventsByUserId(String ownerId, MainCallBack callback);
 
@@ -25,7 +25,7 @@ public interface NetBridge {
 
     void getAllUsers(final MainCallBack callback, String searchName);
 
-    void addNewCard(RealmCard realmCard, final MainCallBack callback);
+    void addNewCard(Card card, final MainCallBack callback);
 
     void getAllCard(final MainCallBack callBack);
 

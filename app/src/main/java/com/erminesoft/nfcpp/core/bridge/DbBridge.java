@@ -1,12 +1,11 @@
 package com.erminesoft.nfcpp.core.bridge;
 
-import com.erminesoft.nfcpp.model.RealmCard;
-import com.erminesoft.nfcpp.model.RealmEvent;
+import com.erminesoft.nfcpp.model.Card;
+import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.User;
+
 import java.util.List;
 import java.util.Observer;
-
-import io.realm.Realm;
 
 public interface DbBridge {
 
@@ -18,17 +17,17 @@ public interface DbBridge {
 
     void removeObserver(Observer observer);
 
-    List<RealmEvent> getAllEvents();
+    List<Event> getAllEvents();
 
-    List<RealmEvent> getUnsentEvents();
+    List<Event> getUnsentEvents();
 
-    void saveEvent(List<RealmEvent> realmEvents);
+    void saveEvent(List<Event> events);
 
-    void saveEvent(RealmEvent realmEvent);
+    void saveEvent(Event event);
 
-    List<RealmEvent> getEventsByDate(String date);
+    List<Event> getEventsByDate(String date);
 
-    List<RealmEvent> getEventsByMonth(String date);
+    List<Event> getEventsByMonth(String date);
 
 
     List<User> getAllUsers();
@@ -37,20 +36,20 @@ public interface DbBridge {
 
     void saveUser(User user);
 
-    RealmEvent getLastEventByCardId(String idCard);
+    Event getLastEventByCardId(String idCard);
 
-    List<RealmEvent> getEventsByIdPerMonth(String ownerId, String date);
+    List<Event> getEventsByIdPerMonth(String ownerId, String date);
 
-    List<RealmEvent> getEventsByDateAndUserId(String date, String userId);
+    List<Event> getEventsByDateAndUserId(String date, String userId);
 
 
-    void saveCard(List<RealmCard> realmCards);
+    void saveCards(List<Card> cards);
 
-    void saveCard(RealmCard realmCard);
+    void saveCards(Card card);
 
-    List<RealmCard> getAllCards();
+    List<Card> getAllCards();
 
-    RealmCard getCardById(String cardId);
+    Card getCardById(String cardId);
 
     boolean containCardById(String cardId);
 

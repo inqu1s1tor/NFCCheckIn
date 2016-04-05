@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.RealmCard;
+import com.erminesoft.nfcpp.model.Card;
 import com.erminesoft.nfcpp.model.User;
 import com.erminesoft.nfcpp.ui.adapters.AdminCardsAdapter;
 import com.erminesoft.nfcpp.ui.adapters.AdminUsersAdapter;
@@ -131,8 +131,8 @@ public class AdminFragment extends GenericFragment {
         mActivityBridge.getFragmentLauncher().launchStatisticsFragment(user.getObjectId());
     }
 
-    private void selectedItemCard(RealmCard realmCard) {
-        Bundle bundle = CreateAndEditCardFragment.buildArgs(realmCard.getIdCard());
+    private void selectedItemCard(Card card) {
+        Bundle bundle = CreateAndEditCardFragment.buildArgs(card.getIdCard());
         mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(bundle);
     }
 
@@ -197,8 +197,8 @@ public class AdminFragment extends GenericFragment {
                 User user = (User) parent.getItemAtPosition(position);
                 selectedItemUser(user);
             } else {
-                RealmCard realmCard = (RealmCard) parent.getItemAtPosition(position);
-                selectedItemCard(realmCard);
+                Card card = (Card) parent.getItemAtPosition(position);
+                selectedItemCard(card);
             }
 
         }

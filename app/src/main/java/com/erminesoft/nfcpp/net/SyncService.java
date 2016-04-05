@@ -3,13 +3,11 @@ package com.erminesoft.nfcpp.net;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
-import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
-import com.erminesoft.nfcpp.model.RealmEvent;
+import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.util.SystemUtils;
 
 import java.util.ArrayDeque;
@@ -20,7 +18,7 @@ public final class SyncService extends IntentService {
     private final static String SERVICE_NAME = "synchronius";
     private DbBridge dbBridge;
     private NetBridge netBridge;
-    private Queue<RealmEvent> unsentRealmEvent;
+    private Queue<Event> unsentEvent;
     private boolean isWork;
 
     public static void start(Context context) {
@@ -52,17 +50,17 @@ public final class SyncService extends IntentService {
     }
 
     private void extractUnsentEvents() {
-        unsentRealmEvent = new ArrayDeque<>(dbBridge.getUnsentEvents());
+        unsentEvent = new ArrayDeque<>(dbBridge.getUnsentEvents());
     }
 
     private void sendEvent() {
-        RealmEvent realmEvent = unsentRealmEvent.poll();
-        if (realmEvent == null) {
+        Event event = unsentEvent.poll();
+        if (event == null) {
             isWork = false;
             return;
         }
-        realmEvent = netBridge.addNewEvent(realmEvent);
-        if(realmEvent != null){
+        event = netBridge.addNewEvent(event);
+        if(event != null){
             sendEvent();
         }
     }

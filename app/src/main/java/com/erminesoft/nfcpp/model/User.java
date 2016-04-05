@@ -1,22 +1,33 @@
 package com.erminesoft.nfcpp.model;
 
-import java.util.ArrayList;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+
 import java.util.Date;
-import java.util.List;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+@Table(name = "USER")
+public class User extends Model {
 
-public class User extends RealmObject{
-
+    @Column(name = "object_id")
     private String objectId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "created")
     private Date created;
+
+    @Column(name = "user_roles")
     private String userRoles;
 
-    @PrimaryKey
+    @Column(name = "email", unique = true, index = true)
     private String email;
 
     public User() {
