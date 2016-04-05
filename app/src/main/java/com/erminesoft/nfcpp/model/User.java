@@ -27,6 +27,9 @@ public class User extends Model {
     @Column(name = "user_roles")
     private String userRoles;
 
+    @Column(name = "user_total_time_today")
+    private String userTotalTimeToday;
+
     @Column(name = "email", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private String email;
 
@@ -87,5 +90,13 @@ public class User extends Model {
 
     public void setUserRoles(String userRoles) {
         this.userRoles = userRoles;
+    }
+
+    public String getUserTotalTimeToday() {
+        return userTotalTimeToday;
+    }
+
+    public void setUserTotalTimeToday(String userTotalTimeToday) {
+        this.userTotalTimeToday = userTotalTimeToday;
     }
 }
