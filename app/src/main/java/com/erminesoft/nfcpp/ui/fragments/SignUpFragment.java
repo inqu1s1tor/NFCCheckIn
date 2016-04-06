@@ -138,7 +138,7 @@ public class SignUpFragment extends GenericFragment {
             testUser.setName(putFirstName);
             testUser.setLastName("test-user");
             testUser.setEmail("test-user");
-            testUser.setObjectId("test-user-test-user");
+            testUser.setObjectId(getActivity().getString(R.string.objectid_test_user));
             testUser.setUserRoles("testUser,");
 
             SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();

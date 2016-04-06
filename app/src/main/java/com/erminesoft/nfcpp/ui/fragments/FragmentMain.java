@@ -86,10 +86,10 @@ public class FragmentMain extends GenericFragment {
 
         myObjectId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
 
-        if (myObjectId.equals("test-user-test-user")) {
+        if (myObjectId.equals(getActivity().getString(R.string.objectid_test_user))) {
             isTestLogin = true;
         }
-        Log.d("FM", "myObjectId = " + myObjectId);
+
         initAdapter();
         getEventsFromDb();
 
@@ -265,6 +265,10 @@ public class FragmentMain extends GenericFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.user_setting_menu_action_tutorial:
+                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
+                break;
+
             case R.id.user_setting_menu_action_sync:
                 if (!isTestLogin && SystemUtils.isNetworkConnected(getActivity())) {
                     SyncService.start(getActivity());

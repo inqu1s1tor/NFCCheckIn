@@ -24,7 +24,9 @@
     <string name="bring_card_hint">Bring a card up to a smartphone</string>
     <string name="id_card_text">ID card</string>
     <string name="description_text">description</string>
-    <string name="log__out_title_item">Log out</string>
+    <string name="setting_menu_tutorial_title_item">Tutorial</string>
+    <string name="setting_menu_sync_title_item">Sync</string>
+    <string name="setting_menu_log_out_title_item">Log out</string>
     <string name="user_name_list_column_tv">User name</string>
     <string name="user_total_time_list_column">Total time</string>
     <string name="enter_card_name">Enter card name</string>
@@ -50,7 +52,7 @@
     <string name="message_error_empty_password">Empty password</string>
     <string name="message_error_empty_firstname">Empty first name</string>
     <string name="message_error_empty_lastname">Empty last name</string>
-
+    <string name="objectid_test_user">test-user-test-user</string>
 
 
 </resources>

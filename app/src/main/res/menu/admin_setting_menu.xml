@@ -1,14 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/action_tutorial"
+        android:title="@string/setting_menu_tutorial_title_item" />
+
+    <item
         android:id="@+id/action_sync"
-        android:title="Sync"
-        android:showAsAction="ifRoom" />
+        android:title="Sync" />
 
 
     <item
         android:id="@+id/action_log_out"
-        android:title="@string/log__out_title_item"
-        android:showAsAction="ifRoom" />
+        android:title="@string/setting_menu_log_out_title_item" />
 
 </menu>
