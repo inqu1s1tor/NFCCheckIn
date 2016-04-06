@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
@@ -33,7 +32,6 @@ import com.erminesoft.nfcpp.util.SortUtil;
 import com.erminesoft.nfcpp.util.SystemUtils;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +54,7 @@ public class FragmentMain extends GenericFragment {
     private Tracker mTracker;
 
     private String myObjectId;
+    private boolean isTestLogin = false;
 
     @Nullable
     @Override
@@ -86,13 +85,20 @@ public class FragmentMain extends GenericFragment {
         setHasOptionsMenu(true);
 
         myObjectId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
+
+        if (myObjectId.equals("test-user-test-user")) {
+            isTestLogin = true;
+        }
+        Log.d("FM", "myObjectId = " + myObjectId);
         initAdapter();
         getEventsFromDb();
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
 
-        loadDataFromBackendless();
+        if (!isTestLogin) {
+            loadDataFromBackendless();
+        }
 
     }
 
@@ -132,7 +138,7 @@ public class FragmentMain extends GenericFragment {
         todayTotalTv.setText(DateUtil.getDifferenceTime(diffInMs));
         eventAdapter.replaceNewData(eventsTodayList);
 
-        if (SystemUtils.isNetworkConnected(getActivity())) {
+        if (!isTestLogin && SystemUtils.isNetworkConnected(getActivity())) {
             SyncService.start(getActivity());
         }
     }
@@ -147,6 +153,7 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void loadDataFromBackendless() {
+        Log.d("!", "!loadDataFromBackendless");
         mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallback());
 
         long lastSyncDate = mActivityBridge.getUApplication().getSharedHelper().getLastSyncDate();
@@ -196,7 +203,7 @@ public class FragmentMain extends GenericFragment {
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
         List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
 
-        if (!mActivityBridge.getUApplication().getDbBridge().containCardById(cardId)) {
+        if (!isTestLogin && !mActivityBridge.getUApplication().getDbBridge().containCardById(cardId)) {
             String message = getActivity().getString(R.string.message_unknown_card);
             showShortToastInsideThread(message);
             return false;
@@ -207,7 +214,6 @@ public class FragmentMain extends GenericFragment {
         }
 
         if (eventList.size() % 2 == 0) {
-
             return true;
         }
 
@@ -245,7 +251,6 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void logout() {
-        Log.d("logout", "logout");
         mActivityBridge.getUApplication().getDbBridge().clearAllData();
         mActivityBridge.getUApplication().getSharedHelper().sharedHelperClear();
         mActivityBridge.getUApplication().getNetBridge().userLogout();
@@ -261,7 +266,7 @@ public class FragmentMain extends GenericFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.user_setting_menu_action_sync:
-                if (SystemUtils.isNetworkConnected(getActivity())) {
+                if (!isTestLogin && SystemUtils.isNetworkConnected(getActivity())) {
                     SyncService.start(getActivity());
                 }
                 break;

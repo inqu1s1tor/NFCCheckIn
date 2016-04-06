@@ -4,6 +4,7 @@
     <string name="hello_check_in">Check-in</string>
     <string name="login_user">Login</string>
     <string name="register_user">Register</string>
+    <string name="login_test_user">Test login</string>
     <string name="logout">Logout</string>
     <string name="statistics">my statistics</string>
     <string name="today_events">Events today:</string>

@@ -12,8 +12,10 @@ import android.widget.EditText;
 
 import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.R;
+import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
+import com.erminesoft.nfcpp.model.User;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -22,6 +24,8 @@ import java.util.Observer;
  * Created by Aleks on 10.03.2016.
  */
 public class SignUpFragment extends GenericFragment {
+
+    private final static String IS_TEST_LOGIN = "is_test_login";
 
     private EditText firstNameEt;
     private EditText lastNameEt;
@@ -33,8 +37,15 @@ public class SignUpFragment extends GenericFragment {
     private TextInputLayout tilLoginUser;
     private TextInputLayout tilPasswordUser;
 
-
     private Observer observer;
+    private boolean isTestLogin = false;
+
+
+    public static Bundle buildArguments(Boolean isTestLogin) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(IS_TEST_LOGIN, isTestLogin);
+        return bundle;
+    }
 
     @Nullable
     @Override
@@ -55,6 +66,17 @@ public class SignUpFragment extends GenericFragment {
         tilLastName = (TextInputLayout) view.findViewById(R.id.lastNameWrap);
         tilLoginUser = (TextInputLayout) view.findViewById(R.id.signUploginUserWrap);
         tilPasswordUser = (TextInputLayout) view.findViewById(R.id.signUpPasswordUserWrap);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            isTestLogin = (boolean) bundle.getSerializable(IS_TEST_LOGIN);
+        }
+
+        if (isTestLogin){
+            lastNameEt.setVisibility(View.GONE);
+            signUpLoginEt.setVisibility(View.GONE);
+            signUpPasswordEt.setVisibility(View.GONE);
+        }
 
 
         View.OnClickListener listener = new Clicker();
@@ -84,34 +106,50 @@ public class SignUpFragment extends GenericFragment {
             tilFirstName.setErrorEnabled(false);
         }
 
-        if (TextUtils.isEmpty(putLastName)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
-            tilLastName.setError(error);
-            return;
-        } else {
-            tilLastName.setErrorEnabled(false);
+        if (!isTestLogin) {
+            if (TextUtils.isEmpty(putLastName)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
+                tilLastName.setError(error);
+                return;
+            } else {
+                tilLastName.setErrorEnabled(false);
+            }
+
+            if (TextUtils.isEmpty(putSignUpLoginEt)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_login);
+                tilLoginUser.setError(error);
+                return;
+            } else {
+                tilLoginUser.setErrorEnabled(false);
+            }
+
+            if (TextUtils.isEmpty(putSignUpPasswordEt)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_password);
+                tilPasswordUser.setError(error);
+                return;
+            } else {
+                tilPasswordUser.setErrorEnabled(false);
+            }
         }
 
-        if (TextUtils.isEmpty(putSignUpLoginEt)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_login);
-            tilLoginUser.setError(error);
-            return;
-        } else {
-            tilLoginUser.setErrorEnabled(false);
-        }
 
-        if (TextUtils.isEmpty(putSignUpPasswordEt)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_password);
-            tilPasswordUser.setError(error);
-            return;
-        } else {
-            tilPasswordUser.setErrorEnabled(false);
-        }
+        if (isTestLogin) {
+            User testUser = new User();
+            testUser.setName(putFirstName);
+            testUser.setLastName("test-user");
+            testUser.setEmail("test-user");
+            testUser.setObjectId("test-user-test-user");
+            testUser.setUserRoles("testUser,");
 
-        showProgressDialog();
-        NetBridge netBridge = mActivityBridge.getUApplication().getNetBridge();
-        netBridge.registryUser(buildUser(putFirstName, putLastName, putSignUpLoginEt, putSignUpPasswordEt),
-                new NetCallBack());
+            SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
+            sharedHelper.setUserName(putFirstName);
+            sharedHelper.setUserPassword("testUser");
+            mActivityBridge.getUApplication().getDbBridge().setMyUser(testUser);
+        } else {
+            showProgressDialog();
+            NetBridge netBridge = mActivityBridge.getUApplication().getNetBridge();
+            netBridge.registryUser(buildUser(putFirstName, putLastName, putSignUpLoginEt, putSignUpPasswordEt), new NetCallBack());
+        }
     }
 
     private BackendlessUser buildUser(String firstName, String lastName, String login, String password) {
@@ -126,6 +164,15 @@ public class SignUpFragment extends GenericFragment {
     @Override
     protected boolean isBackButtonVisible() {
         return true;
+    }
+
+    private void goEntry(){
+        if (isTestLogin) {
+            mActivityBridge.getFragmentLauncher().launchMainFragment();
+        } else {
+            hideProgressDialog();
+            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
+        }
     }
 
     @Override
@@ -154,8 +201,7 @@ public class SignUpFragment extends GenericFragment {
         @Override
         public void update(Observable observable, Object data) {
             Log.e("FL", "userAdded");
-            hideProgressDialog();
-            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
+            goEntry();
         }
     }
 

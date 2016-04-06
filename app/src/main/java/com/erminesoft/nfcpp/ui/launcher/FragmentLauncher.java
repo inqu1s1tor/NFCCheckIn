@@ -52,8 +52,9 @@ public class FragmentLauncher {
         launch(signInFragmnet, SignInFragment.class.getCanonicalName());
     }
 
-    public void launchSignUpFragment() {
+    public void launchSignUpFragment(Boolean isTestLogin) {
         GenericFragment signUpFragment = new SignUpFragment();
+        signUpFragment.setArguments(SignUpFragment.buildArguments(isTestLogin));
         launch(signUpFragment, SignInFragment.class.getCanonicalName());
     }
 
