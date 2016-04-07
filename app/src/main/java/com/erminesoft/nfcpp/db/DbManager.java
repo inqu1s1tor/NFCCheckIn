@@ -74,7 +74,6 @@ public final class DbManager extends Observable implements DbBridge {
 
     @Override
     public void saveEvent(Event event) {
-        Log.d("saveEvent", "event.getCreationTime() = " + event.getCreationTime());
         eventHelper.saveEvent(event);
         notifyObserversProcedure();
     }

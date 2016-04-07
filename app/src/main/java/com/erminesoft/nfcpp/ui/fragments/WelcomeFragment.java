@@ -18,6 +18,8 @@ public class WelcomeFragment extends GenericFragment {
 
     private Button loginUserTv;
     private TextView registerUserTv;
+    private TextView testLoginTv;
+
 
     @Nullable
     @Override
@@ -31,10 +33,13 @@ public class WelcomeFragment extends GenericFragment {
 
         loginUserTv = (Button) view.findViewById(R.id.text_view_login);
         registerUserTv = (TextView) view.findViewById(R.id.text_view_registry);
+        testLoginTv = (TextView) view.findViewById(R.id.text_view_test_login);
+
 
         View.OnClickListener listener = new Clicker();
         loginUserTv.setOnClickListener(listener);
         registerUserTv.setOnClickListener(listener);
+        testLoginTv.setOnClickListener(listener);
 
         checkData();
     }
@@ -44,6 +49,7 @@ public class WelcomeFragment extends GenericFragment {
         if (user == null) {
             loginUserTv.setVisibility(View.VISIBLE);
             registerUserTv.setVisibility(View.VISIBLE);
+            testLoginTv.setVisibility(View.VISIBLE);
         } else {
             if (user.getUserRoles().contains("Admin")) {  // TODO
                 mActivityBridge.getFragmentLauncher().launchAdminFragment();
@@ -67,7 +73,10 @@ public class WelcomeFragment extends GenericFragment {
                     mActivityBridge.getFragmentLauncher().launchSignInfragment();
                     break;
                 case R.id.text_view_registry:
-                    mActivityBridge.getFragmentLauncher().launchSignUpFragment();
+                    mActivityBridge.getFragmentLauncher().launchSignUpFragment(false);
+                    break;
+                case R.id.text_view_test_login:
+                    mActivityBridge.getFragmentLauncher().launchSignUpFragment(true);
                     break;
             }
 

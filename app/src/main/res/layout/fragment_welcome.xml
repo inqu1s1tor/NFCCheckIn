@@ -34,7 +34,17 @@
         android:layout_height="wrap_content"
         android:text="@string/register_user"
         android:textSize="20dp"
+        android:id="@+id/text_view_registry"/>
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_test_user"
+        android:textSize="20dp"
+        android:id="@+id/text_view_test_login"/>
 
 
-        android:id="@+id/text_view_registry" />
+
 </LinearLayout>

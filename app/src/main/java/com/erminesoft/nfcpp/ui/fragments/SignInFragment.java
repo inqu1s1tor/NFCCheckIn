@@ -79,7 +79,13 @@ public class SignInFragment extends GenericFragment {
             tilFirstName.setError(error);
             return;
         } else {
-            tilFirstName.setErrorEnabled(false);
+            if (name.length() < 5){
+                error = getActivity().getResources().getString(R.string.message_error_size_login);
+                tilFirstName.setError(error);
+                return;
+            } else {
+                tilFirstName.setErrorEnabled(false);
+            }
         }
 
         if (TextUtils.isEmpty(password)) {
@@ -87,7 +93,13 @@ public class SignInFragment extends GenericFragment {
             tilPasswordUser.setError(error);
             return;
         } else {
-            tilPasswordUser.setErrorEnabled(false);
+            if (password.length() < 8){
+                error = getActivity().getResources().getString(R.string.message_error_size_login);
+                tilPasswordUser.setError(error);
+                return;
+            } else {
+                tilPasswordUser.setErrorEnabled(false);
+            }
         }
 
         showProgressDialog();

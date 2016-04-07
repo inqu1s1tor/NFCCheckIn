@@ -1,12 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <!--<item-->
+        <!--android:id="@+id/user_setting_menu_action_tutorial"-->
+        <!--android:title="@string/setting_menu_tutorial_title_item" />-->
+
     <item
         android:id="@+id/user_setting_menu_action_sync"
-        android:title="Sync" />
+        android:title="@string/setting_menu_sync_title_item" />
 
 
     <item
         android:id="@+id/user_setting_menu_action_log_out"
-        android:title="@string/log__out_title_item" />
+        android:title="@string/setting_menu_log_out_title_item" />
 
 </menu>
