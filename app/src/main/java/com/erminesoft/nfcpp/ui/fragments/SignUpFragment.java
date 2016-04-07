@@ -225,7 +225,6 @@ public class SignUpFragment extends GenericFragment {
 
         @Override
         public void update(Observable observable, Object data) {
-            Log.e("FL", "userAdded");
             goEntry();
         }
     }

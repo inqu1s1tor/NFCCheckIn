@@ -153,7 +153,6 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void loadDataFromBackendless() {
-        Log.d("!", "!loadDataFromBackendless");
         mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallback());
 
         long lastSyncDate = mActivityBridge.getUApplication().getSharedHelper().getLastSyncDate();
@@ -182,13 +181,11 @@ public class FragmentMain extends GenericFragment {
 
     private void createNewEvent(String cardId) {
         if (checkValidityEntryCard(cardId)) {
-            Log.e("MF", "begin event");
             Event event = new Event();
             event.setIdCard(cardId);
             event.setCreationTime((int) (System.currentTimeMillis() / 1000));
             event.setIsSent(false);
             event.setOwnerId(myObjectId);
-            Log.e("MF", "event = " + event.toString());
             mActivityBridge.getUApplication().getDbBridge().saveEvent(event);
 
             sendLog("createNewEvent");
