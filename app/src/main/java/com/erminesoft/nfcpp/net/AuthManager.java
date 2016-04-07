@@ -34,7 +34,6 @@ final class AuthManager {
 
         Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
             public void handleResponse(BackendlessUser registeredUser) {
-                Log.d("registryUser", "user has been registered and now can login");
                 String login = registeredUser.getProperty("name").toString();
                 String password = registeredUser.getPassword().toString();
                 logInUser(login, password, mainCallBack);
@@ -88,10 +87,8 @@ final class AuthManager {
             public void handleResponse(List<String> userRoles) {
                 String userRolesStr = "";
                 for (String role : userRoles) {
-                    Log.d("getRole", "userRole = " + role.toString());
                     userRolesStr += role + ";";
                 }
-                Log.d("getRole", "userRolesStr = " + userRolesStr);
                 User user = new User();
                 user.setObjectId(registeredUser.getObjectId());
                 user.setName(registeredUser.getProperty("name").toString());
@@ -115,7 +112,6 @@ final class AuthManager {
         Backendless.UserService.logout(new AsyncCallback<Void>() {
             @Override
             public void handleResponse(Void response) {
-                Log.d("userLogout", "handleResponse");
                 dbBridge.clearAllData();
             }
 

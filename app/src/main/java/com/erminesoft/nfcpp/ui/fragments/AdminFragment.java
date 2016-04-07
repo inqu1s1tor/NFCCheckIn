@@ -41,7 +41,6 @@ public class AdminFragment extends GenericFragment {
     private Observer observer;
     private AdminUsersAdapter adminUsersAdapter;
     private AdminCardsAdapter adminCardsAdapter;
-    private Menu menu;
     private RadioGroup radioGroup;
     private TabState state;
     private FloatingActionButton addCardBtn;
@@ -64,14 +63,15 @@ public class AdminFragment extends GenericFragment {
         userNameColumn = (TextView) view.findViewById(R.id.user_name_column_textView);
         totalTimeColumn = (TextView) view.findViewById(R.id.total_time_column_textView);
 
-        mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
-        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
+//        mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
+//        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
 
         View.OnClickListener listener = new Clicker();
         addCardBtn = (FloatingActionButton) view.findViewById(R.id.add_card_float_button);
         addCardBtn.setOnClickListener(listener);
 
-        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
+//        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
+        startSync();
         setHasOptionsMenu(true);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.admin_list_radio_group);
@@ -81,6 +81,12 @@ public class AdminFragment extends GenericFragment {
 
         AdapterView.OnItemClickListener itemClicker = new ItemClicker();
         adminList.setOnItemClickListener(itemClicker);
+    }
+
+    void startSync(){
+        mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
+        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
+        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
     }
 
     @Override
@@ -165,7 +171,12 @@ public class AdminFragment extends GenericFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+//            case R.id.action_tutorial:
+//                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
+//                break;
+
             case R.id.action_sync:
+                startSync();
                 break;
 
             case R.id.action_log_out:

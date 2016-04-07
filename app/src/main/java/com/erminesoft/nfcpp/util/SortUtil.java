@@ -58,7 +58,7 @@ public final class SortUtil {
         if (cardList == null){
             return "Unknown";
         }
-        String nameCard = "";
+        String nameCard = "Unknown";
         for (Card rc : cardList){
             if (rc.getIdCard().equals(cardId)){
                 nameCard = rc.getNameCard();

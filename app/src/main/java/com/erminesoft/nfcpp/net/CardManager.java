@@ -23,8 +23,6 @@ final class CardManager {
         Backendless.Persistence.save(card, new AsyncCallback<Card>() {
             @Override
             public void handleResponse(Card response) {
-                Log.d("addNewCard", "response = " + response.getNameCard());
-                // TODO  permision
                 callback.onSuccess();
             }
 

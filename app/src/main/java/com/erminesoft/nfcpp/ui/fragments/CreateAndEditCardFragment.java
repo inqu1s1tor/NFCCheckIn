@@ -77,7 +77,6 @@ public class CreateAndEditCardFragment extends GenericFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Log.e("CEF", "home pressed");
                 Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.lost_data_dialog));
                 DialogLauncher.launchUnsavedDataDialog(getActivity(),new DialogListener(),bundle);
                 return true;
@@ -133,7 +132,6 @@ public class CreateAndEditCardFragment extends GenericFragment {
     }
 
     private boolean validationFields() {
-        Log.d("validationFields", "editCardId=" + editCardId);
 
         if (TextUtils.isEmpty(cardIdEt.getText().toString())) {
             String message = getActivity().getResources().getString(R.string.message_admin_no_added_card);

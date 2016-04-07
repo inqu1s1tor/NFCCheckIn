@@ -13,18 +13,15 @@ import java.util.List;
 final class CardHelper {
 
     void saveCard(List<Card> cards) {
-        Log.e("CH", "begin card transaction = "+cards.size());
         ActiveAndroid.beginTransaction();
         try {
 
             for (Card card : cards) {
                 card.save();
-                Log.e("CH", "card save = "+card.getIdCard());
             }
             ActiveAndroid.setTransactionSuccessful();
         } finally {
             ActiveAndroid.endTransaction();
-            Log.e("CH", "close card transaction");
         }
     }
 

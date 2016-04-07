@@ -16,6 +16,7 @@ import com.erminesoft.nfcpp.ui.fragments.GenericFragment;
 import com.erminesoft.nfcpp.ui.fragments.SignInFragment;
 import com.erminesoft.nfcpp.ui.fragments.SignUpFragment;
 import com.erminesoft.nfcpp.ui.fragments.StatisticsFragment;
+import com.erminesoft.nfcpp.ui.fragments.TutorialFragment;
 import com.erminesoft.nfcpp.ui.fragments.WelcomeFragment;
 
 /**
@@ -52,8 +53,9 @@ public class FragmentLauncher {
         launch(signInFragmnet, SignInFragment.class.getCanonicalName());
     }
 
-    public void launchSignUpFragment() {
+    public void launchSignUpFragment(Boolean isTestLogin) {
         GenericFragment signUpFragment = new SignUpFragment();
+        signUpFragment.setArguments(SignUpFragment.buildArguments(isTestLogin));
         launch(signUpFragment, SignInFragment.class.getCanonicalName());
     }
 
@@ -83,5 +85,10 @@ public class FragmentLauncher {
         GenericFragment createAndEditCardFragment = new CreateAndEditCardFragment();
         createAndEditCardFragment.setArguments(bundle);
         launch(createAndEditCardFragment, CreateAndEditCardFragment.class.getCanonicalName());
+    }
+
+    public void launchTutorialFragment(){
+        TutorialFragment tutorialFragment = new TutorialFragment();
+        launch(tutorialFragment, CreateAndEditCardFragment.class.getCanonicalName());
     }
 }
