@@ -265,9 +265,9 @@ public class FragmentMain extends GenericFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.user_setting_menu_action_tutorial:
-                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
-                break;
+//            case R.id.user_setting_menu_action_tutorial:
+//                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
+//                break;
 
             case R.id.user_setting_menu_action_sync:
                 if (!isTestLogin && SystemUtils.isNetworkConnected(getActivity())) {

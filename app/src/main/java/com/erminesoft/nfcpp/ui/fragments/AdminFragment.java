@@ -171,9 +171,9 @@ public class AdminFragment extends GenericFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_tutorial:
-                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
-                break;
+//            case R.id.action_tutorial:
+//                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
+//                break;
 
             case R.id.action_sync:
                 startSync();
