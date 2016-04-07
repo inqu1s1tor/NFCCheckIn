@@ -14,7 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/first_name_hint_sign_up"
-            android:inputType="text"
+            android:digits="@string/name_digit_parameter"
+            android:inputType="textNoSuggestions"
+            android:maxLength="20"
             android:text="" />
     </android.support.design.widget.TextInputLayout>
 
@@ -28,7 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/last_name_hint_sign_up"
-            android:inputType="text"
+            android:maxLength="30"
+            android:digits="@string/name_digit_parameter"
+            android:inputType="textNoSuggestions"
             android:text="" />
     </android.support.design.widget.TextInputLayout>
 
@@ -42,7 +46,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/login_hint_sign_up"
-            android:inputType="text"
+            android:digits="@string/login_password_digit_parameter"
+            android:inputType="textNoSuggestions"
+            android:maxLength="20"
             android:text="" />
     </android.support.design.widget.TextInputLayout>
 
@@ -56,7 +62,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password_hint_sign_up"
-            android:inputType="textPassword"
+            android:digits="@string/login_password_digit_parameter"
+            android:inputType="textNoSuggestions|textPassword"
+            android:maxLength="18"
             android:text="" />
     </android.support.design.widget.TextInputLayout>
 

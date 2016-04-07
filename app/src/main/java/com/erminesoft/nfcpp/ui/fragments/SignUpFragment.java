@@ -103,7 +103,14 @@ public class SignUpFragment extends GenericFragment {
             tilFirstName.setError(error);
             return;
         } else {
-            tilFirstName.setErrorEnabled(false);
+            if (putFirstName.length() < 2){
+                error = getActivity().getResources().getString(R.string.message_error_size_firstname);
+                tilFirstName.setError(error);
+                return;
+            } else {
+                tilFirstName.setErrorEnabled(false);
+            }
+
         }
 
         if (!isTestLogin) {
@@ -112,7 +119,13 @@ public class SignUpFragment extends GenericFragment {
                 tilLastName.setError(error);
                 return;
             } else {
-                tilLastName.setErrorEnabled(false);
+                if (putLastName.length() < 2){
+                    error = getActivity().getResources().getString(R.string.message_error_size_firstname);
+                    tilLastName.setError(error);
+                    return;
+                } else {
+                    tilLastName.setErrorEnabled(false);
+                }
             }
 
             if (TextUtils.isEmpty(putSignUpLoginEt)) {
@@ -120,7 +133,13 @@ public class SignUpFragment extends GenericFragment {
                 tilLoginUser.setError(error);
                 return;
             } else {
-                tilLoginUser.setErrorEnabled(false);
+                if (putSignUpLoginEt.length() < 5){
+                    error = getActivity().getResources().getString(R.string.message_error_size_login);
+                    tilLoginUser.setError(error);
+                    return;
+                } else {
+                    tilLoginUser.setErrorEnabled(false);
+                }
             }
 
             if (TextUtils.isEmpty(putSignUpPasswordEt)) {
@@ -128,7 +147,13 @@ public class SignUpFragment extends GenericFragment {
                 tilPasswordUser.setError(error);
                 return;
             } else {
-                tilPasswordUser.setErrorEnabled(false);
+                if (putSignUpPasswordEt.length() < 8){
+                    error = getActivity().getResources().getString(R.string.message_error_size_login);
+                    tilPasswordUser.setError(error);
+                    return;
+                } else {
+                    tilPasswordUser.setErrorEnabled(false);
+                }
             }
         }
 

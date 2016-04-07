@@ -49,10 +49,17 @@
     <string name="button_no_unsaved_dialog">NO</string>
 
     <string name="message_error_empty_login">Empty login</string>
+    <string name="message_error_size_login">Minimum length of 5 characters</string>
     <string name="message_error_empty_password">Empty password</string>
+    <string name="message_error_size_password">Minimum length of 8 characters</string>
     <string name="message_error_empty_firstname">Empty first name</string>
+    <string name="message_error_size_firstname">Minimum length of 2 characters</string>
     <string name="message_error_empty_lastname">Empty last name</string>
     <string name="objectid_test_user">test-user-test-user</string>
+
+
+    <string name="name_digit_parameter">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="login_password_digit_parameter">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789-.</string>
 
 
 </resources>
