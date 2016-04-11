@@ -2,7 +2,6 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,13 +98,7 @@ public class StatisticsFragment extends GenericFragment {
             long creationTime = eventList.get(i).getCreationTime();
             String curDay = DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_D);
 
-            if (TextUtils.isEmpty(dayNumber)) {
-                dayStatistics = new DayStatistics();
-                dayStatistics.setDate(DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_Y_M_D));
-
-                creationTimeList.add(creationTime);
-                dayNumber = curDay;
-            } else if (dayNumber.equals(curDay)) {
+            if (dayNumber.equals(curDay)) {
                 creationTimeList.add(creationTime);
                 if (i == eventList.size() - 1) {
                     long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
@@ -113,10 +106,17 @@ public class StatisticsFragment extends GenericFragment {
                     dayList.add(dayStatistics);
                 }
             } else {
-                long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
-                dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
-                dayList.add(dayStatistics);
-                creationTimeList.clear();
+                if (!dayNumber.equals("")) {
+                    long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
+                    dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
+                    dayList.add(dayStatistics);
+                    creationTimeList = new ArrayList<>();
+                }
+                dayStatistics = new DayStatistics();
+                dayStatistics.setDate(DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_Y_M_D));
+
+                creationTimeList.add(creationTime);
+                dayNumber = curDay;
             }
         }
 
