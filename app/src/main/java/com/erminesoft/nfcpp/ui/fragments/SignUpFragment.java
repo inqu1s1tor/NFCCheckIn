@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 
 import com.backendless.BackendlessUser;
@@ -72,7 +72,8 @@ public class SignUpFragment extends GenericFragment {
             isTestLogin = (boolean) bundle.getSerializable(IS_TEST_LOGIN);
         }
 
-        if (isTestLogin){
+        if (isTestLogin) {
+            firstNameEt.setImeOptions(EditorInfo.IME_ACTION_DONE);
             lastNameEt.setVisibility(View.GONE);
             signUpLoginEt.setVisibility(View.GONE);
             signUpPasswordEt.setVisibility(View.GONE);
@@ -102,79 +103,72 @@ public class SignUpFragment extends GenericFragment {
             error = getActivity().getResources().getString(R.string.message_error_empty_firstname);
             tilFirstName.setError(error);
             return;
+        } else if (putFirstName.length() < 2) {
+            error = getActivity().getResources().getString(R.string.message_error_size_firstname);
+            tilFirstName.setError(error);
+            return;
         } else {
-            if (putFirstName.length() < 2){
-                error = getActivity().getResources().getString(R.string.message_error_size_firstname);
-                tilFirstName.setError(error);
-                return;
-            } else {
-                tilFirstName.setErrorEnabled(false);
-            }
-
+            tilFirstName.setErrorEnabled(false);
         }
-
-        if (!isTestLogin) {
-            if (TextUtils.isEmpty(putLastName)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
-                tilLastName.setError(error);
-                return;
-            } else {
-                if (putLastName.length() < 2){
-                    error = getActivity().getResources().getString(R.string.message_error_size_firstname);
-                    tilLastName.setError(error);
-                    return;
-                } else {
-                    tilLastName.setErrorEnabled(false);
-                }
-            }
-
-            if (TextUtils.isEmpty(putSignUpLoginEt)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_login);
-                tilLoginUser.setError(error);
-                return;
-            } else {
-                if (putSignUpLoginEt.length() < 5){
-                    error = getActivity().getResources().getString(R.string.message_error_size_login);
-                    tilLoginUser.setError(error);
-                    return;
-                } else {
-                    tilLoginUser.setErrorEnabled(false);
-                }
-            }
-
-            if (TextUtils.isEmpty(putSignUpPasswordEt)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_password);
-                tilPasswordUser.setError(error);
-                return;
-            } else {
-                if (putSignUpPasswordEt.length() < 8){
-                    error = getActivity().getResources().getString(R.string.message_error_size_login);
-                    tilPasswordUser.setError(error);
-                    return;
-                } else {
-                    tilPasswordUser.setErrorEnabled(false);
-                }
-            }
-        }
-
 
         if (isTestLogin) {
-            User testUser = new User();
-            testUser.setName(putFirstName);
-            testUser.setLastName("test-user");
-            testUser.setEmail("test-user");
-            testUser.setObjectId(getActivity().getString(R.string.objectid_test_user));
-            testUser.setUserRoles("testUser,");
-
-            SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
-            sharedHelper.setUserName(putFirstName);
-            sharedHelper.setUserPassword("testUser");
-            mActivityBridge.getUApplication().getDbBridge().setMyUser(testUser);
-        } else {
-            showProgressDialog();
-            NetBridge netBridge = mActivityBridge.getUApplication().getNetBridge();
-            netBridge.registryUser(buildUser(putFirstName, putLastName, putSignUpLoginEt, putSignUpPasswordEt), new NetCallBack());
+            initTestUser(putFirstName);
+            return;
         }
+
+        if (TextUtils.isEmpty(putLastName)) {
+            error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
+            tilLastName.setError(error);
+            return;
+        } else if (putLastName.length() < 2) {
+            error = getActivity().getResources().getString(R.string.message_error_size_firstname);
+            tilLastName.setError(error);
+            return;
+        } else {
+            tilLastName.setErrorEnabled(false);
+        }
+
+        if (TextUtils.isEmpty(putSignUpLoginEt)) {
+            error = getActivity().getResources().getString(R.string.message_error_empty_login);
+            tilLoginUser.setError(error);
+            return;
+        } else if (putSignUpLoginEt.length() < 5) {
+            error = getActivity().getResources().getString(R.string.message_error_size_login);
+            tilLoginUser.setError(error);
+            return;
+        } else {
+            tilLoginUser.setErrorEnabled(false);
+        }
+
+        if (TextUtils.isEmpty(putSignUpPasswordEt)) {
+            error = getActivity().getResources().getString(R.string.message_error_empty_password);
+            tilPasswordUser.setError(error);
+            return;
+        } else if (putSignUpPasswordEt.length() < 8) {
+            error = getActivity().getResources().getString(R.string.message_error_size_login);
+            tilPasswordUser.setError(error);
+            return;
+        } else {
+            tilPasswordUser.setErrorEnabled(false);
+        }
+
+        showProgressDialog();
+        NetBridge netBridge = mActivityBridge.getUApplication().getNetBridge();
+        netBridge.registryUser(buildUser(putFirstName, putLastName, putSignUpLoginEt, putSignUpPasswordEt), new NetCallBack());
+    }
+
+    private void initTestUser(String putFirstName) {
+        User testUser = new User();
+        testUser.setName(putFirstName);
+        testUser.setLastName("test-user");
+        testUser.setEmail("test-user");
+        testUser.setObjectId(getActivity().getString(R.string.objectid_test_user));
+        testUser.setUserRoles("testUser,");
+
+        SharedHelper sharedHelper = mActivityBridge.getUApplication().getSharedHelper();
+        sharedHelper.setUserName(putFirstName);
+        sharedHelper.setUserPassword("testUser");
+        mActivityBridge.getUApplication().getDbBridge().setMyUser(testUser);
     }
 
     private BackendlessUser buildUser(String firstName, String lastName, String login, String password) {
@@ -191,7 +185,7 @@ public class SignUpFragment extends GenericFragment {
         return true;
     }
 
-    private void goEntry(){
+    private void goEntry() {
         if (isTestLogin) {
             mActivityBridge.getFragmentLauncher().launchMainFragment();
         } else {

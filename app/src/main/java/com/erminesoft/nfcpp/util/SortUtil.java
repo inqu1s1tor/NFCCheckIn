@@ -72,7 +72,7 @@ public final class SortUtil {
     public static long sortEventsAndReturnTotalWorkingTime(List<Long> allEventsList) {
 
         long entryLong = 0;
-        long exitLong = 0;
+        long exitLong;
         long diffInMs = 0;
         for (int i = 1; i <= allEventsList.size(); i++) {
             if (i % 2 == 0) { // 2

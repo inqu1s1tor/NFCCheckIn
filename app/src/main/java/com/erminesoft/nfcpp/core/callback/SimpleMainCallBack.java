@@ -22,10 +22,4 @@ public class SimpleMainCallBack implements MainCallBack {
     public void onSuccessGetEvents(List<Event> eventList) {
 
     }
-
-    @Override
-    public void onSuccessGetEvent(Event event) {
-
-    }
-
 }

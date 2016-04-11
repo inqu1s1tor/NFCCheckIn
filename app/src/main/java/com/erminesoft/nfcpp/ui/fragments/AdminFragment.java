@@ -3,7 +3,6 @@ package com.erminesoft.nfcpp.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +28,7 @@ import com.erminesoft.nfcpp.util.SortUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -63,14 +63,10 @@ public class AdminFragment extends GenericFragment {
         userNameColumn = (TextView) view.findViewById(R.id.user_name_column_textView);
         totalTimeColumn = (TextView) view.findViewById(R.id.total_time_column_textView);
 
-//        mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
-//        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
-
         View.OnClickListener listener = new Clicker();
         addCardBtn = (FloatingActionButton) view.findViewById(R.id.add_card_float_button);
         addCardBtn.setOnClickListener(listener);
 
-//        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
         startSync();
         setHasOptionsMenu(true);
 
@@ -84,7 +80,7 @@ public class AdminFragment extends GenericFragment {
     }
 
     void startSync(){
-        mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
+        mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack());
         mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
     }
@@ -127,12 +123,11 @@ public class AdminFragment extends GenericFragment {
 
     private String getUserTodayTime(String userId) {
         long curTime = System.currentTimeMillis();
-        String dateString = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
+        String dateString = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M, Locale.getDefault()).format(curTime);
         List<Event> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);
         List<EventsToday> eventsList = new ArrayList<>();
         long todayTime = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, null, eventsList, true);
-        String usertotalTime = DateUtil.getDifferenceTime(todayTime);
-        return usertotalTime;
+        return DateUtil.getDifferenceTime(todayTime);
     }
 
     private void initCardsAdapter() {
@@ -145,13 +140,6 @@ public class AdminFragment extends GenericFragment {
         mActivityBridge.getUApplication().getSharedHelper().sharedHelperClear();
         mActivityBridge.getUApplication().getNetBridge().userLogout();
         mActivityBridge.getFragmentLauncher().launchWelcomeFragment();
-    }
-
-    private void getUsersFromDb() {
-        List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
-        if (users.size() <= 0) {
-            adminUsersAdapter.swapDataList(users);
-        }
     }
 
     private void selectedItemUser(User user) {
@@ -171,10 +159,6 @@ public class AdminFragment extends GenericFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.action_tutorial:
-//                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
-//                break;
-
             case R.id.action_sync:
                 startSync();
                 break;
@@ -245,7 +229,6 @@ public class AdminFragment extends GenericFragment {
                     mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(Bundle.EMPTY);
                     break;
             }
-
         }
     }
 

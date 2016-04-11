@@ -14,7 +14,4 @@ public interface MainCallBack {
     void onError(String error);
 
     void onSuccessGetEvents(List<Event> eventList);
-
-    void onSuccessGetEvent(Event event);
-
 }

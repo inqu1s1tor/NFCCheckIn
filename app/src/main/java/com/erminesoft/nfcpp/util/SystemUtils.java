@@ -35,6 +35,5 @@ public final class SystemUtils {
         }
 
         return false;
-
     }
 }

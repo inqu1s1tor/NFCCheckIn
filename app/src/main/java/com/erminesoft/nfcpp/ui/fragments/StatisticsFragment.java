@@ -2,9 +2,8 @@ package com.erminesoft.nfcpp.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -43,7 +43,6 @@ public class StatisticsFragment extends GenericFragment {
         bundle.putSerializable(OBJECT_ID, objectId);
         return bundle;
     }
-
 
     @Nullable
     @Override
@@ -75,11 +74,10 @@ public class StatisticsFragment extends GenericFragment {
         getEvents();
     }
 
-
     private void getEvents() {
         if (curDateMonth == null) {
             long curTime = System.currentTimeMillis();
-            curDateMonth = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M).format(curTime);
+            curDateMonth = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M, Locale.getDefault()).format(curTime);
         }
         statDate.setText(curDateMonth);
         if (objectUserId != null) {
@@ -89,10 +87,9 @@ public class StatisticsFragment extends GenericFragment {
             eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByMonth(curDateMonth);
             handleList(eventList);
         }
-
-
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void handleList(List<Event> eventList) {
         String dayNumber = "";
         DayStatistics dayStatistics = null;
@@ -102,32 +99,29 @@ public class StatisticsFragment extends GenericFragment {
             long creationTime = eventList.get(i).getCreationTime();
             String curDay = DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_D);
 
-            if (dayNumber.equals(curDay)) {
+            if (TextUtils.isEmpty(dayNumber)) {
+                dayStatistics = new DayStatistics();
+                dayStatistics.setDate(DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_Y_M_D));
+
+                creationTimeList.add(creationTime);
+                dayNumber = curDay;
+            } else if (dayNumber.equals(curDay)) {
                 creationTimeList.add(creationTime);
                 if (i == eventList.size() - 1) {
                     long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
                     dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
                     dayList.add(dayStatistics);
                 }
-
             } else {
-                if (!dayNumber.equals("")) {
-                    long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
-                    dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
-                    dayList.add(dayStatistics);
-                    creationTimeList = new ArrayList<>();
-                }
-                dayStatistics = new DayStatistics();
-                dayStatistics.setDate(DateUtil.dateToFormatString(creationTime * (long) 1000, DateUtil.DATE_FORMAT_Y_M_D));
-
-                creationTimeList.add(creationTime);
-                dayNumber = curDay;
+                long diffInMs = SortUtil.sortEventsAndReturnTotalWorkingTime(creationTimeList);
+                dayStatistics.setTotalTime(DateUtil.getDifferenceTime(diffInMs));
+                dayList.add(dayStatistics);
+                creationTimeList.clear();
             }
         }
 
         statisticsAdapter.replaceNewData(dayList);
     }
-
 
     private void selectedItem(DayStatistics dayStatistics) {
         Bundle bundle = DetailStatisticsFragment.buildArguments(dayStatistics.getDate(), objectUserId);

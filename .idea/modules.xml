@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NFCCheckIn.iml" filepath="$PROJECT_DIR$/NFCCheckIn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NFCCheckin.iml" filepath="$PROJECT_DIR$/NFCCheckin.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
