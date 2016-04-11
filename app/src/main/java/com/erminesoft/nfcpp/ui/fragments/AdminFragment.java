@@ -3,7 +3,6 @@ package com.erminesoft.nfcpp.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +32,7 @@ import com.erminesoft.nfcpp.util.SortUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -136,12 +136,11 @@ public class AdminFragment extends GenericFragment {
 
     private String getUserTodayTime(String userId) {
         long curTime = System.currentTimeMillis();
-        String dateString = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
+        String dateString = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M, Locale.getDefault()).format(curTime);
         List<Event> realmEventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(dateString, userId);
         List<EventsToday> eventsList = new ArrayList<>();
         long todayTime = SortUtil.sortEventsOnTodayAndReturnTotalWorkingTime(realmEventList, null, eventsList, true);
-        String usertotalTime = DateUtil.getDifferenceTime(todayTime);
-        return usertotalTime;
+        return DateUtil.getDifferenceTime(todayTime);
     }
 
     private void initCardsAdapter() {
@@ -267,7 +266,6 @@ public class AdminFragment extends GenericFragment {
                     mActivityBridge.getFragmentLauncher().launchCreateAndEditCardFragment(Bundle.EMPTY);
                     break;
             }
-
         }
     }
 

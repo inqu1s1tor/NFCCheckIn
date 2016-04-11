@@ -1,7 +1,5 @@
 package com.erminesoft.nfcpp.net;
 
-import android.util.Log;
-
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
@@ -17,9 +15,9 @@ import java.util.List;
 /**
  * Created by evgen on 18.03.2016.
  */
-public class UsersManager {
+class UsersManager {
 
-    private int PAGE_SIZE = 100;
+    private static final int PAGE_SIZE = 100;
 
     private final DbBridge dbBridge;
 

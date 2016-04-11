@@ -90,6 +90,11 @@ public final class NetManagerFacade implements NetBridge {
     }
 
     @Override
+    public void getAllUsers(MainCallBack callBack) {
+        getAllUsers(callBack, "");
+    }
+
+    @Override
     public void addNewCard(Card card, MainCallBack callback) {
         cardManager.addNewCard(card, callback);
     }

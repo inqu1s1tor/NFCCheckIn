@@ -3,14 +3,15 @@ package com.erminesoft.nfcpp.net;
 import android.util.Log;
 
 import com.backendless.Backendless;
+import com.backendless.DataPermission;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Event;
 
-public class BoltsEventManager {
+class BoltsEventManager {
 
     private DbBridge dbBridge;
 
-    public BoltsEventManager(DbBridge dbBridge) {
+    BoltsEventManager(DbBridge dbBridge) {
         this.dbBridge = dbBridge;
     }
 
@@ -18,7 +19,7 @@ public class BoltsEventManager {
         try {
             event = Backendless.Persistence.save(event);
             if (event != null) {
-                Backendless.Data.Permissions.FIND.grantForAllRoles(event);
+                DataPermission.FIND.grantForAllRoles(event);
                 dbBridge.saveEvent(event);
                 return event;
             } else {

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
+import com.backendless.DataPermission;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
@@ -13,6 +14,7 @@ import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.util.DateUtil;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 final class EventManager {
 
@@ -20,13 +22,12 @@ final class EventManager {
 
     private DbBridge dbBridge;
 
-    public EventManager(DbBridge dbBridge) {
+    EventManager(DbBridge dbBridge) {
         this.dbBridge = dbBridge;
     }
 
-    void addNewEvent(Event realmEvent, final MainCallBack callback) {
-        String myId = dbBridge.getMe().getObjectId();
-        Backendless.Persistence.save(realmEvent, new AsyncCallback<Event>() {
+    void addNewEvent(Event event, final MainCallBack callback) {
+        Backendless.Persistence.save(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event) {
                 setPermissionGrantForAllRoles(event, callback);
@@ -39,10 +40,9 @@ final class EventManager {
         });
     }
 
-
     private void setPermissionGrantForAllRoles(final Event event, final MainCallBack mainCallBack) {
 
-        Backendless.Data.Permissions.FIND.grantForAllRoles(event, new AsyncCallback<Event>() {
+        DataPermission.FIND.grantForAllRoles(event, new AsyncCallback<Event>() {
             @Override
             public void handleResponse(Event event1) {
                 dbBridge.saveEvent(event1);
@@ -78,7 +78,7 @@ final class EventManager {
 
 
     void getTodayEventsByUserId(String ownerId, long curTime, final MainCallBack callback) {
-        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_M_D_Y).format(curTime);
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_M_D_Y, Locale.getDefault()).format(curTime);
         String whereClause = "ownerId = '" + ownerId + "'  and  created > '" + curStringDate + "'";
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);

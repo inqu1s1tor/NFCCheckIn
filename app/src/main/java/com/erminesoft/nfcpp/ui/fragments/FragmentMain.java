@@ -1,12 +1,8 @@
 package com.erminesoft.nfcpp.ui.fragments;
 
-import android.annotation.TargetApi;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +37,7 @@ import com.google.android.gms.analytics.Tracker;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -49,12 +46,10 @@ import java.util.Observer;
  */
 public class FragmentMain extends GenericFragment {
 
-    private TextView currentTimeTv;
     private TextView todayTotalTv;
     private Button statButton;
     private ListView listViewEvents;
 
-    private NfcAdapter nfcAdapter;
     private EventAdapter eventAdapter;
     private List<EventsToday> eventsTodayList;
     private Observer observer;
@@ -79,7 +74,6 @@ public class FragmentMain extends GenericFragment {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -87,12 +81,12 @@ public class FragmentMain extends GenericFragment {
         NfcApplication application = mActivityBridge.getUApplication();
         mTracker = application.getDefaultTracker();
 
-        currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
+        TextView currentTimeTv = (TextView) view.findViewById(R.id.currentTime);
         todayTotalTv = (TextView) view.findViewById(R.id.todayTotal);
         listViewEvents = (ListView) view.findViewById(R.id.list_events);
 
         long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M).format(curTime);
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D_H_M, Locale.getDefault()).format(curTime);
         currentTimeTv.setText(curStringDate);
 
         if (!initNFC()) {
@@ -144,9 +138,8 @@ public class FragmentMain extends GenericFragment {
         listViewEvents.setAdapter(eventAdapter);
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private boolean initNFC() {
-        nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
+        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
 
         if (nfcAdapter == null) {
             showShortToast("No NFC module");
@@ -202,12 +195,7 @@ public class FragmentMain extends GenericFragment {
 
     private void doubleCheckInFilter(String cardId) {
         if (CardFilterUtil.isDoubleCheckIn(mActivityBridge.getUApplication().getDbBridge(), cardId)) {
-            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    showShortToast("It is a double checkin!");
-                }
-            });
+            showShortToastInsideThread("It is a double checkin!");
         } else {
             createNewEvent(cardId);
         }
@@ -231,10 +219,9 @@ public class FragmentMain extends GenericFragment {
         }
     }
 
-
     private boolean checkValidityEntryCard(String cardId) {
         long curTime = System.currentTimeMillis();
-        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
+        String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D, Locale.getDefault()).format(curTime);
         List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
 
         if (!isTestLogin && !mActivityBridge.getUApplication().getDbBridge().containCardById(cardId)) {
@@ -268,7 +255,6 @@ public class FragmentMain extends GenericFragment {
                 showShortToast(message);
             }
         });
-
     }
 
     private void checkUpdateDataFromBackendless(List<Event> eventList) {
@@ -284,13 +270,6 @@ public class FragmentMain extends GenericFragment {
                 .build());
     }
 
-    private void logout() {
-        mActivityBridge.getUApplication().getDbBridge().clearAllData();
-        mActivityBridge.getUApplication().getSharedHelper().sharedHelperClear();
-        mActivityBridge.getUApplication().getNetBridge().userLogout();
-        mActivityBridge.getFragmentLauncher().launchWelcomeFragment();
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         if (!isAdminLogin) {
@@ -301,10 +280,6 @@ public class FragmentMain extends GenericFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-//            case R.id.user_setting_menu_action_tutorial:
-//                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
-//                break;
-
             case R.id.user_setting_menu_action_sync:
                 if (!isTestLogin && SystemUtils.isNetworkConnected(getActivity())) {
                     SyncService.start(getActivity());
@@ -319,6 +294,13 @@ public class FragmentMain extends GenericFragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void logout() {
+        mActivityBridge.getUApplication().getDbBridge().clearAllData();
+        mActivityBridge.getUApplication().getSharedHelper().sharedHelperClear();
+        mActivityBridge.getUApplication().getNetBridge().userLogout();
+        mActivityBridge.getFragmentLauncher().launchWelcomeFragment();
+    }
+
     @Override
     protected boolean isBackButtonVisible() {
         return isAdminLogin;
@@ -327,10 +309,9 @@ public class FragmentMain extends GenericFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (observer != null) {
-            mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
-            observer = null;
-        }
+
+        mActivityBridge.getUApplication().getDbBridge().removeObserver(observer);
+        observer = null;
     }
 
     private final class NetCallback extends SimpleMainCallBack {
@@ -369,7 +350,7 @@ public class FragmentMain extends GenericFragment {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+
     private final class NfcCallback implements NfcAdapter.ReaderCallback {
 
         @Override

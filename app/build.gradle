@@ -13,7 +13,7 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.erminesoft.nfcpp"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "0.1.2"

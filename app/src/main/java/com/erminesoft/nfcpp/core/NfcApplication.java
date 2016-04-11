@@ -3,7 +3,6 @@ package com.erminesoft.nfcpp.core;
 
 import com.activeandroid.ActiveAndroid;
 import com.activeandroid.app.Application;
-
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.bridge.NetBridge;
@@ -12,13 +11,12 @@ import com.erminesoft.nfcpp.net.NetManagerFacade;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
-
 public final class NfcApplication extends Application {
 
     private SharedHelper sharedHelper;
     private NetBridge netBridge;
     private DbBridge dbBridge;
-    private Tracker mTracker;
+    private Tracker tracker;
 
     @Override
     public void onCreate() {
@@ -27,9 +25,8 @@ public final class NfcApplication extends Application {
         ActiveAndroid.initialize(this);
 
         sharedHelper = new SharedHelper(this);
-        dbBridge = new DbManager(this, sharedHelper);
+        dbBridge = new DbManager(sharedHelper);
         netBridge = new NetManagerFacade(this, sharedHelper, dbBridge);
-        getDefaultTracker();
     }
 
     public NetBridge getNetBridge() {
@@ -44,12 +41,12 @@ public final class NfcApplication extends Application {
         return dbBridge;
     }
 
-    synchronized public Tracker getDefaultTracker() {
-        if (mTracker == null) {
+    public Tracker getDefaultTracker() {
+        if (tracker == null) {
             GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-            mTracker = analytics.newTracker(R.xml.global_tracker);
+            tracker = analytics.newTracker(R.xml.global_tracker);
         }
-        return mTracker;
+        return tracker;
     }
 
 

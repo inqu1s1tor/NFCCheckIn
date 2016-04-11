@@ -27,12 +27,6 @@ public class SignInFragment extends GenericFragment {
     private TextInputLayout tilPasswordUser;
     private Observer observer;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,8 +45,6 @@ public class SignInFragment extends GenericFragment {
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.signInButton).setOnClickListener(listener);
-
-
     }
 
     @Override
@@ -65,7 +57,6 @@ public class SignInFragment extends GenericFragment {
     @Override
     protected boolean isBackButtonVisible() {
         return true;
-
     }
 
     private void buttonSignInPressed() {
@@ -78,28 +69,26 @@ public class SignInFragment extends GenericFragment {
             error = getActivity().getResources().getString(R.string.message_error_empty_login);
             tilFirstName.setError(error);
             return;
+        } else if (name.length() < 5) {
+            error = getActivity().getResources().getString(R.string.message_error_size_login);
+            tilFirstName.setError(error);
+            return;
         } else {
-            if (name.length() < 5){
-                error = getActivity().getResources().getString(R.string.message_error_size_login);
-                tilFirstName.setError(error);
-                return;
-            } else {
-                tilFirstName.setErrorEnabled(false);
-            }
+            tilPasswordUser.setError("");
+            tilFirstName.setErrorEnabled(false);
         }
 
         if (TextUtils.isEmpty(password)) {
             error = getActivity().getResources().getString(R.string.message_error_empty_password);
             tilPasswordUser.setError(error);
             return;
+        } else if (password.length() < 8) {
+            error = getActivity().getResources().getString(R.string.message_error_size_login);
+            tilPasswordUser.setError(error);
+            return;
         } else {
-            if (password.length() < 8){
-                error = getActivity().getResources().getString(R.string.message_error_size_login);
-                tilPasswordUser.setError(error);
-                return;
-            } else {
-                tilPasswordUser.setErrorEnabled(false);
-            }
+            tilPasswordUser.setError("");
+            tilPasswordUser.setErrorEnabled(false);
         }
 
         showProgressDialog();

@@ -1,14 +1,12 @@
 package com.erminesoft.nfcpp.ui.dialogs;
 
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
-
 
 import com.erminesoft.nfcpp.R;
 
@@ -39,14 +37,14 @@ public class UnsavedDataDialog extends GenericDialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_unsaved_data);
 
-        textTitile = (TextView) findViewById(R.id.dialog_unsavedData);
+        TextView textTitle = (TextView) findViewById(R.id.dialog_unsavedData);
 
         String title = bundle.getString(TITLE_TEXT);
         if(TextUtils.isEmpty(title)){
             title = getContext().getString(R.string.app_name);
         }
 
-        textTitile.setText(title);
+        textTitle.setText(title);
 
         View.OnClickListener listener = new Clicker();
 

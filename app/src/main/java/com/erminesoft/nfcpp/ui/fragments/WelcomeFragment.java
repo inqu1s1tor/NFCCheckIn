@@ -79,8 +79,6 @@ public class WelcomeFragment extends GenericFragment {
                     mActivityBridge.getFragmentLauncher().launchSignUpFragment(true);
                     break;
             }
-
-
         }
     }
 }

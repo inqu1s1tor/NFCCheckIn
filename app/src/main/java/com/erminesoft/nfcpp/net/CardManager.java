@@ -34,7 +34,6 @@ final class CardManager {
         });
     }
 
-
     void getAllCard(final MainCallBack callBack) {
         Backendless.Data.of(Card.class).find(new AsyncCallback<BackendlessCollection<Card>>() {
             @Override

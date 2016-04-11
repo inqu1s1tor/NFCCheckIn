@@ -7,11 +7,9 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.local.UserTokenStorageFactory;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.core.callback.MainCallBack;
-import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.User;
 
 import java.util.Date;
@@ -35,9 +33,8 @@ final class AuthManager {
         Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
             public void handleResponse(BackendlessUser registeredUser) {
                 String login = registeredUser.getProperty("name").toString();
-                String password = registeredUser.getPassword().toString();
+                String password = registeredUser.getPassword();
                 logInUser(login, password, mainCallBack);
-
             }
 
             public void handleFault(BackendlessFault fault) {
@@ -45,9 +42,7 @@ final class AuthManager {
                 Log.d("registryUser", "fault = " + fault.getMessage());
             }
         });
-
     }
-
 
     void autoLogin(MainCallBack callback){
         String login = sharedHelper.getUserName();

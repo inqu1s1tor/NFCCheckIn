@@ -1,6 +1,5 @@
 package com.erminesoft.nfcpp.db;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.erminesoft.nfcpp.core.SharedHelper;
@@ -20,7 +19,7 @@ public final class DbManager extends Observable implements DbBridge {
     private final EventHelper eventHelper;
     private final CardHelper cardHelper;
 
-    public DbManager(Context context, SharedHelper sharedHelper) {
+    public DbManager(SharedHelper sharedHelper) {
         this.sharedHelper = sharedHelper;
         userHelper = new UserHelper();
         eventHelper = new EventHelper();

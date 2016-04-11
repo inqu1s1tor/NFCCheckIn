@@ -70,6 +70,4 @@ public final class SyncService extends IntentService {
             sendEvent();
         }
     }
-
-
 }

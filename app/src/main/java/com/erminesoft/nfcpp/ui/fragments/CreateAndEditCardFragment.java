@@ -1,13 +1,10 @@
 package com.erminesoft.nfcpp.ui.fragments;
 
-import android.annotation.TargetApi;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -158,7 +155,6 @@ public class CreateAndEditCardFragment extends GenericFragment {
         return true;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private boolean initNFC() {
         nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
 
@@ -171,7 +167,6 @@ public class CreateAndEditCardFragment extends GenericFragment {
         return true;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private final class NfcCallback implements NfcAdapter.ReaderCallback {
 
         @Override

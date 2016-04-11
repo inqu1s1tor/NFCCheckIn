@@ -33,9 +33,6 @@ public class User extends Model {
     @Column(name = "email", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private String email;
 
-    public User() {
-    }
-
     public String getObjectId() {
         return objectId;
     }

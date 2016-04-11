@@ -67,10 +67,5 @@ public class AdminCardsAdapter extends BaseAdapter {
         TextView cardName;
         TextView cardDescription;
     }
-
-    public void swapDataList(List<Card> cards) {
-        this.cards = cards;
-        notifyDataSetChanged();
-    }
 }
 

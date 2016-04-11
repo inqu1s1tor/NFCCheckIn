@@ -12,10 +12,6 @@ public class EventsToday {
     private String totalTodayTime;
     private boolean selector;
 
-    public EventsToday(){
-
-    }
-
     public String getNameCard() {
         return nameCard;
     }
