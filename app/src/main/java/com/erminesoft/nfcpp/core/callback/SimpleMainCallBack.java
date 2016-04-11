@@ -28,4 +28,9 @@ public class SimpleMainCallBack implements MainCallBack {
 
     }
 
+    @Override
+    public void isUserAuthenticated(boolean isAuth) {
+
+    }
+
 }

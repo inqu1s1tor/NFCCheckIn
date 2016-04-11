@@ -53,6 +53,11 @@ public final class NetManagerFacade implements NetBridge {
     }
 
     @Override
+    public void isUserAuthenticated(MainCallBack callback) {
+        authManager.isUserAuthenticated(callback);
+    }
+
+    @Override
     public void addNewEvent(Event event, MainCallBack callback) {
         eventManager.addNewEvent(event, callback);
     }

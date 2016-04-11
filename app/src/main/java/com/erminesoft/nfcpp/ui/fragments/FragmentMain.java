@@ -15,8 +15,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.backendless.Backendless;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
@@ -25,6 +27,9 @@ import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.net.SyncService;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
+import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
+import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
+import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
 import com.erminesoft.nfcpp.util.CardFilterUtil;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.NfcUtil;
@@ -32,6 +37,7 @@ import com.erminesoft.nfcpp.util.SortUtil;
 import com.erminesoft.nfcpp.util.SystemUtils;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +51,7 @@ public class FragmentMain extends GenericFragment {
 
     private TextView currentTimeTv;
     private TextView todayTotalTv;
+    private Button statButton;
     private ListView listViewEvents;
 
     private NfcAdapter nfcAdapter;
@@ -55,11 +62,21 @@ public class FragmentMain extends GenericFragment {
 
     private String myObjectId;
     private boolean isTestLogin = false;
+    private boolean isAdminLogin = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_main, container, false);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        String myRoles = mActivityBridge.getUApplication().getDbBridge().getMe().getUserRoles();
+        isAdminLogin = myRoles.contains("Admin");
+
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -79,13 +96,13 @@ public class FragmentMain extends GenericFragment {
         currentTimeTv.setText(curStringDate);
 
         if (!initNFC()) {
-            return;
+//            return;
         }
 
         setHasOptionsMenu(true);
 
         myObjectId = mActivityBridge.getUApplication().getDbBridge().getMe().getObjectId();
-
+        Log.d("FM", "myObjectId = " + myObjectId);
         if (myObjectId.equals(getActivity().getString(R.string.objectid_test_user))) {
             isTestLogin = true;
         }
@@ -94,13 +111,25 @@ public class FragmentMain extends GenericFragment {
         getEventsFromDb();
 
         View.OnClickListener listener = new Clicker();
-        view.findViewById(R.id.transferToStatisticsButton).setOnClickListener(listener);
+        statButton = (Button) view.findViewById(R.id.transferToStatisticsButton);
+        statButton.setOnClickListener(listener);
+
+        if (isAdminLogin){
+            statButton.setVisibility(View.INVISIBLE);
+        }
+
 
         if (!isTestLogin) {
-            loadDataFromBackendless();
+            if (!Backendless.UserService.isValidLogin()){
+                mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallback());
+            } else {
+                mActivityBridge.getUApplication().getNetBridge().isUserAuthenticated(new NetCallback());
+                loadDataFromBackendless();
+            }
         }
 
     }
+
 
     @Override
     public void onStart() {
@@ -139,6 +168,7 @@ public class FragmentMain extends GenericFragment {
         eventAdapter.replaceNewData(eventsTodayList);
 
         if (!isTestLogin && SystemUtils.isNetworkConnected(getActivity())) {
+            Log.d("!", "!SyncService.start");
             SyncService.start(getActivity());
         }
     }
@@ -146,7 +176,11 @@ public class FragmentMain extends GenericFragment {
     private void getEventsFromDb() {
         long curTime = System.currentTimeMillis();
         String curStringDate = new SimpleDateFormat(DateUtil.DATE_FORMAT_Y_M_D).format(curTime);
-        List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDate(curStringDate);
+        List<Event> eventList = mActivityBridge.getUApplication().getDbBridge().getEventsByDateAndUserId(curStringDate, myObjectId);     // getEventsByDate
+//        Log.d("getEventsFromDb", "eventList.size() = " + eventList.size());
+//        for (Event ev : eventList) {
+//            Log.d("getEventsFromDb", "getOwnerId() = " + ev.getOwnerId() + "    getCreationTime() = " + ev.getCreationTime());
+//        }
         List<Card> cardList = mActivityBridge.getUApplication().getDbBridge().getAllCards();
 
         loadTodayEventsList(eventList, cardList);
@@ -180,6 +214,9 @@ public class FragmentMain extends GenericFragment {
     }
 
     private void createNewEvent(String cardId) {
+        if (!isTestLogin) {
+            mActivityBridge.getUApplication().getNetBridge().isUserAuthenticated(new NetCallback());
+        }
         if (checkValidityEntryCard(cardId)) {
             Event event = new Event();
             event.setIdCard(cardId);
@@ -256,7 +293,9 @@ public class FragmentMain extends GenericFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.user_setting_menu, menu);
+        if (!isAdminLogin) {
+            inflater.inflate(R.menu.user_setting_menu, menu);
+        }
     }
 
     @Override
@@ -282,7 +321,7 @@ public class FragmentMain extends GenericFragment {
 
     @Override
     protected boolean isBackButtonVisible() {
-        return false;
+        return isAdminLogin;
     }
 
     @Override
@@ -299,6 +338,14 @@ public class FragmentMain extends GenericFragment {
         public void onSuccessGetEvents(List<Event> eventList) {
             checkUpdateDataFromBackendless(eventList);
         }
+
+        @Override
+        public void isUserAuthenticated(boolean isAuth) {
+            if (!isAuth){
+                Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.loggen_another_device));
+                DialogLauncher.launchConfirmationDialog(getActivity(), new DialogListener(), bundle);
+            }
+        }
     }
 
     private final class Clicker implements View.OnClickListener {
@@ -311,6 +358,13 @@ public class FragmentMain extends GenericFragment {
                     break;
             }
 
+        }
+    }
+
+    private final class DialogListener implements GenericDialog.DialogListener{
+        @Override
+        public void onOkPressed() {
+            logout();
         }
     }
 

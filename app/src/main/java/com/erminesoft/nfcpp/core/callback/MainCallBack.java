@@ -17,4 +17,7 @@ public interface MainCallBack {
 
     void onSuccessGetEvent(Event event);
 
+
+    void isUserAuthenticated(boolean isAuth);
+
 }

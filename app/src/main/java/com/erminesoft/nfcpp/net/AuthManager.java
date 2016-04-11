@@ -53,7 +53,6 @@ final class AuthManager {
         String login = sharedHelper.getUserName();
         String password = sharedHelper.getUserPassword();
 
-
         if(TextUtils.isEmpty(login) || TextUtils.isEmpty(password)){
             callback.onError("Empty Login and/or passwd ");
             return;
@@ -99,6 +98,8 @@ final class AuthManager {
                 user.setUserRoles(userRolesStr);
                 dbBridge.setMyUser(user);
                 callback.onSuccess();
+
+                checkValidPermission(userRoles, callback);
             }
 
             @Override
@@ -112,7 +113,7 @@ final class AuthManager {
         Backendless.UserService.logout(new AsyncCallback<Void>() {
             @Override
             public void handleResponse(Void response) {
-                dbBridge.clearAllData();
+//                dbBridge.clearAllData();
             }
 
             @Override
@@ -120,5 +121,31 @@ final class AuthManager {
                 Log.d("userLogout", "fault = " + fault.toString());
             }
         });
+    }
+
+
+    void isUserAuthenticated(final MainCallBack callback){
+        Backendless.UserService.getUserRoles(new AsyncCallback<List<String>>() {
+            @Override
+            public void handleResponse(List<String> userRoles) {
+                checkValidPermission(userRoles, callback);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+            }
+        });
+    }
+
+    private void checkValidPermission(List<String> userRoles, MainCallBack callback){
+        Log.d("!", "!userRoles = " + userRoles.toString());
+        boolean isAuth = true;
+        for (String role : userRoles) {
+            if (role.equals("NotAuthenticatedUser")){
+                isAuth = false;
+            }
+        }
+        callback.isUserAuthenticated(isAuth);
     }
 }

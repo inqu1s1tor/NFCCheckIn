@@ -48,8 +48,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
-    compile 'com.backendless:backendless:3.0.11'
     compile 'com.netflix.rxjava:rxjava-android:+'
     compile 'com.google.android.gms:play-services-analytics:8.1.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.backendless:backendless:3.0.11'
 }

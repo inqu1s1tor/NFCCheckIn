@@ -25,5 +25,6 @@ public abstract class GenericDialog extends Dialog {
     public interface DialogListener {
 
         void onOkPressed();
+
     }
 }

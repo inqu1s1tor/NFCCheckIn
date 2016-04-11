@@ -5,8 +5,12 @@
         <!--android:title="@string/setting_menu_tutorial_title_item" />-->
 
     <item
+        android:id="@+id/action_main"
+        android:title="@string/setting_menu_main_title_item" />
+
+    <item
         android:id="@+id/action_sync"
-        android:title="Sync" />
+        android:title="@string/setting_menu_sync_title_item" />
 
 
     <item

@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.backendless.Backendless;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.callback.SimpleMainCallBack;
 import com.erminesoft.nfcpp.model.Card;
@@ -23,6 +24,9 @@ import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.model.User;
 import com.erminesoft.nfcpp.ui.adapters.AdminCardsAdapter;
 import com.erminesoft.nfcpp.ui.adapters.AdminUsersAdapter;
+import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
+import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
+import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
 import com.erminesoft.nfcpp.util.DateUtil;
 import com.erminesoft.nfcpp.util.SortUtil;
 
@@ -63,15 +67,11 @@ public class AdminFragment extends GenericFragment {
         userNameColumn = (TextView) view.findViewById(R.id.user_name_column_textView);
         totalTimeColumn = (TextView) view.findViewById(R.id.total_time_column_textView);
 
-//        mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
-//        mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
-
         View.OnClickListener listener = new Clicker();
         addCardBtn = (FloatingActionButton) view.findViewById(R.id.add_card_float_button);
         addCardBtn.setOnClickListener(listener);
 
-//        mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
-        startSync();
+        checkLogin();
         setHasOptionsMenu(true);
 
         radioGroup = (RadioGroup) view.findViewById(R.id.admin_list_radio_group);
@@ -83,7 +83,16 @@ public class AdminFragment extends GenericFragment {
         adminList.setOnItemClickListener(itemClicker);
     }
 
-    void startSync(){
+    private void checkLogin(){
+        if (!Backendless.UserService.isValidLogin()){
+            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
+        } else {
+            mActivityBridge.getUApplication().getNetBridge().isUserAuthenticated(new NetCallBack());
+            startSync();
+        }
+    }
+
+    private void startSync(){
         mActivityBridge.getUApplication().getNetBridge().getAllUsers(new NetCallBack(), "");
         mActivityBridge.getUApplication().getNetBridge().getAllCard(new NetCallBack());
         mActivityBridge.getUApplication().getNetBridge().getAllEvents(new NetCallBack());
@@ -147,13 +156,6 @@ public class AdminFragment extends GenericFragment {
         mActivityBridge.getFragmentLauncher().launchWelcomeFragment();
     }
 
-    private void getUsersFromDb() {
-        List<User> users = mActivityBridge.getUApplication().getDbBridge().getAllUsers();
-        if (users.size() <= 0) {
-            adminUsersAdapter.swapDataList(users);
-        }
-    }
-
     private void selectedItemUser(User user) {
         mActivityBridge.getFragmentLauncher().launchStatisticsFragment(user.getObjectId());
     }
@@ -171,6 +173,10 @@ public class AdminFragment extends GenericFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_main:
+                mActivityBridge.getFragmentLauncher().launchAdminMainFragment();
+                break;
+
 //            case R.id.action_tutorial:
 //                mActivityBridge.getFragmentLauncher().launchTutorialFragment();
 //                break;
@@ -207,6 +213,22 @@ public class AdminFragment extends GenericFragment {
             showShortToast(error);
         }
 
+        @Override
+        public void isUserAuthenticated(boolean isAuth) {
+            if (isAuth){
+                startSync();
+            } else {
+                Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.loggen_another_device));
+                DialogLauncher.launchConfirmationDialog(getActivity(), new DialogListener(), bundle);
+            }
+        }
+    }
+
+    private final class DialogListener implements GenericDialog.DialogListener{
+        @Override
+        public void onOkPressed() {
+            logout();
+        }
     }
 
     private final class DbObserver implements Observer {

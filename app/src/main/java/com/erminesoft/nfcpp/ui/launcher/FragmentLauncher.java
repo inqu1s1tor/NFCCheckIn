@@ -64,6 +64,11 @@ public class FragmentLauncher {
         launch(fragmentMain, null);
     }
 
+    public void launchAdminMainFragment() {
+        GenericFragment fragmentMain = new FragmentMain();
+        launch(fragmentMain, FragmentMain.class.getCanonicalName());
+    }
+
     public void launchStatisticsFragment(String objectId) {
         GenericFragment statisticsFragment = new StatisticsFragment();
         statisticsFragment.setArguments(StatisticsFragment.buildArguments(objectId));

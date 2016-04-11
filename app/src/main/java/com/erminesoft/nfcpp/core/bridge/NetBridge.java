@@ -13,6 +13,9 @@ public interface NetBridge {
 
     void registryUser(BackendlessUser user, MainCallBack mainCallBack);
 
+    void isUserAuthenticated(final MainCallBack callback);
+
+
     void addNewEvent(Event event, final MainCallBack callback);
 
     Event addNewEvent(Event event);

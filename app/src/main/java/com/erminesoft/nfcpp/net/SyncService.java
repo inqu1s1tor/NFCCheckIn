@@ -3,6 +3,7 @@ package com.erminesoft.nfcpp.net;
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.erminesoft.nfcpp.core.NfcApplication;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
@@ -55,12 +56,16 @@ public final class SyncService extends IntentService {
 
     private void sendEvent() {
         Event event = unsentEvent.poll();
+
         if (event == null) {
             isWork = false;
             return;
         }
+        Log.d("!", "!SyncService event.getIsSent()=" + event.getIsSent() + "   getCreationTime()=" + event.getCreationTime());
         event.setIsSent(true);
+        String exception = null;
         event = netBridge.addNewEvent(event);
+        Log.d("sendEvent", "!exception = " + exception);
         if(event != null){
             sendEvent();
         }
