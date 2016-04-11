@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.erminesoft.nfcpp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -54,7 +55,7 @@
         </receiver>
 
         <meta-data android:name="AA_DB_NAME" android:value="nfc.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="5" />
+        <meta-data android:name="AA_DB_VERSION" android:value="1" />
 
     </application>
     <uses-permission android:name="android.permission.NFC"/>
