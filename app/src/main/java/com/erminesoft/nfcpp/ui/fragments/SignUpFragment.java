@@ -200,9 +200,6 @@ public class SignUpFragment extends GenericFragment {
     private void goEntry() {
         if (isTestLogin) {
             mActivityBridge.getFragmentLauncher().launchMainFragment();
-        } else {
-            hideProgressDialog();
-            mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
         }
     }
 
@@ -226,7 +223,6 @@ public class SignUpFragment extends GenericFragment {
                 tilFirstName.setError(error);
             } else if (putFirstName.length() < 2) {
                 error = getActivity().getResources().getString(R.string.message_error_size_firstname);
-                Log.d("TextWatcher", "!firstNameEt*");
                 tilFirstName.setError(error);
             } else {
                 tilFirstName.setError("");
