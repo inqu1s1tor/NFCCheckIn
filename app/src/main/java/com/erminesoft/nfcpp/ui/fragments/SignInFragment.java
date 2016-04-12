@@ -3,7 +3,9 @@ package com.erminesoft.nfcpp.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +47,9 @@ public class SignInFragment extends GenericFragment {
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.signInButton).setOnClickListener(listener);
+
+        signInLoginEt.addTextChangedListener(new TextWatcherSignInLogin());
+        signInPasswordEt.addTextChangedListener(new TextWatcherSignInPassword());
     }
 
     @Override
@@ -74,7 +79,7 @@ public class SignInFragment extends GenericFragment {
             tilFirstName.setError(error);
             return;
         } else {
-            tilPasswordUser.setError("");
+            tilFirstName.setError("");
             tilFirstName.setErrorEnabled(false);
         }
 
@@ -83,7 +88,7 @@ public class SignInFragment extends GenericFragment {
             tilPasswordUser.setError(error);
             return;
         } else if (password.length() < 8) {
-            error = getActivity().getResources().getString(R.string.message_error_size_login);
+            error = getActivity().getResources().getString(R.string.message_error_size_password);
             tilPasswordUser.setError(error);
             return;
         } else {
@@ -100,6 +105,61 @@ public class SignInFragment extends GenericFragment {
             mActivityBridge.getFragmentLauncher().launchAdminFragment();
         } else {
             mActivityBridge.getFragmentLauncher().launchMainFragment();
+        }
+    }
+
+
+    private final class TextWatcherSignInLogin implements TextWatcher{
+
+        @Override
+          public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String name = signInLoginEt.getText().toString();
+            String error;
+            if (TextUtils.isEmpty(name)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_login);
+                tilFirstName.setError(error);
+            } else if (name.length() < 5) {
+                error = getActivity().getResources().getString(R.string.message_error_size_login);
+                tilFirstName.setError(error);
+            } else {
+                tilFirstName.setError("");
+                tilFirstName.setErrorEnabled(false);
+            }
+        }
+    }
+
+    private final class TextWatcherSignInPassword implements TextWatcher{
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String password = signInPasswordEt.getText().toString();
+            String error;
+            if (TextUtils.isEmpty(password)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_password);
+                tilPasswordUser.setError(error);
+            } else if (password.length() < 8) {
+                error = getActivity().getResources().getString(R.string.message_error_size_password);
+                tilPasswordUser.setError(error);
+            } else {
+                tilPasswordUser.setError("");
+                tilPasswordUser.setErrorEnabled(false);
+            }
         }
     }
 

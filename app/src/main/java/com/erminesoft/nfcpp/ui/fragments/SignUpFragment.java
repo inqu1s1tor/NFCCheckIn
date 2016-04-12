@@ -3,7 +3,10 @@ package com.erminesoft.nfcpp.ui.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +85,11 @@ public class SignUpFragment extends GenericFragment {
 
         View.OnClickListener listener = new Clicker();
         view.findViewById(R.id.SignUpButton).setOnClickListener(listener);
+
+        firstNameEt.addTextChangedListener(new TextWatcherFirstName());
+        lastNameEt.addTextChangedListener(new TextWatcherLastName());
+        signUpLoginEt.addTextChangedListener(new TextWatcherSignUpLogin());
+        signUpPasswordEt.addTextChangedListener(new TextWatcherSignUpPassword());
     }
 
     @Override
@@ -108,6 +116,7 @@ public class SignUpFragment extends GenericFragment {
             tilFirstName.setError(error);
             return;
         } else {
+            tilFirstName.setError("");
             tilFirstName.setErrorEnabled(false);
         }
 
@@ -125,6 +134,7 @@ public class SignUpFragment extends GenericFragment {
             tilLastName.setError(error);
             return;
         } else {
+            tilLastName.setError("");
             tilLastName.setErrorEnabled(false);
         }
 
@@ -137,6 +147,7 @@ public class SignUpFragment extends GenericFragment {
             tilLoginUser.setError(error);
             return;
         } else {
+            tilLoginUser.setError("");
             tilLoginUser.setErrorEnabled(false);
         }
 
@@ -145,10 +156,11 @@ public class SignUpFragment extends GenericFragment {
             tilPasswordUser.setError(error);
             return;
         } else if (putSignUpPasswordEt.length() < 8) {
-            error = getActivity().getResources().getString(R.string.message_error_size_login);
+            error = getActivity().getResources().getString(R.string.message_error_size_password);
             tilPasswordUser.setError(error);
             return;
         } else {
+            tilPasswordUser.setError("");
             tilPasswordUser.setErrorEnabled(false);
         }
 
@@ -191,6 +203,116 @@ public class SignUpFragment extends GenericFragment {
         } else {
             hideProgressDialog();
             mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallBack());
+        }
+    }
+
+
+    private final class TextWatcherFirstName implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String putFirstName = firstNameEt.getText().toString();
+            String error;
+            if (TextUtils.isEmpty(putFirstName)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_firstname);
+                tilFirstName.setError(error);
+            } else if (putFirstName.length() < 2) {
+                error = getActivity().getResources().getString(R.string.message_error_size_firstname);
+                Log.d("TextWatcher", "!firstNameEt*");
+                tilFirstName.setError(error);
+            } else {
+                tilFirstName.setError("");
+                tilFirstName.setErrorEnabled(false);
+            }
+        }
+    }
+
+    private final class TextWatcherLastName implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String putLastName = lastNameEt.getText().toString();
+            String error;
+            if (TextUtils.isEmpty(putLastName)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
+                tilLastName.setError(error);
+            } else if (putLastName.length() < 2) {
+                error = getActivity().getResources().getString(R.string.message_error_size_firstname);
+                tilLastName.setError(error);
+            } else {
+                tilLastName.setError("");
+                tilLastName.setErrorEnabled(false);
+            }
+        }
+    }
+
+    private final class TextWatcherSignUpLogin implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String putSignUpLoginEt = signUpLoginEt.getText().toString();
+            String error;
+            if (TextUtils.isEmpty(putSignUpLoginEt)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_login);
+                tilLoginUser.setError(error);
+            } else if (putSignUpLoginEt.length() < 5) {
+                error = getActivity().getResources().getString(R.string.message_error_size_login);
+                tilLoginUser.setError(error);
+            } else {
+                tilLoginUser.setError("");
+                tilLoginUser.setErrorEnabled(false);
+            }
+        }
+    }
+
+    private final class TextWatcherSignUpPassword implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String putSignUpPasswordEt = signUpPasswordEt.getText().toString();
+            String error;
+            if (TextUtils.isEmpty(putSignUpPasswordEt)) {
+                error = getActivity().getResources().getString(R.string.message_error_empty_password);
+                tilPasswordUser.setError(error);
+            } else if (putSignUpPasswordEt.length() < 8) {
+                error = getActivity().getResources().getString(R.string.message_error_size_password);
+                tilPasswordUser.setError(error);
+            } else {
+                tilPasswordUser.setError("");
+                tilPasswordUser.setErrorEnabled(false);
+            }
         }
     }
 

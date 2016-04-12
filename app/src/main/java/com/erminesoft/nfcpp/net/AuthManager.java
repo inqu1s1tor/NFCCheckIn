@@ -108,7 +108,6 @@ final class AuthManager {
         Backendless.UserService.logout(new AsyncCallback<Void>() {
             @Override
             public void handleResponse(Void response) {
-//                dbBridge.clearAllData();
             }
 
             @Override

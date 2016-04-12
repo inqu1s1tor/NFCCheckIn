@@ -5,7 +5,7 @@ import com.erminesoft.nfcpp.model.Event;
 
 public final class CardFilterUtil {
 
-    private static final int TWELVE_SEC = 20;
+    private static final int TWELVE_SEC = 60;
 
     public static boolean isDoubleCheckIn(DbBridge dbBridge, String cardId) {
         Event event = dbBridge.getLastEventByCardId(cardId);
