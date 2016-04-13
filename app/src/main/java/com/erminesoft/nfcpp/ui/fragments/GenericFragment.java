@@ -35,6 +35,10 @@ public abstract class GenericFragment extends Fragment {
         Toast.makeText(getActivity(), contentString, Toast.LENGTH_SHORT).show();
     }
 
+    protected void showLongToast(String contentString) {
+        Toast.makeText(getActivity(), contentString, Toast.LENGTH_LONG).show();
+    }
+
     protected void showProgressDialog() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getActivity());

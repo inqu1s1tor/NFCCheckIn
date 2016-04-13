@@ -108,7 +108,7 @@ public class SignUpFragment extends GenericFragment {
         String error;
 
         if (TextUtils.isEmpty(putFirstName)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_firstname);
+            error = getActivity().getResources().getString(R.string.message_error_empty_field);
             tilFirstName.setError(error);
             return;
         } else if (putFirstName.length() < 2) {
@@ -126,7 +126,7 @@ public class SignUpFragment extends GenericFragment {
         }
 
         if (TextUtils.isEmpty(putLastName)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
+            error = getActivity().getResources().getString(R.string.message_error_empty_field);
             tilLastName.setError(error);
             return;
         } else if (putLastName.length() < 2) {
@@ -139,7 +139,7 @@ public class SignUpFragment extends GenericFragment {
         }
 
         if (TextUtils.isEmpty(putSignUpLoginEt)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_login);
+            error = getActivity().getResources().getString(R.string.message_error_empty_field);
             tilLoginUser.setError(error);
             return;
         } else if (putSignUpLoginEt.length() < 5) {
@@ -152,7 +152,7 @@ public class SignUpFragment extends GenericFragment {
         }
 
         if (TextUtils.isEmpty(putSignUpPasswordEt)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_password);
+            error = getActivity().getResources().getString(R.string.message_error_empty_field);
             tilPasswordUser.setError(error);
             return;
         } else if (putSignUpPasswordEt.length() < 8) {
@@ -219,7 +219,7 @@ public class SignUpFragment extends GenericFragment {
             String putFirstName = firstNameEt.getText().toString();
             String error;
             if (TextUtils.isEmpty(putFirstName)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_firstname);
+                error = getActivity().getResources().getString(R.string.message_error_empty_field);
                 tilFirstName.setError(error);
             } else if (putFirstName.length() < 2) {
                 error = getActivity().getResources().getString(R.string.message_error_size_firstname);
@@ -246,7 +246,7 @@ public class SignUpFragment extends GenericFragment {
             String putLastName = lastNameEt.getText().toString();
             String error;
             if (TextUtils.isEmpty(putLastName)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_lastname);
+                error = getActivity().getResources().getString(R.string.message_error_empty_field);
                 tilLastName.setError(error);
             } else if (putLastName.length() < 2) {
                 error = getActivity().getResources().getString(R.string.message_error_size_firstname);
@@ -273,7 +273,7 @@ public class SignUpFragment extends GenericFragment {
             String putSignUpLoginEt = signUpLoginEt.getText().toString();
             String error;
             if (TextUtils.isEmpty(putSignUpLoginEt)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_login);
+                error = getActivity().getResources().getString(R.string.message_error_empty_field);
                 tilLoginUser.setError(error);
             } else if (putSignUpLoginEt.length() < 5) {
                 error = getActivity().getResources().getString(R.string.message_error_size_login);
@@ -300,7 +300,7 @@ public class SignUpFragment extends GenericFragment {
             String putSignUpPasswordEt = signUpPasswordEt.getText().toString();
             String error;
             if (TextUtils.isEmpty(putSignUpPasswordEt)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_password);
+                error = getActivity().getResources().getString(R.string.message_error_empty_field);
                 tilPasswordUser.setError(error);
             } else if (putSignUpPasswordEt.length() < 8) {
                 error = getActivity().getResources().getString(R.string.message_error_size_password);
@@ -310,6 +310,24 @@ public class SignUpFragment extends GenericFragment {
                 tilPasswordUser.setErrorEnabled(false);
             }
         }
+    }
+
+    private void errorRegistry(String message) {
+        if (message.equals(getResources().getString(R.string.registry_error_user_already_exists))) {
+            String showMessage = getResources().getString(R.string.registry_error_user_already_exists_choose_another_login);
+            showLongToast(showMessage);
+            tilPasswordUser.setError(showMessage);
+            return;
+        }
+
+        if (message.contains(getResources().getString(R.string.error_unable_host))) {
+            String showMessage = getResources().getString(R.string.error_registry_unable_host);
+            showLongToast(showMessage);
+            tilPasswordUser.setError(showMessage);
+            return;
+        }
+
+        showLongToast(message);
     }
 
     @Override
@@ -329,7 +347,7 @@ public class SignUpFragment extends GenericFragment {
         @Override
         public void onError(String error) {
             hideProgressDialog();
-            showShortToast(error);
+            errorRegistry(error);
         }
     }
 

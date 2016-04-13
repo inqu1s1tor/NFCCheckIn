@@ -71,7 +71,7 @@ public class SignInFragment extends GenericFragment {
         String error;
 
         if (TextUtils.isEmpty(name)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_login);
+            error = getActivity().getResources().getString(R.string.message_error_empty_field);
             tilFirstName.setError(error);
             return;
         } else if (name.length() < 5) {
@@ -84,7 +84,7 @@ public class SignInFragment extends GenericFragment {
         }
 
         if (TextUtils.isEmpty(password)) {
-            error = getActivity().getResources().getString(R.string.message_error_empty_password);
+            error = getActivity().getResources().getString(R.string.message_error_empty_field);
             tilPasswordUser.setError(error);
             return;
         } else if (password.length() < 8) {
@@ -124,7 +124,7 @@ public class SignInFragment extends GenericFragment {
             String name = signInLoginEt.getText().toString();
             String error;
             if (TextUtils.isEmpty(name)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_login);
+                error = getActivity().getResources().getString(R.string.message_error_empty_field);
                 tilFirstName.setError(error);
             } else if (name.length() < 5) {
                 error = getActivity().getResources().getString(R.string.message_error_size_login);
@@ -151,7 +151,7 @@ public class SignInFragment extends GenericFragment {
             String password = signInPasswordEt.getText().toString();
             String error;
             if (TextUtils.isEmpty(password)) {
-                error = getActivity().getResources().getString(R.string.message_error_empty_password);
+                error = getActivity().getResources().getString(R.string.message_error_empty_field);
                 tilPasswordUser.setError(error);
             } else if (password.length() < 8) {
                 error = getActivity().getResources().getString(R.string.message_error_size_password);
@@ -161,6 +161,24 @@ public class SignInFragment extends GenericFragment {
                 tilPasswordUser.setErrorEnabled(false);
             }
         }
+    }
+
+    private void errorLogin(String message){
+        if (message.contains(getResources().getString(R.string.error_invalid_login_password))){
+            String showMessage = getResources().getString(R.string.error_invalid_login_password_please_register);
+            showLongToast(showMessage);
+            tilPasswordUser.setError(showMessage);
+            return;
+        }
+
+        if (message.contains(getResources().getString(R.string.error_unable_host))){
+            String showMessage = getResources().getString(R.string.error_login_unable_host);
+            showLongToast(showMessage);
+            tilPasswordUser.setError(showMessage);
+            return;
+        }
+
+        showLongToast(message);
     }
 
     @Override
@@ -174,8 +192,7 @@ public class SignInFragment extends GenericFragment {
         @Override
         public void onError(String error) {
             hideProgressDialog();
-            showShortToast(error);
-            tilPasswordUser.setError(error);
+            errorLogin(error);
         }
     }
 

@@ -2,9 +2,9 @@
     <string name="app_name">Nfcpp</string>
     <string name="hello_nfc">NFC</string>
     <string name="hello_check_in">Check-in</string>
-    <string name="login_user">Login</string>
-    <string name="register_user">Register</string>
-    <string name="login_test_user">Test login</string>
+    <string name="login_user">Sing In</string>
+    <string name="register_user">Sing Up</string>
+    <string name="login_test_user">Demo mode</string>
     <string name="logout">Logout</string>
     <string name="statistics">my statistics</string>
     <string name="today_events">Events today:</string>
@@ -50,16 +50,21 @@
     <string name="dialog_button_no">NO</string>
     <string name="dialog_button_ok">OK</string>
 
-    <string name="message_error_empty_login">Empty login</string>
-    <string name="message_error_size_login">Minimum length of 5 characters</string>
-    <string name="message_error_empty_password">Empty password</string>
-    <string name="message_error_size_password">Minimum length of 8 characters</string>
-    <string name="message_error_empty_firstname">Empty first name</string>
-    <string name="message_error_size_firstname">Minimum length of 2 characters</string>
-    <string name="message_error_empty_lastname">Empty last name</string>
+    <string name="message_error_empty_field">The field can not be empty</string>
+    <string name="message_error_size_login">The minimum length is 5 characters</string>
+    <string name="message_error_size_password">The minimum length is 8 characters</string>
+    <string name="message_error_size_firstname">The minimum length is 2 characters</string>
     <string name="objectid_test_user">test-user-test-user</string>
 
     <string name="loggen_another_device">Logged on another device!</string>
+
+    <string name="registry_error_user_already_exists">Unable to register user. User already exists.</string>
+    <string name="registry_error_user_already_exists_choose_another_login">User already exists. Please choose another login</string>
+    <string name="error_unable_host">Unable to resolve host</string>
+    <string name="error_registry_unable_host">Please check the Internet connection. The registration is not possible without the Internet</string>
+    <string name="error_login_unable_host">Please check the Internet connection</string>
+    <string name="error_invalid_login_password">Invalid login or password</string>
+    <string name="error_invalid_login_password_please_register">User does not exist. To proceed please register</string>
 
     <string name="name_digit_parameter">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="login_password_digit_parameter">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789-.</string>
