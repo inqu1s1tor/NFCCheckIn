@@ -61,7 +61,7 @@ public class UnsavedDataDialog extends GenericDialog {
                 case R.id.dialog_button_ok:
 
                     if (dialogListener != null) {
-                        dialogListener.onOkPressed();
+                        dialogListener.onProceedPressed();
                         dismiss();
                     }
 

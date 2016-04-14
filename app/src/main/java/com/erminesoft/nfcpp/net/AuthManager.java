@@ -63,7 +63,7 @@ final class AuthManager {
             public void handleResponse(BackendlessUser registeredUser) {
                 sharedHelper.setUserName(registeredUser.getProperty("name").toString());
                 sharedHelper.setUserPassword(password);
-                getRole(registeredUser, callback);
+                getRoleAndSaveMyUser(registeredUser, callback);
             }
 
             public void handleFault(BackendlessFault fault) {
@@ -75,7 +75,7 @@ final class AuthManager {
 
 
 
-    private void getRole(final BackendlessUser registeredUser, final MainCallBack callback) {
+    private void getRoleAndSaveMyUser(final BackendlessUser registeredUser, final MainCallBack callback) {
         Backendless.UserService.getUserRoles(new AsyncCallback<List<String>>() {
             @Override
             public void handleResponse(List<String> userRoles) {
@@ -94,7 +94,8 @@ final class AuthManager {
                 dbBridge.setMyUser(user);
                 callback.onSuccess();
 
-                checkValidPermission(userRoles, callback);
+//                checkValidPermission(userRoles, callback);
+                callback.isUserAuthenticated(checkValidPermission(userRoles));
             }
 
             @Override
@@ -122,7 +123,7 @@ final class AuthManager {
         Backendless.UserService.getUserRoles(new AsyncCallback<List<String>>() {
             @Override
             public void handleResponse(List<String> userRoles) {
-                checkValidPermission(userRoles, callback);
+                callback.isUserAuthenticated(checkValidPermission(userRoles));
             }
 
             @Override
@@ -132,7 +133,7 @@ final class AuthManager {
         });
     }
 
-    private void checkValidPermission(List<String> userRoles, MainCallBack callback){
+    private boolean checkValidPermission(List<String> userRoles){
         Log.d("!", "!userRoles = " + userRoles.toString());
         boolean isAuth = true;
         for (String role : userRoles) {
@@ -140,6 +141,44 @@ final class AuthManager {
                 isAuth = false;
             }
         }
-        callback.isUserAuthenticated(isAuth);
+
+        return isAuth;
+    }
+
+
+    void updateMyUser(final BackendlessUser backendlessUser, final MainCallBack callback){
+
+        Backendless.UserService.getUserRoles(new AsyncCallback<List<String>>() {
+            @Override
+            public void handleResponse(List<String> userRoles) {
+                if (checkValidPermission(userRoles)) {
+                    saveMyUser(backendlessUser, callback);
+                } else {
+                    callback.isUserAuthenticated(false);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                callback.onError(fault.toString());
+            }
+        });
+    }
+
+    private void saveMyUser(BackendlessUser backendlessUser, final MainCallBack callback){
+        final String password = backendlessUser.getPassword();
+        Backendless.UserService.update(backendlessUser, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser updatedUser) {
+                sharedHelper.setUserPassword(password);
+                autoLogin(callback);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Log.d("updateMyUser", "fault = " + fault.toString());
+                callback.onError(fault.toString());
+            }
+        });
     }
 }

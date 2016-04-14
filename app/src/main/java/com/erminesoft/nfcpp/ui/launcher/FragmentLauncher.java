@@ -11,8 +11,10 @@ import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.ui.fragments.AdminFragment;
 import com.erminesoft.nfcpp.ui.fragments.CreateAndEditCardFragment;
 import com.erminesoft.nfcpp.ui.fragments.DetailStatisticsFragment;
+import com.erminesoft.nfcpp.ui.fragments.EditProfileFragment;
 import com.erminesoft.nfcpp.ui.fragments.FragmentMain;
 import com.erminesoft.nfcpp.ui.fragments.GenericFragment;
+import com.erminesoft.nfcpp.ui.fragments.MyProfileFragment;
 import com.erminesoft.nfcpp.ui.fragments.SignInFragment;
 import com.erminesoft.nfcpp.ui.fragments.SignUpFragment;
 import com.erminesoft.nfcpp.ui.fragments.StatisticsFragment;
@@ -93,5 +95,15 @@ public class FragmentLauncher {
     public void launchTutorialFragment(){
         TutorialFragment tutorialFragment = new TutorialFragment();
         launch(tutorialFragment, CreateAndEditCardFragment.class.getCanonicalName());
+    }
+
+    public void launchMyProfileFragment(){
+        MyProfileFragment myProfileFragment = new MyProfileFragment();
+        launch(myProfileFragment, CreateAndEditCardFragment.class.getCanonicalName());
+    }
+
+    public void launchEditProfileFragment(){
+        EditProfileFragment editProfileFragment = new EditProfileFragment();
+        launch(editProfileFragment, CreateAndEditCardFragment.class.getCanonicalName());
     }
 }

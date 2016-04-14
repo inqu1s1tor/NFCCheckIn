@@ -2,6 +2,7 @@ package com.erminesoft.nfcpp.db;
 
 import android.util.Log;
 
+import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.core.SharedHelper;
 import com.erminesoft.nfcpp.core.bridge.DbBridge;
 import com.erminesoft.nfcpp.model.Card;
@@ -35,6 +36,7 @@ public final class DbManager extends Observable implements DbBridge {
     public User getMe() {
         String param = "name";
         String value = sharedHelper.getUserName();
+        Log.d("getMe", "!value = " + value);
         return userHelper.getUserByStringParam(param, value);
     }
 
@@ -44,6 +46,13 @@ public final class DbManager extends Observable implements DbBridge {
         userHelper.saveUser(myUser);
         notifyObserversProcedure();
     }
+
+    @Override
+    public void setMyBackendlessUser(BackendlessUser backendlessUser) {
+
+
+    }
+
 
     @Override
     public void addNewObserver(Observer observer) {

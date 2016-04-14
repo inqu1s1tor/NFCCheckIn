@@ -9,6 +9,7 @@ import android.content.Context;
 public abstract class GenericDialog extends Dialog {
 
     protected static final String TITLE_TEXT = "title";
+    protected static final String OLD_PASSWORD = "title";
 
     public GenericDialog(Context context) {
         super(context);
@@ -25,6 +26,11 @@ public abstract class GenericDialog extends Dialog {
     public interface DialogListener {
 
         void onOkPressed();
+
+        void onProceedPressed();
+
+        void onPasswordChange(String newPassword);
+
 
     }
 }

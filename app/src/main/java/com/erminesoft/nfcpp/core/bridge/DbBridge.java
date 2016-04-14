@@ -1,5 +1,6 @@
 package com.erminesoft.nfcpp.core.bridge;
 
+import com.backendless.BackendlessUser;
 import com.erminesoft.nfcpp.model.Card;
 import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.User;
@@ -12,6 +13,8 @@ public interface DbBridge {
     User getMe();
 
     void setMyUser(User myUser);
+
+    void setMyBackendlessUser(BackendlessUser backendlessUser);
 
     void addNewObserver(Observer observer);
 

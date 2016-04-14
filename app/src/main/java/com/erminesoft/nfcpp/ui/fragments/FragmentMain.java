@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.backendless.Backendless;
 import com.erminesoft.nfcpp.R;
 import com.erminesoft.nfcpp.core.NfcApplication;
@@ -23,6 +24,7 @@ import com.erminesoft.nfcpp.model.Event;
 import com.erminesoft.nfcpp.model.EventsToday;
 import com.erminesoft.nfcpp.net.SyncService;
 import com.erminesoft.nfcpp.ui.adapters.EventAdapter;
+import com.erminesoft.nfcpp.ui.dialogs.ConfirmationDialog;
 import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
 import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
 import com.erminesoft.nfcpp.ui.launcher.DialogLauncher;
@@ -47,7 +49,7 @@ import java.util.Observer;
 public class FragmentMain extends GenericFragment {
 
     private TextView todayTotalTv;
-    private Button statButton;
+    private Button statButton, myProfile;
     private ListView listViewEvents;
 
     private EventAdapter eventAdapter;
@@ -105,16 +107,18 @@ public class FragmentMain extends GenericFragment {
         getEventsFromDb();
 
         View.OnClickListener listener = new Clicker();
-        statButton = (Button) view.findViewById(R.id.transferToStatisticsButton);
+        statButton = (Button) view.findViewById(R.id.fragment_main_statistics);
+        myProfile = (Button) view.findViewById(R.id.fragment_main_profile);
         statButton.setOnClickListener(listener);
+        myProfile.setOnClickListener(listener);
 
-        if (isAdminLogin){
+        if (isAdminLogin) {
             statButton.setVisibility(View.INVISIBLE);
         }
 
 
         if (!isTestLogin) {
-            if (!Backendless.UserService.isValidLogin()){
+            if (!Backendless.UserService.isValidLogin()) {
                 mActivityBridge.getUApplication().getNetBridge().autoLoginUser(new NetCallback());
             } else {
                 mActivityBridge.getUApplication().getNetBridge().isUserAuthenticated(new NetCallback());
@@ -322,8 +326,8 @@ public class FragmentMain extends GenericFragment {
 
         @Override
         public void isUserAuthenticated(boolean isAuth) {
-            if (!isAuth){
-                Bundle bundle = UnsavedDataDialog.buildArguments(getActivity().getResources().getString(R.string.loggen_another_device));
+            if (!isAuth) {
+                Bundle bundle = ConfirmationDialog.buildArguments(getActivity().getResources().getString(R.string.loggen_another_device));
                 DialogLauncher.launchConfirmationDialog(getActivity(), new DialogListener(), bundle);
             }
         }
@@ -334,21 +338,32 @@ public class FragmentMain extends GenericFragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.transferToStatisticsButton:
+                case R.id.fragment_main_statistics:
                     mActivityBridge.getFragmentLauncher().launchStatisticsFragment(null);
+                    break;
+
+                case R.id.fragment_main_profile:
+                    mActivityBridge.getFragmentLauncher().launchMyProfileFragment();
                     break;
             }
 
         }
     }
 
-    private final class DialogListener implements GenericDialog.DialogListener{
+    private final class DialogListener implements GenericDialog.DialogListener {
         @Override
         public void onOkPressed() {
             logout();
         }
-    }
 
+        @Override
+        public void onProceedPressed() {
+        }
+
+        @Override
+        public void onPasswordChange(String newPassword) {
+        }
+    }
 
 
     private final class NfcCallback implements NfcAdapter.ReaderCallback {

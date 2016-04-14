@@ -228,6 +228,15 @@ public class AdminFragment extends GenericFragment {
         public void onOkPressed() {
             logout();
         }
+
+        @Override
+        public void onProceedPressed() {
+        }
+
+        @Override
+        public void onPasswordChange(String newPassword) {
+
+        }
     }
 
     private final class DbObserver implements Observer {

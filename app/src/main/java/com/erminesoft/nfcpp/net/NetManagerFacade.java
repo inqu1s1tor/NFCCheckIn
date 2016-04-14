@@ -58,6 +58,11 @@ public final class NetManagerFacade implements NetBridge {
     }
 
     @Override
+    public void updateMyUser(BackendlessUser backendlessUser, MainCallBack callback) {
+        authManager.updateMyUser(backendlessUser, callback);
+    }
+
+    @Override
     public void addNewEvent(Event event, MainCallBack callback) {
         eventManager.addNewEvent(event, callback);
     }

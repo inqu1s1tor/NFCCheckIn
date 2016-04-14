@@ -53,7 +53,7 @@ public class ConfirmationDialog extends GenericDialog {
 
                 case R.id.dialog_confirmation_button_ok:
                     if (dialogListener != null) {
-                        dialogListener.onOkPressed();
+                        dialogListener.onProceedPressed();
                         dismiss();
                     }
                     break;

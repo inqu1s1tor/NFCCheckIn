@@ -15,6 +15,8 @@ public interface NetBridge {
 
     void isUserAuthenticated(final MainCallBack callback);
 
+    void updateMyUser(BackendlessUser backendlessUser, final MainCallBack callback);
+
 
     void addNewEvent(Event event, final MainCallBack callback);
 

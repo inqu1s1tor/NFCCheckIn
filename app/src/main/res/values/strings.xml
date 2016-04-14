@@ -6,17 +6,18 @@
     <string name="register_user">Sing Up</string>
     <string name="login_test_user">Demo mode</string>
     <string name="logout">Logout</string>
-    <string name="statistics">my statistics</string>
+    <string name="my_statistics">My History</string>
+    <string name="my_profile">My Profile</string>
     <string name="today_events">Events today:</string>
-    <string name="total_today">Hours today</string>
+    <string name="total_time">Total time:</string>
     <string name="empty_admin_list">Empty List</string>
     <string name="sign_in_login_hint">Login</string>
     <string name="sign_in_password">Password</string>
     <string name="sign_in_buton">Sign in</string>
-    <string name="first_name_hint_sign_up">First name</string>
-    <string name="last_name_hint_sign_up">Last name</string>
-    <string name="login_hint_sign_up">Login</string>
-    <string name="password_hint_sign_up">Password</string>
+    <string name="first_name_field_title">First name</string>
+    <string name="last_name_field_title">Last name</string>
+    <string name="login_field_title">Login</string>
+    <string name="password_field_title">Password</string>
     <string name="sign_up_buutton_text">Sign up</string>
     <string name="item_menu_admin_titlee">Add new place</string>
     <string name="input_new_place_hint">Input new place</string>
@@ -49,11 +50,24 @@
     <string name="dialog_button_yes">YES</string>
     <string name="dialog_button_no">NO</string>
     <string name="dialog_button_ok">OK</string>
+    <string name="dialog_old_password_field_title">Old password</string>
+    <string name="dialog_new_password_field_title">New password</string>
+    <string name="dialog_confirm_password_field_title">Confirm password</string>
+
+    <string name="fragment_my_profile_edit_btn">edit</string>
+    <string name="fragment_my_profile_title">My Profile</string>
+    <string name="fragment_my_profile_password_field">********</string>
+
+    <string name="fragment_edit_profile_title">Edit Profile</string>
 
     <string name="message_error_empty_field">The field can not be empty</string>
     <string name="message_error_size_login">The minimum length is 5 characters</string>
     <string name="message_error_size_password">The minimum length is 8 characters</string>
     <string name="message_error_size_firstname">The minimum length is 2 characters</string>
+    <string name="message_error_password_not_match">Passwords do not match</string>
+    <string name="message_error_old_password_incorrect">the old password is incorrect</string>
+    <string name="message_error_check_internet">Please check the Internet connection</string>
+
     <string name="objectid_test_user">test-user-test-user</string>
 
     <string name="loggen_another_device">Logged on another device!</string>

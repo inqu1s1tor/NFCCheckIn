@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.erminesoft.nfcpp.ui.dialogs.ConfirmationDialog;
 import com.erminesoft.nfcpp.ui.dialogs.GenericDialog;
+import com.erminesoft.nfcpp.ui.dialogs.PasswordDialog;
 import com.erminesoft.nfcpp.ui.dialogs.UnsavedDataDialog;
 import com.erminesoft.nfcpp.ui.fragments.FragmentMain;
 
@@ -22,5 +23,10 @@ public class DialogLauncher {
     public static void launchConfirmationDialog(Activity activity, GenericDialog.DialogListener dialogListener, Bundle bundle){
         ConfirmationDialog confirmationDialog = new ConfirmationDialog(activity, dialogListener, bundle);
         confirmationDialog.show();
+    }
+
+    public static void launchPasswordDialog(Activity activity, GenericDialog.DialogListener dialogListener, Bundle bundle){
+        PasswordDialog passwordDialog = new PasswordDialog(activity, dialogListener, bundle);
+        passwordDialog.show();
     }
 }

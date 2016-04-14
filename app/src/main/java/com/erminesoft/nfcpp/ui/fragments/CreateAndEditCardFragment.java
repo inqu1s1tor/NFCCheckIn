@@ -202,7 +202,15 @@ public class CreateAndEditCardFragment extends GenericFragment {
 
         @Override
         public void onOkPressed() {
+        }
+
+        @Override
+        public void onProceedPressed() {
             getActivity().onBackPressed();
+        }
+
+        @Override
+        public void onPasswordChange(String newPassword) {
         }
     }
 
