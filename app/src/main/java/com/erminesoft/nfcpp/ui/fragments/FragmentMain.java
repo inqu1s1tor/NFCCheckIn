@@ -92,7 +92,6 @@ public class FragmentMain extends GenericFragment {
         currentTimeTv.setText(curStringDate);
 
         if (!initNFC()) {
-//            return;
         }
 
         setHasOptionsMenu(true);
@@ -124,6 +123,8 @@ public class FragmentMain extends GenericFragment {
                 mActivityBridge.getUApplication().getNetBridge().isUserAuthenticated(new NetCallback());
                 loadDataFromBackendless();
             }
+        } else {
+            myProfile.setVisibility(View.GONE);
         }
 
     }
@@ -353,11 +354,11 @@ public class FragmentMain extends GenericFragment {
     private final class DialogListener implements GenericDialog.DialogListener {
         @Override
         public void onOkPressed() {
-            logout();
         }
 
         @Override
         public void onProceedPressed() {
+            logout();
         }
 
         @Override

@@ -226,11 +226,12 @@ public class AdminFragment extends GenericFragment {
     private final class DialogListener implements GenericDialog.DialogListener{
         @Override
         public void onOkPressed() {
-            logout();
+
         }
 
         @Override
         public void onProceedPressed() {
+            logout();
         }
 
         @Override
